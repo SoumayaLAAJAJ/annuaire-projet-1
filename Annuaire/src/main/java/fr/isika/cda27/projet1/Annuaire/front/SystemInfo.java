@@ -1,4 +1,4 @@
-package fr.isika.cda27.projet1.Annuaire;
+package fr.isika.cda27.projet1.Annuaire.front;
 
 public class SystemInfo {
 
