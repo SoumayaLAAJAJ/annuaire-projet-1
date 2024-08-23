@@ -8,25 +8,34 @@ import fr.isika.cda27.projet1.Annuaire.back.Intern;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
 
 /**
  * JavaFX App
  */
 public class App extends Application {
 
-    @Override
-    public void start(Stage stage) {
+	@Override
+	public void start(Stage stage) {
 
-        Label label = new Label("Hello, JavaFX ");
-        Scene scene = new Scene(new StackPane(label), 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
+		BorderPane root = new BorderPane();
+		Scene scene = new Scene(root, 1280, 700);
+		scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+		stage.setTitle("Annuaire de Gin");
+		// PANNEAU GAUCHE
+				LeftPane leftPane = new LeftPane();
+				root.setLeft(leftPane);
 
+				// PAGE LISTE
+				BorderPane listPage = new PageList();
+				root.setCenter(listPage);
+
+				stage.setMaximized(true);
+				stage.setScene(scene);
+				stage.show();
+
+	}
     public static void main(String[] args) {
     	Tree abr = new Tree();
     	List<Intern> interns = new ArrayList<>();
@@ -64,6 +73,11 @@ public class App extends Application {
     	System.out.println("**resultats cda27" + cda27Results);
     	
         launch();
-    }
+    
+
+		
+	}
 
 }
+
+
