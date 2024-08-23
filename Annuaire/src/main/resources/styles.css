@@ -1,0 +1,61 @@
+.root {
+   -fx-font-size: 15px;
+}
+
+.label {
+	-fx-padding: 2px 0;
+}
+
+/* Bouton standard */ 
+.button {
+    -fx-padding: 10px 25px;
+    -fx-background-color: none;
+    -fx-transition: background-color 0.3s ease;
+    -fx-alignment: center-left;
+}
+
+.button:hover {
+    -fx-background-color: #648A9F;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+
+/* Bouton barre de recherche */ 
+.searchBtn {
+    -fx-padding: 7px 25px 8px 30px;
+    -fx-background-color: rgba(100, 138, 159, 0.5);
+    -fx-transition: background-color 0.3s ease;
+    -fx-background-radius: 30px; 
+}
+
+.searchBtn:hover {
+    -fx-background-color: rgba(100, 138, 159, 0.75);
+}
+
+
+/* Tableview */ 
+
+.table-view {
+    -fx-background-color: #D9D9D9;
+}
+
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+.table-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-height: 0px;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-background-color: #648A9F;
+}
+
+.table-view .table-cell {
+    -fx-padding: 10px 10px 5px 10px;
+    -fx-border-color: transparent;
+    -fx-alignment: center;
+}
