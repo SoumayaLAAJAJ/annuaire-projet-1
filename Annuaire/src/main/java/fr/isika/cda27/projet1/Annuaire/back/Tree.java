@@ -31,7 +31,7 @@ public class Tree {
 	 * mettre en place la méthode addNode(); -> Sinon, on applique la méthode
 	 * addNode(); directement * @param intern
 	 */
-	public void checkRootToAddNode(Intern intern) {
+	public void checkRootToAddNode(InternDAO intern) {
 		try {
 			if (isEmpty()) {
 				this.root = new Node(intern);
@@ -63,7 +63,7 @@ public class Tree {
 	/**
 	 * **********RECHERCHE DANS L'ARBRE BINAIRE*******
 	 */
-	public List<Intern> checkRootAndSearchIntern(Intern internToLookFor){
+	public List<InternDAO> checkRootAndSearchIntern(InternDAO internToLookFor){
 		/**
 		 * Si l'arbre est vide, retourner une liste vide
 		 */

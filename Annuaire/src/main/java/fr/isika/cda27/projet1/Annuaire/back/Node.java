@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-	private Intern key;
+	private InternDAO key;
 	private Node leftChild;
 	private Node rightChild;
 
-	public Node(Intern key, Node leftChild, Node rightChild) {
+	public Node(InternDAO key, Node leftChild, Node rightChild) {
 		this.key = key;
 		this.leftChild = leftChild;
 		this.rightChild = rightChild;
 	}
 
-	public Node(Intern key) {
+	public Node(InternDAO key) {
 		this.key = key;
 	}
 
-	public Intern getKey() {
+	public InternDAO getKey() {
 		return key;
 	}
 
-	public void setKey(Intern key) {
+	public void setKey(InternDAO key) {
 		this.key = key;
 	}
 
@@ -50,7 +50,7 @@ public class Node {
 	 * 
 	 * @param intern
 	 */
-	public void addNode(Intern intern) {
+	public void addNode(InternDAO intern) {
 		/**
 		 * SI le stagiaire de la racine > celui qui est comparé...
 		 */
@@ -137,9 +137,9 @@ public class Node {
 	 * 
 	 *  @return liste de resultats
 	 */
-	public List<Intern> searchIntern(Intern internToLookFor) {
+	public List<InternDAO> searchIntern(InternDAO internToLookFor) {
 		
-		List<Intern> results = new ArrayList<>();
+		List<InternDAO> results = new ArrayList<>();
 		
 		/**
 		 * On fait la récursive tant qu'on a pas trouvé dans les sous arbres
