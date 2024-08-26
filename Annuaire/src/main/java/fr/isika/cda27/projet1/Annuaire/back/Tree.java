@@ -70,13 +70,15 @@ public class Tree implements Serializable {
 	 * Utile pour la persistance de l'arbre (c'est à dire le fait de sauvegarder l'état actuel) et récupérer les données pour plus tard
 	 * IOException, ClassNotFoundException : gèrent les erreurs dans la lecture du fichier ; par exemple s'il n'est pas trouvé ou si le fichier contient des données qui ne sont pas interprétées comme un Tree (comme ce qu'il y a tout au dessus du fichier binaire)
 	 * ObjectInputStream : utilisé pour lire des objets à partir d'un flux binaire 
-	 * 
+	 *
 	 * 
 	 * @param filePath
 	 * @return
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
+	//TODO: PAS DE STATIC
+	// class Tree avec les méthodes de CRUD de l'arbre - dans chacune de ces méthodes, on vérifie si fichier binaire est vide, si non null, on lit le premier noeud comme racine et méthode récursive à partir de là 
 	public static Tree loadTreeFromBinaryFile(String filePath) throws IOException, ClassNotFoundException {
 	    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
 	    	// Ici je fais un cast car readObject retourne un objet générique et je veux que ce soit traité comme un Tree

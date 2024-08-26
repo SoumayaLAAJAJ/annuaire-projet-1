@@ -1,6 +1,9 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -9,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 public class LeftPane extends BorderPane {
 
@@ -48,11 +52,34 @@ public class LeftPane extends BorderPane {
 		Button internListBtn = new Button("Liste des stagiaires");
 		internListBtn.setPrefWidth(270);
 		internListBtn.getStyleClass().add("labelBold");
-
+		internListBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				PageList pageList = new PageList();
+				Scene scene = new Scene(pageList, 1280, 700);
+				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
+				stage.setScene(scene);
+				
+			}
+		});
+		
 		Button internAddBtn = new Button("Ajouter un stagiaire");
 		internAddBtn.setPrefWidth(270);
 		menu.getChildren().addAll(internListBtn, internAddBtn);
 		setCenter(menu);
+		internAddBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				FormAddIntern formAddIntern = new FormAddIntern();
+				Scene scene = new Scene(formAddIntern, 1280, 700);
+				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
+				stage.setScene(scene);
+				
+				
+			}
+		});
 
 		// Footer
 		BorderPane menuFooter = new BorderPane();

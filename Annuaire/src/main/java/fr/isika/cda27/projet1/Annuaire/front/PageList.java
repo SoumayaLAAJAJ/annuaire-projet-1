@@ -1,7 +1,6 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
-import fr.isika.cda27.projet1.Annuaire.back.InternDAO;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +9,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,14 +23,23 @@ public class PageList extends BorderPane {
     public Intern selectedIntern;
 
     public PageList() {
-        setPadding(new Insets(0, 50, 40, 50));
+    	
+        this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        
+        // PANNEAU GAUCHE
+        LeftPane leftPane = new LeftPane();
+        this.setLeft(leftPane);
+
+        // Conteneur pour la barre de recherche et la table
+        VBox rightContainer = new VBox();
+        rightContainer.setPadding(new Insets(0, 50, 0, 50)); // padding autour du conteneur
+        rightContainer.setSpacing(10); // Espace entre les éléments de la VBox
 
         // SEARCH BAR
         SearchBar searchBar = new SearchBar();
-        searchBar.setPadding(new Insets(30, 0, 35, 0));
-        setTop(searchBar);
+        rightContainer.getChildren().add(searchBar);
 
-     // Charger l'arbre depuis le fichier binaire
+        // Charger l'arbre depuis le fichier binaire
         List<Intern> internList = new ArrayList<>();
         try {
             Tree tree = Tree.loadTreeFromBinaryFile("src/main/resources/arbre.bin");
@@ -62,8 +73,22 @@ public class PageList extends BorderPane {
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
+        
+        // Permettre au TableView d'occuper tout l'espace disponible
+        VBox.setVgrow(tableView, Priority.ALWAYS);
 
-        setCenter(tableView);
+        // Ajouter la table au conteneur de droite
+        rightContainer.getChildren().add(tableView);
+
+        // Ajouter un espace en bas
+        Region bottomPadding = new Region();
+        bottomPadding.setMinHeight(30); // Ajuster la hauteur pour définir l'espace en bas
+        rightContainer.getChildren().add(bottomPadding);
+
+        // Ajouter le conteneur de droite au centre du BorderPane
+        this.setCenter(rightContainer);
     }
 }
+
+
 

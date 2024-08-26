@@ -25,9 +25,7 @@ public class App extends Application {
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
         stage.setTitle("Annuaire de Gin");
 
-        // PANNEAU GAUCHE
-        LeftPane leftPane = new LeftPane();
-        root.setLeft(leftPane);
+        
 
         // PAGE LISTE
         BorderPane listPage = new PageList();
