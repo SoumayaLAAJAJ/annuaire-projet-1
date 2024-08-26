@@ -2,6 +2,7 @@ package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
 import fr.isika.cda27.projet1.Annuaire.back.InternDAO;
+import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -11,6 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PageList extends BorderPane {
 
@@ -25,14 +28,17 @@ public class PageList extends BorderPane {
         searchBar.setPadding(new Insets(30, 0, 35, 0));
         setTop(searchBar);
 
-        // Initialiser la liste observable avec les données de InternDAO
+     // Charger l'arbre depuis le fichier binaire
+        List<Intern> internList = new ArrayList<>();
         try {
-            InternDAO internDAO = new InternDAO();
-            myObservableArrayList = FXCollections.observableArrayList(internDAO.getMaListe());
-        } catch (IOException e) {
+            Tree tree = Tree.loadTreeFromBinaryFile("src/main/resources/arbre.bin");
+            internList = tree.getAllInterns();
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            myObservableArrayList = FXCollections.observableArrayList();
         }
+
+        // Initialiser la liste observable avec les données de l'arbre binaire
+        myObservableArrayList = FXCollections.observableArrayList(internList);
 
         // TABLEVIEW
         TableView<Intern> tableView = new TableView<>(myObservableArrayList);

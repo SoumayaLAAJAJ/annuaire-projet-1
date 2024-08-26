@@ -1,11 +1,25 @@
 package fr.isika.cda27.projet1.Annuaire.back;
 
-public class Intern implements Comparable<Intern>{
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Intern implements Serializable, Comparable<Intern>{
+	//private static final long serialVersionUID = 1L;
+    public static final int NAME_LENGTH = 20;
+    public static final int FIRSTNAME_LENGTH = 20;
+    public static final int DEPARTMENT_LENGTH = 10;
+    public static final int YEAR_LENGTH = 4;
+    public static final int PROMO_LENGTH = 4;
+    public static final int RECORD_LENGTH = NAME_LENGTH + FIRSTNAME_LENGTH + DEPARTMENT_LENGTH + YEAR_LENGTH + PROMO_LENGTH + 20;
+    
 	private String name;
 	private String firstname;
 	private String department;
 	private String year;
 	private String promo;
+
 	
 	public Intern(String name, String firstname, String department, String year, String promo) {
 		this.name = name;
@@ -14,6 +28,7 @@ public class Intern implements Comparable<Intern>{
 		this.year = year;
 		this.promo = promo;
 	}
+	
 
 	public Intern() {
 	}
@@ -58,11 +73,6 @@ public class Intern implements Comparable<Intern>{
 		this.promo = promo;
 	}
 
-	@Override
-	public String toString() {
-		return "Intern [name=" + name + ", firstname=" + firstname + ", department=" + department + ", year=" + year
-				+ ", promo=" + promo + "]";
-	}
 
 	/**
 	 * Modification de la méthode compareTo appartenant à l'interface Comparable
@@ -94,35 +104,34 @@ public class Intern implements Comparable<Intern>{
 	}
 	
 	/**
-	 * Méthode vérifiant si un attribut correspond à celui de la liste
-	 * - SI la case du nom est rempli ET qu'il ne correspond pas à un nom de la liste, ALORS on retourne false
-	 * - idem pour chaque argument (prenom, departement, année, promo)
-	 * - Si au contraire, il est vide ou que les attributs correspondent : return true
+	 * Stockage des données dans le fichier binaire 
 	 * 
-	 * @param o
-	 * @return boolean 
+	 * @param raf
+	 * @throws IOException
 	 */
-	public boolean match(Intern o) {
-		if(o.name != null && !this.name.equalsIgnoreCase(o.name)) {
-			return false;
-		}
-		if(o.name != null && !this.name.equalsIgnoreCase(o.name)) {
-			return false;
-		}
-		if(o.department != null && !this.department.equalsIgnoreCase(o.department)) {
-			return false;
-		}
-		if(o.year != null && !this.year.equalsIgnoreCase(o.year)) {
-			return false;
-		}
-		if(o.department != null && !this.department.equalsIgnoreCase(o.department)) {
-			return false;
-		}
-		if(o.promo != null && !this.promo.equalsIgnoreCase(o.promo)) {
-			return false;
-		}
-		return true;
-	}
+	public void writeToRandomAccessFile(RandomAccessFile raf) throws IOException {
+        raf.writeChars(formatString(name, NAME_LENGTH));
+        raf.writeChars(formatString(firstname, FIRSTNAME_LENGTH));
+        raf.writeChars(formatString(department, DEPARTMENT_LENGTH));
+        raf.writeChars(formatString(year, YEAR_LENGTH));
+        raf.writeChars(formatString(promo, PROMO_LENGTH));
+    }
+
+	/**
+	 * Formatte les String pour faire en sorte qu'elles aient une longueur fixe en ajoutant des espaces à droite si nécessaire
+	 * @param s
+	 * @param length
+	 * @return
+	 */
+    private String formatString(String s, int length) {
+        if (s.length() >= length) {
+            return s.substring(0, length);
+        } else {
+        	// le symbole %- est définii comme un marqueur de format et il permet l'alignement à gauche
+        	// si s = abc et que length et 5 alors on aura "abc  " avec 2 espaces
+            return String.format("%-" + length + "s", s);
+        }
+    }
 	
 
 

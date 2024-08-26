@@ -1,9 +1,15 @@
 package fr.isika.cda27.projet1.Annuaire.back;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tree {
+public class Tree implements Serializable {
+	//private static final long serialVersionUID = 1L;
 	private Node root;
 
 	public Tree(Node root) {
@@ -31,18 +37,17 @@ public class Tree {
 	 * mettre en place la méthode addNode(); -> Sinon, on applique la méthode
 	 * addNode(); directement * @param intern
 	 */
-	public void checkRootToAddNode(InternDAO intern) {
-		try {
-			if (isEmpty()) {
-				this.root = new Node(intern);
-			} else {
-				this.root.addNode(intern);
-			}
-		} catch (IllegalArgumentException e) {
-			System.err.println("Erreur: " + e.getMessage());
-		}
-		
-	}
+	public void checkRootToAddNode(Intern intern) {
+        try {
+            if (isEmpty()) {
+                this.root = new Node(intern);
+            } else {
+                this.root.addNode(intern);
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("Erreur: " + e.getMessage());
+        }
+    }
 
 	/**
 	 * AFFICHAGE PAR ORDRE ALPHABETIQUE SELON PARCOURS INFIXE - 1ere étape : Voir
@@ -55,26 +60,43 @@ public class Tree {
 		if (isEmpty()) {
 			System.out.println("L'arbre est vide");
 		} else {
-			// mettre en arg la liste qu'on a initialiser dans l'arbre 
 			this.root.displayNode();
 		}
 	}
 	
+	
 	/**
-	 * **********RECHERCHE DANS L'ARBRE BINAIRE*******
+	 * Charge un arbre depuis le fichier binaire
+	 * Utile pour la persistance de l'arbre (c'est à dire le fait de sauvegarder l'état actuel) et récupérer les données pour plus tard
+	 * IOException, ClassNotFoundException : gèrent les erreurs dans la lecture du fichier ; par exemple s'il n'est pas trouvé ou si le fichier contient des données qui ne sont pas interprétées comme un Tree (comme ce qu'il y a tout au dessus du fichier binaire)
+	 * ObjectInputStream : utilisé pour lire des objets à partir d'un flux binaire 
+	 * 
+	 * 
+	 * @param filePath
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
 	 */
-	public List<InternDAO> checkRootAndSearchIntern(InternDAO internToLookFor){
-		/**
-		 * Si l'arbre est vide, retourner une liste vide
-		 */
-		if(isEmpty()) {
-			return new ArrayList<>();	
-		}
-		/**
-		 * Sinon, faire la récursive jusqu'à trouver un match
-		 */
-		return root.searchIntern(internToLookFor);
+	public static Tree loadTreeFromBinaryFile(String filePath) throws IOException, ClassNotFoundException {
+	    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
+	    	// Ici je fais un cast car readObject retourne un objet générique et je veux que ce soit traité comme un Tree
+	        return (Tree) in.readObject();
+	    }
 	}
+	
+	/**
+	 * Retourne une liste de tous les Intern dans l'arbre en ordre infixe
+	 * @return internList
+	 */
+	public List<Intern> getAllInterns() {
+	    List<Intern> internList = new ArrayList<>();
+	    if (!isEmpty()) {
+	        root.collectInterns(internList);
+	    }
+	    return internList;
+	}
+
+
 	
 
 }
