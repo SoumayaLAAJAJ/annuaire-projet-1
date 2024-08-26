@@ -1,22 +1,39 @@
 package fr.isika.cda27.projet1.Annuaire.back;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOError;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.RandomAccess;
 
 public class Tree implements Serializable {
 	//private static final long serialVersionUID = 1L;
 	private Node root;
+	private RandomAccessFile raf;
 
 	public Tree(Node root) {
 		this.root = root;
+		try {
+			raf = new RandomAccessFile("","rw");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Tree() {
+		try {
+			raf = new RandomAccessFile("","rw");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Node getRoot() {
@@ -39,12 +56,21 @@ public class Tree implements Serializable {
 	 */
 	public void checkRootToAddNode(Intern intern) {
         try {
-            if (isEmpty()) {
+        	//si le fichier est vide = pas d'arbre
+            if (raf.length() == 0) {
                 this.root = new Node(intern);
+                //ecrure ke noeud dans le fichier binaire
+                raf.seek(0);
+                intern.writeToRandomAccessFile(raf);
+                raf.writeInt(-1);
+                raf.writeInt(-1);
+                raf.writeInt(-1);
             } else {
-                this.root.addNode(intern);
+            	raf.seek(0);
+            	this.root ;// =lire racine dans le fichier binaire
+                this.root.addNode(intern, raf);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IOException e) {
             System.err.println("Erreur: " + e.getMessage());
         }
     }
@@ -70,15 +96,13 @@ public class Tree implements Serializable {
 	 * Utile pour la persistance de l'arbre (c'est à dire le fait de sauvegarder l'état actuel) et récupérer les données pour plus tard
 	 * IOException, ClassNotFoundException : gèrent les erreurs dans la lecture du fichier ; par exemple s'il n'est pas trouvé ou si le fichier contient des données qui ne sont pas interprétées comme un Tree (comme ce qu'il y a tout au dessus du fichier binaire)
 	 * ObjectInputStream : utilisé pour lire des objets à partir d'un flux binaire 
-	 *
+	 * 
 	 * 
 	 * @param filePath
 	 * @return
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	//TODO: PAS DE STATIC
-	// class Tree avec les méthodes de CRUD de l'arbre - dans chacune de ces méthodes, on vérifie si fichier binaire est vide, si non null, on lit le premier noeud comme racine et méthode récursive à partir de là 
 	public static Tree loadTreeFromBinaryFile(String filePath) throws IOException, ClassNotFoundException {
 	    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
 	    	// Ici je fais un cast car readObject retourne un objet générique et je veux que ce soit traité comme un Tree
