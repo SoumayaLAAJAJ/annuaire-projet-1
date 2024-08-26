@@ -1,28 +1,30 @@
 package fr.isika.cda27.projet1.Annuaire.back;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
-	private InternDAO key;
+public class Node implements Serializable {
+	// private static final long serialVersionUID = 1L;
+	private Intern key;
 	private Node leftChild;
 	private Node rightChild;
 
-	public Node(InternDAO key, Node leftChild, Node rightChild) {
+	public Node(Intern key, Node leftChild, Node rightChild) {
 		this.key = key;
 		this.leftChild = leftChild;
 		this.rightChild = rightChild;
 	}
 
-	public Node(InternDAO key) {
+	public Node(Intern key) {
 		this.key = key;
 	}
 
-	public InternDAO getKey() {
+	public Intern getKey() {
 		return key;
 	}
 
-	public void setKey(InternDAO key) {
+	public void setKey(Intern key) {
 		this.key = key;
 	}
 
@@ -43,14 +45,13 @@ public class Node {
 	}
 
 	/**
-	 * **************AJOUT D'UN NOEUD DANS L'ARBRE : *************** 
-	 * - 1ère étape : définir la méthode d'ajout de noeud dans la classe Node 
-	 * - 2ème étape : voir
+	 * **************AJOUT D'UN NOEUD DANS L'ARBRE : *************** - 1ère étape :
+	 * définir la méthode d'ajout de noeud dans la classe Node - 2ème étape : voir
 	 * dans la classe Tree
 	 * 
 	 * @param intern
 	 */
-	public void addNode(InternDAO intern) {
+	public void addNode(Intern intern) {
 		/**
 		 * SI le stagiaire de la racine > celui qui est comparé...
 		 */
@@ -103,9 +104,9 @@ public class Node {
 	}
 
 	/**
-	 * **************AFFICHAGE PAR ORDRE ALPHABETIQUE SELON PARCOURS INFIXE*************
-	 *  - 1ere étape : définir la méthode d'affichage d'un Node selon son emplacement dans l'arbre 
-	 *  - 2eme étape : voir dans la classe Tree
+	 * **************AFFICHAGE PAR ORDRE ALPHABETIQUE SELON PARCOURS
+	 * INFIXE************* - 1ere étape : définir la méthode d'affichage d'un Node
+	 * selon son emplacement dans l'arbre - 2eme étape : voir dans la classe Tree
 	 * 
 	 * infixe : leftChild - Node - rightChild
 	 * 
@@ -133,33 +134,17 @@ public class Node {
 	}
 
 	/**
-	 * **********RECHERCHE DANS L'ARBRE BINAIRE*******
-	 * 
-	 *  @return liste de resultats
+	 * Parcours de l'arbre en ordre infixe et ajout les Interns d'une liste fournie en paramètre
+	 * @param internList
 	 */
-	public List<InternDAO> searchIntern(InternDAO internToLookFor) {
-		
-		List<InternDAO> results = new ArrayList<>();
-		
-		/**
-		 * On fait la récursive tant qu'on a pas trouvé dans les sous arbres
-		 */
-		if (this.leftChild != null) {
-			results.addAll(this.leftChild.searchIntern(internToLookFor));
+	public void collectInterns(List<Intern> internList) {
+		if (leftChild != null) {
+			leftChild.collectInterns(internList);
 		}
-
-		/**
-		 * Si un Intern "match" (méthode crée dans Intern), alors on ajoute cet Intern
-		 * dans le tableau result : condition d'arrêt de la récursive
-		 */
-		if (this.key.match(internToLookFor)) {
-			results.add(this.key);
+		internList.add(key);
+		if (rightChild != null) {
+			rightChild.collectInterns(internList);
 		}
-
-		if (this.rightChild != null) {
-			results.addAll(this.rightChild.searchIntern(internToLookFor));
-		}
-
-		return results;
 	}
+
 }
