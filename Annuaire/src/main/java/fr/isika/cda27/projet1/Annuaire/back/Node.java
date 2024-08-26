@@ -1,16 +1,19 @@
 package fr.isika.cda27.projet1.Annuaire.back;
 
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.RandomAccess;
 
 public class Node implements Serializable {
 	// private static final long serialVersionUID = 1L;
 	private Intern key;
-	private Node leftChild;
-	private Node rightChild;
+	private int leftChild;
+	private int rightChild;
+	private int doublon;
 
-	public Node(Intern key, Node leftChild, Node rightChild) {
+	public Node(Intern key, int leftChild, int rightChild) {
 		this.key = key;
 		this.leftChild = leftChild;
 		this.rightChild = rightChild;
@@ -32,7 +35,7 @@ public class Node implements Serializable {
 		return leftChild;
 	}
 
-	public void setLeftChild(Node leftChild) {
+	public void setLeftChild(int leftChild) {
 		this.leftChild = leftChild;
 	}
 
@@ -40,7 +43,7 @@ public class Node implements Serializable {
 		return rightChild;
 	}
 
-	public void setRightChild(Node rightChild) {
+	public void setRightChild(int rightChild) {
 		this.rightChild = rightChild;
 	}
 
@@ -51,34 +54,48 @@ public class Node implements Serializable {
 	 * 
 	 * @param intern
 	 */
-	public void addNode(Intern intern) {
+	public void addNode(Intern intern, RandomAccessFile raf) {
 		/**
 		 * SI le stagiaire de la racine > celui qui est comparé...
 		 */
-		if (this.key.compareTo(intern) > 0) {
+		if (this.key.getName().compareTo(intern.getName()) > 0) {
 			/**
 			 * ...et que dans ce cas, le fils gauche du noeud racine (key) est null...
 			 */
-			if (this.leftChild == null) {
+			if (this.leftChild== -1) {
 				/**
 				 * ... ALORS on ajoute le stagiaire au fils gauche (condition d'arrêt)
 				 */
-				this.leftChild = new Node(intern);
+				//on recule le curseur de 12 octet
+				raf.seek(raf.getFilePointer() - 12);
+				raf.writeInt(raf.length() / Intern.RECORD_LENGTH); //index du noeud
+				//je me remets à la fin du fichier
+				raf.seek(raf.length());
+				//j'écris le nouveau noeud
+				intern.writeToRandomAccessFile(raf);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				
+			//	this.leftChild = new Node(intern);
 				/**
 				 * Mais si le stagiaire de la racine est toujours > celui qui est comparé MAIS
 				 * que le fils gauche est déjà rempli
 				 */
-			} else {
+			} else { //fils gauche non vide
 				/**
 				 * alors on continue le traitement sur le noeud intermédiaire jusqu'à trouver un
 				 * noeud null ( => récursivité)
 				 */
-				this.leftChild.addNode(intern);
+				// on se déplace à la position fils gauche
+				raf.seek(this.leftChild *  Intern.RECORD_LENGTH);
+				Node leftNode = //lire un noeud
+				leftNode.addNode(intern, raf);
 			}
 			/**
 			 * SI le stagiaire de la racine < celui qui est comparé...
 			 */
-		} else if (this.key.compareTo(intern) < 0) {
+		} else if (this.key.compareTo(intern) < 0) { //meme chose mais on remont de -8 octet
 			/**
 			 * ...et que dans ce cas le fils droit est null...
 			 */
@@ -99,7 +116,7 @@ public class Node implements Serializable {
 			 * UN TRY/CATCH)
 			 */
 		} else {
-			throw new IllegalArgumentException("Le stagiaire suivant existe déjà: " + this.key.toString());
+			/// meme chose maios on remonte de 4
 		}
 	}
 
@@ -147,4 +164,7 @@ public class Node implements Serializable {
 		}
 	}
 
+	//TODO methode lire un noeud qui retourne le noeud lu
+	
+	//TODO ecrire un noeud dans un fichier binaire
 }
