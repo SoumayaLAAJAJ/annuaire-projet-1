@@ -3,6 +3,7 @@ package fr.isika.cda27.projet1.Annuaire.front;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.isika.cda27.projet1.Annuaire.back.BinaryFileReader;
@@ -64,6 +65,3 @@ public class App extends Application {
         }
     }
 }
-
-
-
