@@ -17,7 +17,6 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-
 	@Override
 	public void start(Stage stage) {
 
@@ -25,24 +24,26 @@ public class App extends Application {
 		Scene scene = new Scene(root, 1280, 700);
 		scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 		stage.setTitle("Annuaire de Gin");
+		
 		// PANNEAU GAUCHE
-				LeftPane leftPane = new LeftPane();
-				root.setLeft(leftPane);
+		LeftPane leftPane = new LeftPane();
+		root.setLeft(leftPane);
 
-				// PAGE LISTE
-				BorderPane listPage = new PageList();
-				root.setCenter(listPage);
+		// PAGE LISTE
+		BorderPane listPage = new PageList();
+		root.setCenter(listPage);
 
-				stage.setMaximized(true);
-				stage.setScene(scene);
-				stage.show();
+		stage.setMaximized(true);
+		stage.setScene(scene);
+		stage.show();
 
 	}
-    public static void main(String[] args) {
-    	Tree abr = new Tree();
-    	
-    	List<InternDAO> interns = new ArrayList<>();
-    	
+
+	public static void main(String[] args) {
+		Tree abr = new Tree();
+
+		List<InternDAO> interns = new ArrayList<>();
+
 //    	Collections.addAll(interns, 
 //    			new Intern("Laajaj", "Soumaya", "75", "2024", "CDA270"),
 //    			new Intern("Costabello", "Florent", "13", "2024", "CDA27"),
@@ -51,21 +52,21 @@ public class App extends Application {
 //    			new Intern("Laajaj", "Amelie", "75", "2024", "CDA279"), 
 //    			new Intern("Smaniotto", "Valentin", "95", "2024", "CDA27")
 //    			);
-    	/**
-    	 * Création de l'arbre
-    	 */
-    	for(InternDAO intern : interns) {
-    		abr.checkRootToAddNode(intern);
-    	}
-    	
-    	/**
-    	 * Affichage de l'arbre
-    	 */
-    	abr.checkRootToDisplayNodes();
-    	
-    	/**
-    	 * Recherche dans l'arbre
-    	 */
+		/**
+		 * Création de l'arbre
+		 */
+		for (InternDAO intern : interns) {
+			abr.checkRootToAddNode(intern);
+		}
+
+		/**
+		 * Affichage de l'arbre
+		 */
+		abr.checkRootToDisplayNodes();
+
+		/**
+		 * Recherche dans l'arbre
+		 */
 //    	List<Intern> laajajResults = abr.checkRootAndSearchIntern(new Intern("laajaj", null, null, null, null));
 //    	System.out.println("**correspondant à Laajaj : " + laajajResults);
 //    	
@@ -75,12 +76,8 @@ public class App extends Application {
 //    	List<Intern> cda27Results = abr.checkRootAndSearchIntern(new Intern(null, null, null, null, "cda27"));
 //    	System.out.println("**resultats cda27" + cda27Results);
 //    	
-        launch();
-    
+		launch();
 
-		
 	}
 
 }
-
-
