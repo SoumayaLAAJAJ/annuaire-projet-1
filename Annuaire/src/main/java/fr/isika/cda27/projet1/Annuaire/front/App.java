@@ -3,6 +3,7 @@ package fr.isika.cda27.projet1.Annuaire.front;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,9 @@ import fr.isika.cda27.projet1.Annuaire.back.BinaryFileReader;
 import fr.isika.cda27.projet1.Annuaire.back.BinaryFileWriter;
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
 import fr.isika.cda27.projet1.Annuaire.back.InternDAO;
+import fr.isika.cda27.projet1.Annuaire.back.Node;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
-import fr.isika.cda27.projet1.Annuaire.back.TreeBuilder;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -42,13 +44,14 @@ public class App extends Application {
         	InternDAO intern = new InternDAO();
         	List<Intern> interns = intern.getMaListe();
         	
-        	
-        	TreeBuilder treeBuilder = new TreeBuilder();
-        	treeBuilder.buildTreeFromInterns(interns);
-        	
-        	Tree tree = treeBuilder.getTree();
-        	saveTreeToBinaryFile(tree, "src/main/resources/arbre.bin");
 
+        	RandomAccessFile raf = new RandomAccessFile("src/main/resources/arbre.bin","rw");
+			interns = intern.getMaListe();			
+			System.out.println(interns);			// Parcours de chaque stagiare pour créer un Node et l'écrire dans le fichier
+			for (int i = 0; i < interns.size(); i++) {				// Crée un noeud avec le stagiaire
+				Node node = new Node(interns.get(i));				// Écrit le noeud dans le fichier binaire
+				node.addNode(interns.get(i), raf);
+			}
             System.out.println("creation OK");
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,10 +61,5 @@ public class App extends Application {
         launch();
     }
 
-    // Méthode pour sauvegarder l'arbre en fichier binaire
-    private static void saveTreeToBinaryFile(Tree tree, String filePath) throws IOException {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            out.writeObject(tree);
-        }
-    }
+
 }
