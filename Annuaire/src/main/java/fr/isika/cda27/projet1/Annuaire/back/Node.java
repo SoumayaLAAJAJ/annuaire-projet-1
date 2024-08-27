@@ -60,7 +60,7 @@ public class Node implements Serializable {
 	 * @throws IOException 
 	 */
 	
-	public Node addNode(Intern intern, RandomAccessFile raf) throws IOException {
+	public void addNode(Intern intern, RandomAccessFile raf) throws IOException {
 		/**
 		 * SI le stagiaire de la racine > celui qui est comparé...
 		 */
@@ -74,7 +74,7 @@ public class Node implements Serializable {
 				 */
 				//on recule le curseur de 12 octet
 				raf.seek(raf.getFilePointer() - 12);
-				raf.writeInt((int)(raf.length() / Intern.RECORD_LENGTH)); //index du noeud
+				raf.writeLong((raf.length() / Intern.RECORD_LENGTH)); //index du noeud
 				//je me remets à la fin du fichier
 				raf.seek(raf.length());
 				//j'écris le nouveau noeud
@@ -101,16 +101,17 @@ public class Node implements Serializable {
 			/**
 			 * SI le stagiaire de la racine < celui qui est comparé...
 			 */
-		} else if (this.key.compareTo(intern) < 0) { //meme chose mais on remont de -8 octet
+		}  //meme chose mais on remont de -8 octet
 			/**
 			 * ...et que dans ce cas le fils droit est null...
 			 */
+		else if (this.key.getName().compareTo(intern.getName()) < 0) {
 			if (this.rightChild == -1) {
 				/**
 				 * ...ALORS on ajoute le stagiaire dans ce noeud (condition d'arrêt)
 				 */
 				raf.seek(raf.getFilePointer() - 8);
-				raf.writeInt((int)raf.length() / Intern.RECORD_LENGTH); //index du noeud
+				raf.writeLong(raf.length()  / Intern.RECORD_LENGTH); //index du noeud
 				//je me remets à la fin du fichier
 				raf.seek(raf.length());
 				//j'écris le nouveau noeud
@@ -127,18 +128,20 @@ public class Node implements Serializable {
 				//this.rightChild.addNode(intern);
 				raf.seek(this.rightChild *  Intern.RECORD_LENGTH);
 			//	Node rightNode= rightNode.ReadNode();//lire un noeud
-				//rightNode.addNode(intern, raf);
+		//		 rightChild.addNode(intern, raf);
 			}
 			/**
 			 * Dans le cas où il y a un doublon, on envoie une erreur pour stopper le
 			 * processus (VOIR AVEC LA TEAM S'ILS PENSENT QU'IL EST PLUS PERTINENT DE METTRE
 			 * UN TRY/CATCH)
 			 */
-		} else {
-			if (this.doublon == -1) {
+		}
+		else {
+		 if (this.doublon == -1) { 
+			
 			/// meme chose maios on remonte de 4
 			raf.seek(raf.getFilePointer() - 4);
-			raf.writeInt((int)raf.length() / Intern.RECORD_LENGTH); //index du noeud
+			raf.writeLong(raf.length()  / Intern.RECORD_LENGTH); //index du noeud
 			//je me remets à la fin du fichier
 			raf.seek(raf.length());
 			//j'écris le nouveau noeud
@@ -156,9 +159,9 @@ public class Node implements Serializable {
 				raf.seek(this.doublon *  Intern.RECORD_LENGTH);
 				//Node doublonNode= doublonNode.ReadNode();//lire un noeud
 				//rightNode.addNode(intern, raf);
-		} }
+		} 
 		System.out.println(intern);
-		return null;
+		}
 		}
 	
 

@@ -57,16 +57,16 @@ public class Tree implements Serializable {
         	//si le fichier est vide = pas d'arbre
             if (raf.length() == 0) {
                 this.root = new Node(intern);
-                //ecrure ke noeud dans le fichier binaire
+                //ecrire le noeud dans le fichier binaire
                 raf.seek(0);
                 intern.writeToRandomAccessFile(raf);
                 raf.writeInt(-1);
                 raf.writeInt(-1);
                 raf.writeInt(-1);
-            } else {
-            	raf.seek(0);
+         //   } else {
+            	//raf.seek(0);
             	//this.root.ReadNode() ;// =lire racine dans le fichier binaire
-                this.root.addNode(intern, raf);
+            //    this.root.ReadNode();
             }
         } catch (IOException e) {
             System.err.println("Erreur: " + e.getMessage());
