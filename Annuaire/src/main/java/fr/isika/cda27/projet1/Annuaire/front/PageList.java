@@ -42,12 +42,12 @@ public class PageList extends BorderPane {
 
         // Charger l'arbre depuis le fichier binaire
         List<Intern> internList = new ArrayList<>();
-        try {
-            Tree tree = Tree.loadTreeFromBinaryFile("src/main/resources/arbre.bin");
+        //try {
+            //Tree tree = Tree.loadTreeFromBinaryFile("src/main/resources/arbre.bin");
             //internList = tree.getAllInterns();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        //} catch (IOException | ClassNotFoundException e) {
+            //e.printStackTrace();
+        //}
 
         // Initialiser la liste observable avec les données de l'arbre binaire
         myObservableArrayList = FXCollections.observableArrayList(internList);

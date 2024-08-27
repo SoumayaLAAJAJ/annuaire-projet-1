@@ -1,5 +1,6 @@
 package fr.isika.cda27.projet1.Annuaire.back;
 
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +13,9 @@ public class Node implements Serializable {
 	private int leftChild;
 	private int rightChild;
 	private int doublon;
-
+	private Node rightNode;
+	private Node leftNode;
+	private Node doublonNode;
 	public Node(Intern key, int leftChild, int rightChild) {
 		this.key = key;
 		this.leftChild = leftChild;
@@ -53,8 +56,11 @@ public class Node implements Serializable {
 	 * dans la classe Tree
 	 * 
 	 * @param intern
+	 * @return 
+	 * @throws IOException 
 	 */
-	public void addNode(Intern intern, RandomAccessFile raf) {
+	
+	public void addNode(Intern intern, RandomAccessFile raf) throws IOException {
 		/**
 		 * SI le stagiaire de la racine > celui qui est comparé...
 		 */
@@ -67,15 +73,15 @@ public class Node implements Serializable {
 				 * ... ALORS on ajoute le stagiaire au fils gauche (condition d'arrêt)
 				 */
 				//on recule le curseur de 12 octet
-				//raf.seek(raf.getFilePointer() - 12);
-				//raf.writeInt(raf.length() / Intern.RECORD_LENGTH); //index du noeud
+				raf.seek(raf.getFilePointer() - 12);
+				raf.writeLong((raf.length() / Intern.RECORD_LENGTH)); //index du noeud
 				//je me remets à la fin du fichier
-				//raf.seek(raf.length());
+				raf.seek(raf.length());
 				//j'écris le nouveau noeud
-				//intern.writeToRandomAccessFile(raf);
-				//raf.writeInt(-1);
-				//raf.writeInt(-1);
-				//raf.writeInt(-1);
+				intern.writeToRandomAccessFile(raf);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
 				
 			//	this.leftChild = new Node(intern);
 				/**
@@ -88,37 +94,76 @@ public class Node implements Serializable {
 				 * noeud null ( => récursivité)
 				 */
 				// on se déplace à la position fils gauche
-				//raf.seek(this.leftChild *  Intern.RECORD_LENGTH);
-				//Node leftNode = //lire un noeud
+				raf.seek(this.leftChild *  Intern.RECORD_LENGTH);
+				//Node leftNode = leftNode.ReadNode();//lire un noeud
 				//leftNode.addNode(intern, raf);
 			}
 			/**
 			 * SI le stagiaire de la racine < celui qui est comparé...
 			 */
-		} else if (this.key.compareTo(intern) < 0) { //meme chose mais on remont de -8 octet
+		}  //meme chose mais on remont de -8 octet
 			/**
 			 * ...et que dans ce cas le fils droit est null...
 			 */
-			//if (this.rightChild == ) {
+		else if (this.key.getName().compareTo(intern.getName()) < 0) {
+			if (this.rightChild == -1) {
 				/**
 				 * ...ALORS on ajoute le stagiaire dans ce noeud (condition d'arrêt)
 				 */
-				//this.rightChild = new Node(intern);
+				raf.seek(raf.getFilePointer() - 8);
+				raf.writeLong(raf.length()  / Intern.RECORD_LENGTH); //index du noeud
+				//je me remets à la fin du fichier
+				raf.seek(raf.length());
+				//j'écris le nouveau noeud
+				intern.writeToRandomAccessFile(raf);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				
+			//	this.rightChild = new Node(intern);
 				/**
 				 * si le fils droit est déjà rempli, alors récursivité
 				 */
 			} else {
 				//this.rightChild.addNode(intern);
+				raf.seek(this.rightChild *  Intern.RECORD_LENGTH);
+			//	Node rightNode= rightNode.ReadNode();//lire un noeud
+		//		 rightChild.addNode(intern, raf);
 			}
 			/**
 			 * Dans le cas où il y a un doublon, on envoie une erreur pour stopper le
 			 * processus (VOIR AVEC LA TEAM S'ILS PENSENT QU'IL EST PLUS PERTINENT DE METTRE
 			 * UN TRY/CATCH)
 			 */
-		} /*else {
+		}
+		else {
+		 if (this.doublon == -1) { 
+			
 			/// meme chose maios on remonte de 4
-		}*/
-//}
+			raf.seek(raf.getFilePointer() - 4);
+			raf.writeLong(raf.length()  / Intern.RECORD_LENGTH); //index du noeud
+			//je me remets à la fin du fichier
+			raf.seek(raf.length());
+			//j'écris le nouveau noeud
+			intern.writeToRandomAccessFile(raf);
+			raf.writeInt(-1);
+			raf.writeInt(-1);
+			raf.writeInt(-1);
+			
+		//	this.rightChild = new Node(intern);
+			/**
+			 * si le fils droit est déjà rempli, alors récursivité
+			 */
+			} else {
+				//this.rightChild.addNode(intern);
+				raf.seek(this.doublon *  Intern.RECORD_LENGTH);
+				//Node doublonNode= doublonNode.ReadNode();//lire un noeud
+				//rightNode.addNode(intern, raf);
+		} 
+		System.out.println(intern);
+		}
+		}
+	
 
 	/**
 	 * **************AFFICHAGE PAR ORDRE ALPHABETIQUE SELON PARCOURS
@@ -133,46 +178,40 @@ public class Node implements Serializable {
 		 * Si le fils gauche est rempli, alors recursivité : On continue d'afficher les
 		 * fils gauches jusqu'à ce qu'on tombe sur une feuille
 		 */
-		//if (this.leftChild != null) {
-			//this.leftChild.displayNode();
+		if (this.leftChild != -1) {
+			this.leftNode.displayNode();
 		}
 
 		/**
 		 * Affichage de la racine
 		 */
-		//System.out.println(this.key.toString());
+		System.out.println(this.key.toString());
 
 		/**
 		 * Si le fils droit est rempli, alors recursivité
 		 */
-		//if (this.rightChild != null) {
-			//this.rightChild.displayNode();
-		//}
-	//}
+		if (this.rightChild != -1) {
+			this.rightNode.displayNode();
+		}
+	}
 
 	/**
 	 * Parcours de l'arbre en ordre infixe et ajout les Interns d'une liste fournie en paramètre
 	 * @param internList
 	 */
-	/*public void collectInterns(List<Intern> internList) {
-		if (leftChild != null) {
-			leftChild.collectInterns(internList);
+	public void collectInterns(List<Intern> internList) {
+		if (leftChild != -1) {
+			leftNode.collectInterns(internList);
 		}
 		internList.add(key);
-		if (rightChild != null) {
-			rightChild.collectInterns(internList);
+		if (rightChild != -1) {
+			rightNode.collectInterns(internList);
 		}
-	}*/
-
-	public int getDoublon() {
-		return doublon;
-	}
-
-	public void setDoublon(int doublon) {
-		this.doublon = doublon;
 	}
 
 	//TODO methode lire un noeud qui retourne le noeud lu
-	
-	//TODO ecrire un noeud dans un fichier binaire
+	//public Node ReadNode() {
+		//return null;
+	//}
+	//TODO ecrire un noeud dans un fichier binaire (write to random access file)
 }

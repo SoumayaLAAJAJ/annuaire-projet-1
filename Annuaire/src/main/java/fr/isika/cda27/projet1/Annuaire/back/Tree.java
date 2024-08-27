@@ -15,12 +15,13 @@ import java.util.RandomAccess;
 public class Tree implements Serializable {
 	//private static final long serialVersionUID = 1L;
 	private Node root;
-	private RandomAccessFile raf;
+	public RandomAccessFile raf;
 
 	public Tree(Node root) {
+		
 		this.root = root;
 		try {
-			raf = new RandomAccessFile("","rw");
+			raf = new RandomAccessFile("src/main/resources/arbre.bin","rw");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,7 +30,7 @@ public class Tree implements Serializable {
 
 	public Tree() {
 		try {
-			raf = new RandomAccessFile("","rw");
+			raf = new RandomAccessFile("src/main/resources/arbre.bin","rw");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,9 +45,6 @@ public class Tree implements Serializable {
 		this.root = root;
 	}
 
-	public boolean isEmpty() {
-		return (this.root == null);
-	}
 
 	/**
 	 * AJOUT D'UN NOEUD DANS L'ARBRE : - 1ère étape : voir dans la classe Node -
@@ -54,26 +52,26 @@ public class Tree implements Serializable {
 	 * mettre en place la méthode addNode(); -> Sinon, on applique la méthode
 	 * addNode(); directement * @param intern
 	 */
-	/*public void checkRootToAddNode(Intern intern) {
+	public void checkRootToAddNode(Intern intern) {
         try {
         	//si le fichier est vide = pas d'arbre
             if (raf.length() == 0) {
                 this.root = new Node(intern);
-                //ecrure ke noeud dans le fichier binaire
+                //ecrire le noeud dans le fichier binaire
                 raf.seek(0);
                 intern.writeToRandomAccessFile(raf);
                 raf.writeInt(-1);
                 raf.writeInt(-1);
                 raf.writeInt(-1);
-            } else {
-            	raf.seek(0);
-            	this.root ;// =lire racine dans le fichier binaire
-                this.root.addNode(intern, raf);
+         //   } else {
+            	//raf.seek(0);
+            	//this.root.ReadNode() ;// =lire racine dans le fichier binaire
+            //    this.root.ReadNode();
             }
         } catch (IOException e) {
             System.err.println("Erreur: " + e.getMessage());
         }
-    }*/
+    }
 
 	/**
 	 * AFFICHAGE PAR ORDRE ALPHABETIQUE SELON PARCOURS INFIXE - 1ere étape : Voir
@@ -82,13 +80,8 @@ public class Tree implements Serializable {
 	 * méthode displayNode(); définie dans la classe Node
 	 * 
 	 */
-	public void checkRootToDisplayNodes() {
-		if (isEmpty()) {
-			System.out.println("L'arbre est vide");
-		} else {
-			this.root.displayNode();
-		}
-	}
+
+	
 	
 	
 	/**
@@ -103,25 +96,20 @@ public class Tree implements Serializable {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	public static Tree loadTreeFromBinaryFile(String filePath) throws IOException, ClassNotFoundException {
-	    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
-	    	// Ici je fais un cast car readObject retourne un objet générique et je veux que ce soit traité comme un Tree
-	        return (Tree) in.readObject();
-	    }
-	}
+
 	
 	/**
 	 * Retourne une liste de tous les Intern dans l'arbre en ordre infixe
 	 * @return internList
 	 */
-	/*public List<Intern> getAllInterns() {
+	public List<Intern> getAllInterns() {
 	    List<Intern> internList = new ArrayList<>();
-	    if (!isEmpty()) {
+	    if (this.root == null) {
 	        root.collectInterns(internList);
 	    }
 	    return internList;
 	}
-*/
+
 
 	
 
