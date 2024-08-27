@@ -15,7 +15,7 @@ public class Node implements Serializable {
 	private int doublon;
 	private Node rightNode;
 	private Node leftNode;
-
+	private Node doublonNode;
 	public Node(Intern key, int leftChild, int rightChild) {
 		this.key = key;
 		this.leftChild = leftChild;
@@ -59,6 +59,7 @@ public class Node implements Serializable {
 	 * @return 
 	 * @throws IOException 
 	 */
+	
 	public Node addNode(Intern intern, RandomAccessFile raf) throws IOException {
 		/**
 		 * SI le stagiaire de la racine > celui qui est comparé...
@@ -94,8 +95,8 @@ public class Node implements Serializable {
 				 */
 				// on se déplace à la position fils gauche
 				raf.seek(this.leftChild *  Intern.RECORD_LENGTH);
-				Node leftNode = leftNode.ReadNode();//lire un noeud
-				leftNode.addNode(intern, raf);
+				//Node leftNode = leftNode.ReadNode();//lire un noeud
+				//leftNode.addNode(intern, raf);
 			}
 			/**
 			 * SI le stagiaire de la racine < celui qui est comparé...
@@ -125,8 +126,8 @@ public class Node implements Serializable {
 			} else {
 				//this.rightChild.addNode(intern);
 				raf.seek(this.rightChild *  Intern.RECORD_LENGTH);
-				Node rightNode= rightNode.ReadNode();//lire un noeud
-				rightNode.addNode(intern, raf);
+			//	Node rightNode= rightNode.ReadNode();//lire un noeud
+				//rightNode.addNode(intern, raf);
 			}
 			/**
 			 * Dans le cas où il y a un doublon, on envoie une erreur pour stopper le
@@ -153,9 +154,10 @@ public class Node implements Serializable {
 			} else {
 				//this.rightChild.addNode(intern);
 				raf.seek(this.doublon *  Intern.RECORD_LENGTH);
-				Node doublonNode= doublonNode.ReadNode();//lire un noeud
-				rightNode.addNode(intern, raf);
+				//Node doublonNode= doublonNode.ReadNode();//lire un noeud
+				//rightNode.addNode(intern, raf);
 		} }
+		System.out.println(intern);
 		return null;
 		}
 	
@@ -205,8 +207,8 @@ public class Node implements Serializable {
 	}
 
 	//TODO methode lire un noeud qui retourne le noeud lu
-	public Node ReadNode() {
-		return null;
-	}
+	//public Node ReadNode() {
+		//return null;
+	//}
 	//TODO ecrire un noeud dans un fichier binaire (write to random access file)
 }
