@@ -19,7 +19,7 @@ public class TreeBuilder {
      * Ajoute chaque Stagiaire à l'arbre 
      * @param interns
      */
-    public void buildTreeFromInterns(List<Intern> interns) {
+    /*public void buildTreeFromInterns(List<Intern> interns) {
         Set<Intern> seenInterns = new HashSet<>();
         	for (Intern intern : interns) {
                 if (seenInterns.add(intern)) {
@@ -27,7 +27,7 @@ public class TreeBuilder {
                 }
             }
         
-    }
+    }*/
     
     
 }

@@ -11,10 +11,13 @@ public class Tree implements Serializable {
 	private RandomAccessFile raf;
 
 	public Tree(Node root) {
+		
 		this.root = root;
 		try {
+
 			raf = new RandomAccessFile("src/main/resources/arbre.bin", "rw");
 		} catch (FileNotFoundException e) {
+
 			e.printStackTrace();
 		}
 	}
@@ -34,6 +37,7 @@ public class Tree implements Serializable {
 	public void setRoot(Node root) {
 		this.root = root;
 	}
+
 
 	public RandomAccessFile getRaf() {
 		return raf;
@@ -68,3 +72,4 @@ public class Tree implements Serializable {
 		}
 	}
 }
+

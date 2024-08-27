@@ -3,7 +3,9 @@
 }
 
 .label {
-	-fx-padding: 2.0px 0.0;
+	-fx-padding: 2px 0;
+	-fx-font-family: 'Arial';
+	-fx-font-weight: bold;
 }
 
 /* Bouton standard */ 
@@ -15,6 +17,23 @@
 }
 
 .button:hover {
+    -fx-background-color: #648A9F;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+/* Bouton spécifique */
+.specific-button {
+    -fx-padding: 10px 25px;
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.specific-button:hover {
     -fx-background-color: #648A9F;
     -fx-text-fill: white;
     -fx-cursor: hand;
@@ -33,6 +52,7 @@
 .searchBtn:hover {
     -fx-background-color: rgba(100, 138, 159, 0.75);
 }
+
 
 .searchIconBtn {
 	-fx-padding: 8px 10px;
@@ -57,6 +77,16 @@
     -fx-padding: 8px 20px; 
 }
 
+/* Style pour les ChoiceBox */
+.choice-box {
+    -fx-background-color: rgba(100, 138, 159, 0.15);
+    -fx-padding: 10px;
+    -fx-pref-width: 200px;
+    -fx-border-color: rgba(100, 138, 159, 0.75); 
+    -fx-border-width: 1px;
+    -fx-border-radius: 200px;
+    -fx-background-radius: 20px;
+}
 
 
 /* Tableview */ 
