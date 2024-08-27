@@ -5,30 +5,29 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Intern implements Serializable, Comparable<Intern>{
-	//private static final long serialVersionUID = 1L;
-    public static final int NAME_LENGTH = 20;
-    public static final int FIRSTNAME_LENGTH = 20;
-    public static final int DEPARTMENT_LENGTH = 10;
-    public static final int YEAR_LENGTH = 4;
-    public static final int PROMO_LENGTH = 4;
-    public static final int RECORD_LENGTH = NAME_LENGTH + FIRSTNAME_LENGTH + DEPARTMENT_LENGTH + YEAR_LENGTH + PROMO_LENGTH + 20;
-    
+public class Intern implements Serializable, Comparable<Intern> {
+
+	public static final int NAME_LENGTH = 10;
+	public static final int FIRSTNAME_LENGTH = 10;
+	public static final int DEPARTMENT_LENGTH = 6;
+	public static final int YEAR_LENGTH = 8;
+	public static final int PROMO_LENGTH = 12;
+	public static final int RECORD_LENGTH = NAME_LENGTH + FIRSTNAME_LENGTH + DEPARTMENT_LENGTH + YEAR_LENGTH + PROMO_LENGTH;
+
 	private String name;
 	private String firstname;
 	private String department;
 	private String year;
 	private String promo;
 
-	
-	public Intern(String name, String firstname, String department, String year, String promo) {
+	public Intern(String name, String firstname, String department, String promo, String year) {
 		this.name = name;
 		this.firstname = firstname;
 		this.department = department;
-		this.year = year;
 		this.promo = promo;
+		this.year = year;
+
 	}
-	
 
 	public Intern() {
 	}
@@ -73,28 +72,25 @@ public class Intern implements Serializable, Comparable<Intern>{
 		this.promo = promo;
 	}
 
-
 	/**
-	 * Modification de la méthode compareTo appartenant à l'interface Comparable
-	 * On compare d'abord le nom.
-	 * - Si c'est le même nom, alors on compare le prénom
-	 * - Si c'est le même prénom, alors on compare le département
-	 * - Si c'est le même département, on compare l'année
-	 * - Si c'est la même année, on compare la promo
-	 * NB: la gestion de doublon se fait directement dans la méthode addNode(); 
+	 * Modification de la méthode compareTo appartenant à l'interface Comparable On
+	 * compare d'abord le nom. - Si c'est le même nom, alors on compare le prénom -
+	 * Si c'est le même prénom, alors on compare le département - Si c'est le même
+	 * département, on compare l'année - Si c'est la même année, on compare la promo
+	 * NB: la gestion de doublon se fait directement dans la méthode addNode();
 	 *
 	 */
 	@Override
 	public int compareTo(Intern o) {
 		int result = this.name.compareTo(o.name);
-		
-		if(result == 0) {
+
+		if (result == 0) {
 			result = this.firstname.compareTo(o.firstname);
-			if(result == 0) {
+			if (result == 0) {
 				result = this.department.compareTo(o.department);
-				if(result == 0) {
+				if (result == 0) {
 					result = this.year.compareTo(o.year);
-					if(result == 0) {
+					if (result == 0) {
 						result = this.promo.compareTo(o.promo);
 					}
 				}
@@ -102,37 +98,48 @@ public class Intern implements Serializable, Comparable<Intern>{
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Stockage des données dans le fichier binaire 
+	 * Stockage des données dans le fichier binaire
 	 * 
 	 * @param raf
 	 * @throws IOException
 	 */
+	// Méthode d'écriture dans un RandomAccessFile
 	public void writeToRandomAccessFile(RandomAccessFile raf) throws IOException {
-        raf.writeChars(formatString(name, NAME_LENGTH));
-        raf.writeChars(formatString(firstname, FIRSTNAME_LENGTH));
-        raf.writeChars(formatString(department, DEPARTMENT_LENGTH));
-        raf.writeChars(formatString(year, YEAR_LENGTH));
-        raf.writeChars(formatString(promo, PROMO_LENGTH));
-    }
+		raf.writeChars(formatString(this.name, NAME_LENGTH));
+		raf.writeChars(formatString(this.firstname, FIRSTNAME_LENGTH));
+		raf.writeChars(formatString(this.department, DEPARTMENT_LENGTH));
+		raf.writeChars(formatString(this.year, YEAR_LENGTH));
+		raf.writeChars(formatString(this.promo, PROMO_LENGTH));
+	}
 
 	/**
-	 * Formatte les String pour faire en sorte qu'elles aient une longueur fixe en ajoutant des espaces à droite si nécessaire
+	 * Formatte les String pour faire en sorte qu'elles aient une longueur fixe en
+	 * ajoutant des espaces à droite si nécessaire
+	 * 
 	 * @param s
 	 * @param length
-	 * @return
+	 * @return String
 	 */
-    private String formatString(String s, int length) {
-        if (s.length() >= length) {
-            return s.substring(0, length);
-        } else {
-        	// le symbole %- est définii comme un marqueur de format et il permet l'alignement à gauche
-        	// si s = abc et que length et 5 alors on aura "abc  " avec 2 espaces
-            return String.format("%-" + length + "s", s);
-        }
-    }
-	
+	private String formatString(String s, int length) {
 
+		String sLong = s;
+		if (sLong.length() < length) {
+			for (int i = s.length(); i < length; i++) {
+				sLong += " ";
+			}
+		} else {
+			sLong = sLong.substring(0, length);
+		}
+
+		return sLong;
+	}
+
+	@Override
+	public String toString() {
+		return "Intern [name=" + name + ", firstname=" + firstname + ", department=" + department + ", year=" + year
+				+ ", promo=" + promo + "]";
+	}
 
 }

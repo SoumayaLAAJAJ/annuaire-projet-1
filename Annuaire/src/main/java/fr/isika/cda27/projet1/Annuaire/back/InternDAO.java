@@ -47,7 +47,16 @@ public class InternDAO {
     
     
 
-    public void setMaListe(List<Intern> maListe) {
+    @Override
+	public String toString() {
+		return "InternDAO [name=" + name + ", firstname=" + firstname + ", department=" + department + ", year=" + year
+				+ ", promo=" + promo + ", maListe=" + maListe + "]";
+	}
+
+
+
+
+	public void setMaListe(List<Intern> maListe) {
 		this.maListe = maListe;
 	}
 

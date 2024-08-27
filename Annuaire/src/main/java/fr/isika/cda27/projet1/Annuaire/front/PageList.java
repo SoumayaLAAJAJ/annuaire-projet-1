@@ -25,17 +25,20 @@ public class PageList extends BorderPane {
 
         // SEARCH BAR
         SearchBar searchBar = new SearchBar();
-        searchBar.setPadding(new Insets(30, 0, 35, 0));
+        searchBar.setPadding(new Insets(30, 0, 25, 0));
         setTop(searchBar);
 
-     // Charger l'arbre depuis le fichier binaire
+        // Charger l'arbre depuis le fichier binaire
         List<Intern> internList = new ArrayList<>();
-        try {
-            Tree tree = Tree.loadTreeFromBinaryFile("src/main/resources/arbre.bin");
-            internList = tree.getAllInterns();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+       
+        //try {
+        //    Tree tree = Tree.loadTreeFromBinaryFile("src/main/resources/arbre.bin");
+           // internList = tree.getAllInterns();
+       // } catch (IOException | ClassNotFoundException e) {
+         //   e.printStackTrace();
+       // }
+        
+       
 
         // Initialiser la liste observable avec les données de l'arbre binaire
         myObservableArrayList = FXCollections.observableArrayList(internList);

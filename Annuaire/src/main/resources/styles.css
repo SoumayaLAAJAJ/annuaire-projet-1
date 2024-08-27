@@ -1,14 +1,14 @@
 .root {
-   -fx-font-size: 15px;
+   -fx-font-size: 15.0px;
 }
 
 .label {
-	-fx-padding: 2px 0;
+	-fx-padding: 2.0px 0.0;
 }
 
 /* Bouton standard */ 
 .button {
-    -fx-padding: 10px 25px;
+    -fx-padding: 10.0px 25.0px;
     -fx-background-color: none;
     -fx-transition: background-color 0.3s ease;
     -fx-alignment: center-left;
@@ -21,9 +21,10 @@
 }
 
 
-/* Bouton barre de recherche */ 
+
+/* Barre de recherche */ 
 .searchBtn {
-    -fx-padding: 7px 25px 8px 30px;
+    -fx-padding: 7px 0px 8px 25px;
     -fx-background-color: rgba(100, 138, 159, 0.5);
     -fx-transition: background-color 0.3s ease;
     -fx-background-radius: 30px; 
@@ -32,6 +33,30 @@
 .searchBtn:hover {
     -fx-background-color: rgba(100, 138, 159, 0.75);
 }
+
+.searchIconBtn {
+	-fx-padding: 8px 10px;
+    -fx-background-color: rgba(100, 138, 159, 0.5);
+    -fx-transition: background-color 0.3s ease;
+    -fx-background-radius: 30px; 
+}
+
+.searchIconBtn:hover {
+    -fx-background-color: rgba(100, 138, 159, 0.75);
+
+}
+
+/* Style pour les TextField */
+.text-field {
+    -fx-background-color: rgba(100, 138, 159, 0.10); 
+    -fx-border-color: rgba(100, 138, 159, 0.75); 
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-max-width: 200px;
+    -fx-padding: 8px 20px; 
+}
+
 
 
 /* Tableview */ 
@@ -42,12 +67,12 @@
 
 .table-view .column-header .label {
     -fx-font-weight: bold;
-    -fx-padding: 10px;
+    -fx-padding: 10.0px;
 }
 
 .table-view .scroll-bar:horizontal {
-    -fx-opacity: 0;
-    -fx-pref-height: 0px;
+    -fx-opacity: 0.0;
+    -fx-pref-height: 0.0px;
 }
 
 .table-view .table-row-cell:selected .table-cell {
@@ -55,7 +80,7 @@
 }
 
 .table-view .table-cell {
-    -fx-padding: 10px 10px 5px 10px;
+    -fx-padding: 10.0px 10.0px 5.0px 10.0px;
     -fx-border-color: transparent;
     -fx-alignment: center;
 }
