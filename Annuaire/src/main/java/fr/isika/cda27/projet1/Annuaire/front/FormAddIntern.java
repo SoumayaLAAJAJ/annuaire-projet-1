@@ -1,6 +1,7 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
 
+import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -12,6 +13,8 @@ import javafx.scene.layout.VBox;
 
 public class FormAddIntern extends HBox{
 	
+	private User loggedInUser;
+
 	Label title = new Label("Ajouter un stagiaire");
 	VBox container = new VBox();
 	
@@ -37,7 +40,7 @@ public class FormAddIntern extends HBox{
 	GridPane form = new GridPane();
 	
 	
-	public FormAddIntern() {
+	public FormAddIntern(User loggedInUser) {
 		super();
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 		add.getStyleClass().add("specific-button");
@@ -76,7 +79,7 @@ public class FormAddIntern extends HBox{
 		container.getChildren().addAll(searchBar, form);
 		container.setPadding(new Insets(0, 50, 40, 50));
 		
-		LeftPane leftPane = new LeftPane();
+		LeftPane leftPane = new LeftPane(loggedInUser);
 		this.getChildren().addAll(leftPane, container);
 		
 	}

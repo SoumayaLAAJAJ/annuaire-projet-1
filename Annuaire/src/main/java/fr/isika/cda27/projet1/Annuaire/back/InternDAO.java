@@ -18,7 +18,7 @@ public class InternDAO {
     // la même logique est gardée, c'est juste qu'à la place du FileInputStream  et InputStreamReader qui lisait chaque caractère, maintenant on lit la ligne complète 
     public InternDAO() throws IOException {
         maListe = new ArrayList<>();
-        String path = "src/main/resources/STAGIAIRE-TEST.DON";
+        String path = "src/main/resources/STAGIAIRES-TEST.DON";
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
             String name = "", firstname = "", department = "", year = "", promo = "";

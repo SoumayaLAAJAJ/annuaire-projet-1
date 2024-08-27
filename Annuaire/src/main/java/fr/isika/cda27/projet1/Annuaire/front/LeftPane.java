@@ -1,5 +1,6 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
+import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,7 +17,7 @@ import javafx.stage.Stage;
 
 public class LeftPane extends BorderPane {
 
-	public LeftPane() {
+	public LeftPane(User loggedInUser) {
 		// Couleur de fond et largueur du panneau
 		setStyle("-fx-background-color:#D9D9D9");
 		setPrefWidth(270);
@@ -39,7 +40,7 @@ public class LeftPane extends BorderPane {
 		VBox userGreetings = new VBox();
 		userGreetings.setPadding(new Insets(35, 0, 0, 10));
 		Label greetings = new Label("Bonjour");
-		Label username = new Label("Gin");
+		Label username = new Label(loggedInUser.getUsername().toUpperCase());
 		userGreetings.getChildren().addAll(greetings, username);
 
 		userTitle.getChildren().addAll(imageView, userGreetings);
@@ -56,7 +57,7 @@ public class LeftPane extends BorderPane {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				PageList pageList = new PageList();
+				PageList pageList = new PageList(loggedInUser);
 				Scene scene = new Scene(pageList, 1280, 700);
 				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
 				stage.setScene(scene);
@@ -72,7 +73,7 @@ public class LeftPane extends BorderPane {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				FormAddIntern formAddIntern = new FormAddIntern();
+				FormAddIntern formAddIntern = new FormAddIntern(loggedInUser);
 				Scene scene = new Scene(formAddIntern, 1280, 700);
 				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
 				stage.setScene(scene);

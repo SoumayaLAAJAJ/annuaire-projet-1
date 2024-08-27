@@ -2,6 +2,7 @@ package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
+import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -22,18 +23,18 @@ public class PageList extends BorderPane {
     public ObservableList<Intern> myObservableArrayList;
     public Intern selectedIntern;
 
-    public PageList() {
+    public PageList(User loggedInUser) {
     	
         this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
         
         // PANNEAU GAUCHE
-        LeftPane leftPane = new LeftPane();
+        LeftPane leftPane = new LeftPane(loggedInUser);
         this.setLeft(leftPane);
 
         // Conteneur pour la barre de recherche et la table
         VBox rightContainer = new VBox();
-        rightContainer.setPadding(new Insets(0, 50, 0, 50)); // padding autour du conteneur
-        rightContainer.setSpacing(10); // Espace entre les éléments de la VBox
+        rightContainer.setPadding(new Insets(0, 50, 0, 50)); 
+        rightContainer.setSpacing(10); 
 
         // SEARCH BAR
         SearchBar searchBar = new SearchBar();
@@ -43,7 +44,7 @@ public class PageList extends BorderPane {
         List<Intern> internList = new ArrayList<>();
         try {
             Tree tree = Tree.loadTreeFromBinaryFile("src/main/resources/arbre.bin");
-            internList = tree.getAllInterns();
+            //internList = tree.getAllInterns();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

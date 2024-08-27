@@ -130,7 +130,7 @@ public class Intern implements Serializable, Comparable<Intern>{
         	// le symbole %- est définii comme un marqueur de format et il permet l'alignement à gauche
         	// si s = abc et que length et 5 alors on aura "abc  " avec 2 espaces
         	//TODO: CHANGER LE FORMAT POUR FAIRE EN SORTE DE METTRE DES ESPACES AU LIEU DU %- CAR PAS BON FORMAT POUR UN FICHIER BINAIRE
-            return String.format("%-" + length + "s", s);
+            return String.format(s, length);
         }
     }
 	

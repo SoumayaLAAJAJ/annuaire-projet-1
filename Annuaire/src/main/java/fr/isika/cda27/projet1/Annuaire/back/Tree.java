@@ -54,7 +54,7 @@ public class Tree implements Serializable {
 	 * mettre en place la méthode addNode(); -> Sinon, on applique la méthode
 	 * addNode(); directement * @param intern
 	 */
-	public void checkRootToAddNode(Intern intern) {
+	/*public void checkRootToAddNode(Intern intern) {
         try {
         	//si le fichier est vide = pas d'arbre
             if (raf.length() == 0) {
@@ -73,7 +73,7 @@ public class Tree implements Serializable {
         } catch (IOException e) {
             System.err.println("Erreur: " + e.getMessage());
         }
-    }
+    }*/
 
 	/**
 	 * AFFICHAGE PAR ORDRE ALPHABETIQUE SELON PARCOURS INFIXE - 1ere étape : Voir
@@ -114,14 +114,14 @@ public class Tree implements Serializable {
 	 * Retourne une liste de tous les Intern dans l'arbre en ordre infixe
 	 * @return internList
 	 */
-	public List<Intern> getAllInterns() {
+	/*public List<Intern> getAllInterns() {
 	    List<Intern> internList = new ArrayList<>();
 	    if (!isEmpty()) {
 	        root.collectInterns(internList);
 	    }
 	    return internList;
 	}
-
+*/
 
 	
 
