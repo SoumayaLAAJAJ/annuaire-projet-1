@@ -111,8 +111,12 @@ public class LogForm {
                 User loggedInUser = user.login(FILE_PATH, username, password);
                 if (loggedInUser != null) {
                     PageList pageList = new PageList(loggedInUser);
-                    Scene scene = new Scene(pageList, 1280, 700);
-                    primaryStage.setScene(scene);  
+                    Scene scene = new Scene(pageList);
+                    primaryStage.setScene(scene);
+                    primaryStage.setTitle("Bienvenue dans l'annuaire de Gin");
+                    primaryStage.setMaximized(false);
+                    primaryStage.setMaximized(true);
+                    
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erreur de connexion");

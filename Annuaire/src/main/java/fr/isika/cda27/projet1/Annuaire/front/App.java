@@ -13,9 +13,8 @@ public class App extends Application {
 
         if (loginScene != null) {
             stage.setScene(loginScene);
-            stage.setTitle("Connexion au Annuaire de Gin");
+            stage.setTitle("Connexion à l'annuaire de Gin");
     		stage.setMaximized(true);
-
             stage.show();
         } else {
             // Gérer le cas où la scène n'a pas pu être créée (par exemple, si l'image n'est pas trouvée)

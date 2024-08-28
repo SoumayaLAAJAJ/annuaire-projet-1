@@ -2,17 +2,15 @@ package fr.isika.cda27.projet1.Annuaire.back;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.Serializable;
-import java.util.Objects;
 
-public class Intern implements Serializable, Comparable<Intern> {
+public class Intern implements Comparable<Intern> {
 
 	public static final int NAME_LENGTH = 10;
 	public static final int FIRSTNAME_LENGTH = 10;
 	public static final int DEPARTMENT_LENGTH = 6;
-	public static final int YEAR_LENGTH = 8;
-	public static final int PROMO_LENGTH = 12;
-	public static final int RECORD_LENGTH = NAME_LENGTH + FIRSTNAME_LENGTH + DEPARTMENT_LENGTH + YEAR_LENGTH + PROMO_LENGTH;
+	public static final int YEAR_LENGTH = 4;
+	public static final int PROMO_LENGTH = 8;
+	public static final int RECORD_LENGTH = NAME_LENGTH*2 + FIRSTNAME_LENGTH*2 + DEPARTMENT_LENGTH*2 + YEAR_LENGTH*2+ PROMO_LENGTH*2 + 12;
 
 	private String name;
 	private String firstname;
