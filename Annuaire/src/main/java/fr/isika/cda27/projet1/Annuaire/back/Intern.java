@@ -122,7 +122,7 @@ public class Intern implements Serializable, Comparable<Intern> {
 	 * @param length
 	 * @return String
 	 */
-	private String formatString(String s, int length) {
+	public String formatString(String s, int length) {
 		String sLong = s;
 		if (sLong.length() < length) {
 			for (int i = s.length(); i < length; i++) {

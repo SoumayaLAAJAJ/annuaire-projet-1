@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
+import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -41,9 +42,10 @@ public class FormAddIntern extends HBox{
 	VBox yearBox= new VBox();
 
 	GridPane form = new GridPane();
+	private User loggedInUser;
 	
 	
-	public FormAddIntern() {
+	public FormAddIntern(User loggedInUser) {
 		super();
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 		add.getStyleClass().add("specific-button");
@@ -103,7 +105,7 @@ public class FormAddIntern extends HBox{
 		container.getChildren().addAll(searchBar, form);
 		container.setPadding(new Insets(0, 50, 40, 50));
 		
-		LeftPane leftPane = new LeftPane();
+		LeftPane leftPane = new LeftPane(loggedInUser);
 		this.getChildren().addAll(leftPane, container);
 		
 	}

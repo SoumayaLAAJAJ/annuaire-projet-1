@@ -186,25 +186,26 @@ public class Node {
 //	 * infixe : leftChild - Node - rightChild
 //	 * 
 //	 */
-//	public void displayNode() {
+//	public void displayNode(ICI IL FAUT AVOIR L'ARRAYLIST) {
 //		/**
 //		 * Si le fils gauche est rempli, alors recursivité : On continue d'afficher les
 //		 * fils gauches jusqu'à ce qu'on tombe sur une feuille
 //		 */
 //		if (this.leftChild != -1) {
-//			this.leftNode.displayNode();
+//			this.leftNode.displayNode(ARRAYLIST);
 //		}
 //
 //		/**
 //		 * Affichage de la racine
 //		 */
 //		System.out.println(this.key.toString());
+//		ARRAYLIST.ADD
 //
 //		/**
 //		 * Si le fils droit est rempli, alors recursivité
 //		 */
 //		if (this.rightChild != -1) {
-//			this.rightNode.displayNode();
+//			this.rightNode.displayNode(ARRAYLIST);
 //		}
 //	}
 //
