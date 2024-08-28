@@ -51,14 +51,25 @@ public class PageList extends BorderPane {
         // APPEL READNODE
 		//readNodeFromBinFile(raf, 312);
 
+        
+        try {
+        	// creation du random access file pour lire et se déplacer dans le fichier binaire
+            RandomAccessFile raf = new RandomAccessFile("src/main/resources/arbre.bin", "rw");
+            // lecture des données via le fichier binaire : on a crée la méthode un peu plus bas / cf explications
+            List<Intern> internList = readAllInternsFromBinFile(raf);
+            // pour rappel, observableArrayList permet de créer une liste "dynamique' : JavaFX va surveiller les potentiels changements et MAJ automatiquement la liste en fonction
+            myObservableArrayList = FXCollections.observableArrayList(internList);
+            raf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // si erreur, on crée une liste vide comme ça on a quand même le front qui s'affiche
+            myObservableArrayList = FXCollections.observableArrayList(); 
+        }
+        
 
-        // Charger l'arbre depuis le fichier binaire
-        List<Intern> internList = new ArrayList<>();
-
-        // Initialiser la liste observable avec les données de l'arbre binaire
-        myObservableArrayList = FXCollections.observableArrayList(internList);
 
         // TABLEVIEW
+        // Initialiser la liste observable avec les données de l'arbre binaire
         TableView<Intern> tableView = new TableView<>(myObservableArrayList);
 
         TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
@@ -123,7 +134,63 @@ public class PageList extends BorderPane {
 		}
 	}
     
+    private List<Intern> readAllInternsFromBinFile(RandomAccessFile raf) throws IOException {
+        List<Intern> internList = new ArrayList<>();
+        raf.seek(0); // Commencer au début du fichier
+
+        while (raf.getFilePointer() + Intern.RECORD_LENGTH <= raf.length()) {
+            Intern intern = readInternFromFile(raf);
+            if (intern != null) {
+                internList.add(intern);
+            }
+        }
+        return internList;
+    }
+
+    private Intern readInternFromFile(RandomAccessFile raf) throws IOException {
+        // Vérification de s'il y a de la data à lire dans le fichier binaire
+        if (raf.getFilePointer() + Intern.RECORD_LENGTH > raf.length()) {
+        	// on retourne null s'il n'y a pas assez de data
+            return null;  
+        }
+
+        String name = "";
+        String firstname = "";
+        String department = "";
+        String year = "";
+        String promo = "";
+
+        // Lecture des champs du stagiaire
+        for (int j = 0; j < Intern.NAME_LENGTH; j++) {
+            name += raf.readChar();
+        }
+        for (int j = 0; j < Intern.FIRSTNAME_LENGTH; j++) {
+            firstname += raf.readChar();
+        }
+        for (int j = 0; j < Intern.DEPARTMENT_LENGTH; j++) {
+            department += raf.readChar();
+        }
+        for (int j = 0; j < Intern.YEAR_LENGTH; j++) {
+            year += raf.readChar();
+        }
+        for (int j = 0; j < Intern.PROMO_LENGTH; j++) {
+            promo += raf.readChar();
+        }
+
+        // Lecture des indices des enfants : 12 est la taille des 3 int 
+        if (raf.getFilePointer() + 12 > raf.length()) { 
+            return null;
+        }
+
+        int leftChild = raf.readInt();
+        int rightChild = raf.readInt();
+        int next = raf.readInt();
+
+        return new Intern(name.trim(), firstname.trim(), department.trim(), year.trim(), promo.trim());
+    }
+
     
+    //méthode de Faustine : NE PAS TOUCHER !!!!
     private static void readNodeFromBinFile(RandomAccessFile raf, int index) {
 		String name = "";
 		String firstname = "";
