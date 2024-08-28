@@ -97,12 +97,12 @@
 
 .table-view .column-header .label {
     -fx-font-weight: bold;
-    -fx-padding: 10.0px;
+    -fx-padding: 10px;
 }
 
 .table-view .scroll-bar:horizontal {
-    -fx-opacity: 0.0;
-    -fx-pref-height: 0.0px;
+    -fx-opacity: 0;
+    -fx-pref-height: 0px;
 }
 
 .table-view .table-row-cell:selected .table-cell {
@@ -110,7 +110,7 @@
 }
 
 .table-view .table-cell {
-    -fx-padding: 10.0px 10.0px 5.0px 10.0px;
+    -fx-padding: 10px 10px 5px 10px;
     -fx-border-color: transparent;
     -fx-alignment: center;
 }

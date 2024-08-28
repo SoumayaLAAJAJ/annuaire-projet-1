@@ -1,6 +1,11 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
 import javafx.scene.control.TextField;
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+import fr.isika.cda27.projet1.Annuaire.back.Intern;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,7 +19,7 @@ public class SearchBar extends VBox {
 
 	public SearchBar() {
 
-		setPadding(new Insets(30, 0, 35, 0));
+		setPadding(new Insets(30, 0, 20, 0));
 
 		VBox searchPane = new VBox();
 		searchPane.setSpacing(20);
@@ -32,7 +37,7 @@ public class SearchBar extends VBox {
 		// Pane contenant le texte et l'icône
 		HBox btnContent = new HBox();
 		btnContent.setAlignment(Pos.CENTER_LEFT);
-		btnContent.setSpacing(125);
+		btnContent.setSpacing(115);
 		btnContent.getChildren().addAll(new Label("Rechercher par :"), iconView);
 
 		// Création du bouton et ajout du contenu
@@ -106,8 +111,7 @@ public class SearchBar extends VBox {
 
 		});
 
-		// Appel de la méthode pour récupérér l'input quand on presse entrée sur les
-		// différents champs
+		// Appel de la méthode pour récupérér l'input quand on presse entrée sur les différents champs
 		nameTextField.setOnAction(e -> handleSearchOne("name", nameTextField));
 		firstnameTextField.setOnAction(e -> handleSearchOne("firstname", firstnameTextField));
 		departmentTextField.setOnAction(e -> handleSearchOne("department", departmentTextField));
@@ -123,6 +127,46 @@ public class SearchBar extends VBox {
 	// Récupération de l'input
 	private void handleSearchOne(String label, TextField textField) {
 		System.out.println(label + " " + textField.getText());
+	
+		try {
+
+			RandomAccessFile raf = new RandomAccessFile("src/main/resources/arbre.bin", "r");
+
+			String nameSearched = textField.getText();
+			nameSearched = nameSearched.toUpperCase();
+			Boolean nameFound = false;
+			int position = 0;
+			
+			while (position < raf.length() && !nameFound) {
+
+				String nomLu = "";
+				raf.seek(position);
+				System.out.println(raf.getFilePointer());
+
+				for (int j = 0; j < Intern.NAME_LENGTH; j++) {
+					nomLu += raf.readChar();
+				}
+				nomLu = nomLu.trim();
+
+				System.out.println(nomLu);
+
+				if (nomLu.equals(nameSearched)) {
+					System.out.println("J'ai trouvé le nom : " + nameSearched + " en position " + position);
+					nameFound = true;
+				} else {
+					position += Intern.RECORD_LENGTH;
+				}
+			}
+
+			if (!nameFound) {
+				System.out.println("Je n'ai pas trouvé le nom " + nameSearched + " dans le fichier");
+			}
+
+			raf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	// Récupération des valeurs de tous les inputs
