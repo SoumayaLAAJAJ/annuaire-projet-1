@@ -1,6 +1,7 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.User;
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -58,9 +59,12 @@ public class LeftPane extends BorderPane {
 			@Override
 			public void handle(ActionEvent event) {
 				PageList pageList = new PageList(loggedInUser);
-				Scene scene = new Scene(pageList, 1280, 700);
+				Scene scene = new Scene(pageList);
 				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
 				stage.setScene(scene);
+				 //stage.setMaximized(false);
+
+				 stage.setMaximized(true);
 				
 			}
 		});
@@ -74,9 +78,10 @@ public class LeftPane extends BorderPane {
 			@Override
 			public void handle(ActionEvent event) {
 				FormAddIntern formAddIntern = new FormAddIntern(loggedInUser);
-				Scene scene = new Scene(formAddIntern, 1280, 700);
+				Scene scene = new Scene(formAddIntern);
 				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
 				stage.setScene(scene);
+				 stage.setMaximized(false);
 				
 				
 			}

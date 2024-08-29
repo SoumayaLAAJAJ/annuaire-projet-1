@@ -8,13 +8,18 @@ import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -38,7 +43,7 @@ public class PageList extends BorderPane {
 
 		// Conteneur pour la barre de recherche et la table
 		VBox rightContainer = new VBox();
-		rightContainer.setPadding(new Insets(0, 50, 0, 50));
+		rightContainer.setPadding(new Insets(0, 40, 0, 40));
 		rightContainer.setSpacing(10);
 
 		// SEARCH BAR
@@ -48,55 +53,90 @@ public class PageList extends BorderPane {
 
 		rightContainer.getChildren().add(searchBar);
 
-////        try {
-////        	Tree tree = new Tree();
-////        	// creation du random access file pour lire et se déplacer dans le fichier binaire
-////            // lecture des données via le fichier binaire : on a crée la méthode un peu plus bas / cf explications
-////            //List<Intern> internList = readAllInternsFromBinFile(raf);
-////            // pour rappel, observableArrayList permet de créer une liste "dynamique' : JavaFX va surveiller les potentiels changements et MAJ automatiquement la liste en fonction
-////           // myObservableArrayList = FXCollections.observableArrayList(internList);
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////            // si erreur, on crée une liste vide comme ça on a quand même le front qui s'affiche
-////            myObservableArrayList = FXCollections.observableArrayList(); 
-////        }
-//
-//        
-//        // Initialiser la liste observable avec les données de l'arbre binaire
-//        myObservableArrayList = FXCollections.observableArrayList(myObservableArrayList);
-//
-//        // TABLEVIEW
-//        TableView<Intern> tableView = new TableView<>(myObservableArrayList);
-//
-//        TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
-//        colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
-//
-//        TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
-//        colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
-//
-//        TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
-//        colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
-//
-//        TableColumn<Intern, String> colYear = new TableColumn<>("Année");
-//        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
-//
-//        TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
-//        colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
-//
-//        tableView.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);
-//        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//
-//        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
-//        
-//        // Permettre au TableView d'occuper tout l'espace disponible
-//        VBox.setVgrow(tableView, Priority.ALWAYS);
-//
-//        // Ajouter la table au conteneur de droite
-//        rightContainer.getChildren().add(tableView);
+		// TABLEVIEW
+
+		// Initialiser la liste observable avec les données de l'arbre binaire
+		// myObservableArrayList =
+		// FXCollections.observableArrayList(myObservableArrayList);
+
+		TableView<Intern> tableView = new TableView<>();
+
+		TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
+		colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+		TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
+		colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+
+		TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
+		colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
+
+		TableColumn<Intern, String> colYear = new TableColumn<>("Année");
+		colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+		TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
+		colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
+
+		tableView.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);
+		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+		tableView.getSelectionModel().selectedItemProperty()
+				.addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
+
+		// Ajout de l'icône de suppression
+		Image binIcon = new Image(getClass().getResource("/binIcon.png").toExternalForm());
+		ImageView BinIconView = new ImageView(binIcon);
+		BinIconView.setFitWidth(20);
+		BinIconView.setPreserveRatio(true);
+
+		// Ajout de l'icône d'édition
+		Image editIcon = new Image(getClass().getResource("/editIcon.png").toExternalForm());
+		ImageView editIconView = new ImageView(editIcon);
+		editIconView.setFitWidth(20);
+		editIconView.setPreserveRatio(true);
+
+		// Création du bouton suppression et ajout de l'icône dans le bouton
+		Button removeBtn = new Button();
+		removeBtn.setGraphic(BinIconView);
+		removeBtn.getStyleClass().add("searchIconBtn");
+		removeBtn.setVisible(true);
+
+		// Création du bouton d'édition et ajout de l'icône dans le bouton
+		Button editBtn = new Button();
+		editBtn.setGraphic(editIconView);
+		editBtn.getStyleClass().add("searchIconBtn");
+		editBtn.setVisible(true);
+
+		VBox adminBtns = new VBox(removeBtn, editBtn);
+		adminBtns.setSpacing(20);
+
+		// Si user est admin :
+
+		if (loggedInUser.isRoleAdmin()) {
+			// Création de l'hbox contenant la table view et les boutons admin
+			HBox tableViewBox = new HBox(tableView, adminBtns);
+			tableViewBox.setSpacing(20);
+			VBox.setVgrow(tableViewBox, Priority.ALWAYS);
+			rightContainer.getChildren().add(tableViewBox);
+
+		} else {
+
+			// Si user est pas admin, ajout uniquement de tableview dans l'hbox
+			rightContainer.getChildren().add(tableView);
+
+		}
+
+		// Permet à la tableview d'occuper tout l'espace disponible horizontalement
+		HBox.setHgrow(tableView, Priority.ALWAYS);
+
+		// Permettre au TableView d'occuper tout l'espace disponible verticalement
+		VBox.setVgrow(tableView, Priority.ALWAYS);
+
+		// Ajout de la table view bow à la page
+		//rightContainer.getChildren().add(tableViewBox);
 
 		// Ajouter un espace en bas
 		Region bottomPadding = new Region();
-		bottomPadding.setMinHeight(30); // Ajuster la hauteur pour définir l'espace en bas
+		bottomPadding.setMinHeight(20); // Ajuster la hauteur pour définir l'espace en bas
 		rightContainer.getChildren().add(bottomPadding);
 
 		// Ajouter le conteneur de droite au centre du BorderPane
@@ -104,132 +144,3 @@ public class PageList extends BorderPane {
 	}
 
 }
-
-//    private List<Intern> readAllInternsFromBinFile(RandomAccessFile raf) throws IOException {
-//        List<Intern> internList = new ArrayList<>();
-//        raf.seek(0); // Commencer au début du fichier
-//
-//        while (raf.getFilePointer() + Intern.RECORD_LENGTH <= raf.length()) {
-//            Intern intern = readInternFromFile(raf);
-//            if (intern != null) {
-//                internList.add(intern);
-//            }
-//        }
-//        return internList;
-//    }
-//
-//    private Intern readInternFromFile(RandomAccessFile raf) throws IOException {
-//        // Vérification de s'il y a de la data à lire dans le fichier binaire
-//        if (raf.getFilePointer() + Intern.RECORD_LENGTH > raf.length()) {
-//        	// on retourne null s'il n'y a pas assez de data
-//            return null;  
-//        }
-//
-//        String name = "";
-//        String firstname = "";
-//        String department = "";
-//        String year = "";
-//        String promo = "";
-//
-//        // Lecture des champs du stagiaire
-//        for (int j = 0; j < Intern.NAME_LENGTH; j++) {
-//            name += raf.readChar();
-//        }
-//        for (int j = 0; j < Intern.FIRSTNAME_LENGTH; j++) {
-//            firstname += raf.readChar();
-//        }
-//        for (int j = 0; j < Intern.DEPARTMENT_LENGTH; j++) {
-//            department += raf.readChar();
-//        }
-//        for (int j = 0; j < Intern.YEAR_LENGTH; j++) {
-//            year += raf.readChar();
-//        }
-//        for (int j = 0; j < Intern.PROMO_LENGTH; j++) {
-//            promo += raf.readChar();
-//        }
-//
-//        // Lecture des indices des enfants : 12 est la taille des 3 int 
-//        if (raf.getFilePointer() + 12 > raf.length()) { 
-//            return null;
-//        }
-//
-//        int leftChild = raf.readInt();
-//        int rightChild = raf.readInt();
-//        int next = raf.readInt();
-//
-//        return new Intern(name.trim(), firstname.trim(), department.trim(), year.trim(), promo.trim());
-//    }
-//
-//    
-//    
-//    private static void readNodeFromBinFile(RandomAccessFile raf, int index) {
-//		String name = "";
-//		String firstname = "";
-//		String department = "";
-//		String year = "";
-//		String promo = "";
-//		int leftChild = 0;
-//		int rightChild = 0;
-//		int next = 0;
-//
-//		try {
-//			// read Nom
-//			raf.seek(index);
-//			System.out.println(raf.getFilePointer());
-//
-//			for (int j = 0; j < Intern.NAME_LENGTH; j++) {
-//				name += raf.readChar();
-//			}
-//			name = name.trim();
-//			System.out.println(name);
-//
-//			// read Prenom
-//			for (int j = 0; j < (Intern.FIRSTNAME_LENGTH); j++) {
-//				firstname += raf.readChar();
-//			}
-//			firstname = firstname.trim();
-//			System.out.println(firstname);
-//			
-//			// read Department
-//			for (int j = 0; j < (Intern.DEPARTMENT_LENGTH); j++) {
-//				department += raf.readChar();
-//			}
-//			department = department.trim();
-//			System.out.println(department);
-//			
-//			// read année
-//			for (int j = 0; j < (Intern.YEAR_LENGTH); j++) {
-//				year += raf.readChar();
-//			}
-//			year = year.trim();
-//			System.out.println(year);
-//			
-//			// read promo
-//			for (int j = 0; j < (Intern.PROMO_LENGTH); j++) {
-//				promo += raf.readChar();
-//			}
-//			promo = promo.trim();
-//			System.out.println(promo);
-//			
-//			// read left child
-//			leftChild = raf.readInt();
-//			System.out.println(leftChild);
-//			
-//			// read right child
-//			rightChild = raf.readInt();
-//			System.out.println(rightChild);
-//
-//			// read next child
-//			next = raf.readInt();
-//			System.out.println(next);
-//
-//			System.out.println(raf.getFilePointer());
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
-
-
-
