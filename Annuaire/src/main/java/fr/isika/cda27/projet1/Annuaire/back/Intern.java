@@ -9,7 +9,7 @@ public class Intern implements Comparable<Intern> {
 	public static final int FIRSTNAME_LENGTH = 10;
 	public static final int DEPARTMENT_LENGTH = 6;
 	public static final int YEAR_LENGTH = 4;
-	public static final int PROMO_LENGTH = 8;
+	public static final int PROMO_LENGTH = 16;
 	public static final int RECORD_LENGTH = NAME_LENGTH*2 + FIRSTNAME_LENGTH*2 + DEPARTMENT_LENGTH*2 + YEAR_LENGTH*2+ PROMO_LENGTH*2 + 12;
 
 	private String name;

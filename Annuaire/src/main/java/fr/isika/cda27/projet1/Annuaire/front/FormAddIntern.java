@@ -84,7 +84,7 @@ public class FormAddIntern extends HBox{
 
 			@Override
 			public void handle(ActionEvent event) {
-				Intern newIntern = new Intern(nameTxtfield.getText(), firstnameTxtfield.getText(), departmentTxtfield.getText(), yearChoiceBox.getValue(), promoTxtField.getText());
+				Intern newIntern = new Intern(nameTxtfield.getText(), firstnameTxtfield.getText(), departmentTxtfield.getText(), promoTxtField.getText(), yearChoiceBox.getValue());
 				Tree tree = new Tree();
 				try {
 					tree.addNode(newIntern);

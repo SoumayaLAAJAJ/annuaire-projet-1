@@ -1,8 +1,6 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
-import fr.isika.cda27.projet1.Annuaire.back.InternDAO;
-import fr.isika.cda27.projet1.Annuaire.back.Node;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.collections.FXCollections;
@@ -19,11 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PageList extends BorderPane {
@@ -53,34 +48,37 @@ public class PageList extends BorderPane {
 
 		rightContainer.getChildren().add(searchBar);
 
-		// TABLEVIEW
+		try {
+            List<Intern> interns = tree.getInterns(); // Récupère la liste des stagiaires
+            myObservableArrayList = FXCollections.observableArrayList(interns); // Initialise l'ObservableList
+        } catch (IOException e) {
+            e.printStackTrace();
+            myObservableArrayList = FXCollections.observableArrayList(); // En cas d'erreur, initialise une liste vide
+        }
 
-		// Initialiser la liste observable avec les données de l'arbre binaire
-		// myObservableArrayList =
-		// FXCollections.observableArrayList(myObservableArrayList);
+        // TABLEVIEW
+        TableView<Intern> tableView = new TableView<>(myObservableArrayList);
 
-		TableView<Intern> tableView = new TableView<>();
+        TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
+        colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-		TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
-		colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
+        colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
 
-		TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
-		colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+        TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
+        colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
 
-		TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
-		colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
+        TableColumn<Intern, String> colYear = new TableColumn<>("Année");
+        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
 
-		TableColumn<Intern, String> colYear = new TableColumn<>("Année");
-		colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
+        TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
+        colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
 
-		TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
-		colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
+        tableView.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-		tableView.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);
-		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-		tableView.getSelectionModel().selectedItemProperty()
-				.addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
+        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
+        
 
 		// Ajout de l'icône de suppression
 		Image binIcon = new Image(getClass().getResource("/binIcon.png").toExternalForm());
@@ -130,9 +128,6 @@ public class PageList extends BorderPane {
 
 		// Permettre au TableView d'occuper tout l'espace disponible verticalement
 		VBox.setVgrow(tableView, Priority.ALWAYS);
-
-		// Ajout de la table view bow à la page
-		//rightContainer.getChildren().add(tableViewBox);
 
 		// Ajouter un espace en bas
 		Region bottomPadding = new Region();

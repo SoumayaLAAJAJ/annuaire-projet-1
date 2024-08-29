@@ -78,16 +78,19 @@ public class Tree {
 				department += raf.readChar();
 			}
 			department = department.trim();
+			
 			//System.out.println(department); // read année
 			for (int j = 0; j < (Intern.YEAR_LENGTH); j++) {
 				year += raf.readChar();
 			}
 			year = year.trim();
-			System.out.println(year); // read promo
+			
 			for (int j = 0; j < (Intern.PROMO_LENGTH); j++) {
 				promo += raf.readChar();
 			}
 			promo = promo.trim();
+			
+			System.out.println(year); // read promo
 			//System.out.println(promo); // read left child
 			leftChild = raf.readInt();
 			System.out.println(leftChild); // read right child
@@ -100,7 +103,7 @@ public class Tree {
 			e.printStackTrace();
 		}
 
-		Intern intern = new Intern(name, firstname, department, year, promo);
+		Intern intern = new Intern(name, firstname, department, promo, year);
 		Node node = new Node(intern, leftChild, rightChild, next);
 
 		return node;
@@ -174,7 +177,7 @@ public class Tree {
 		//affiche filsGauche filsGauche.getInternsInfix(maListe)
 		if (currentNode.getLeftChild()!=-1) {
 			System.out.println("appel recc fils gauche " + currentNode.getIntern().getName());
-			 getInternsInfix( myList, currentNode.getLeftChild()*88 ,raf);
+			 getInternsInfix( myList, currentNode.getLeftChild()*Intern.RECORD_LENGTH ,raf);
 		}
 		
 		//affiche noeud maList.add(noeud.intern)
@@ -184,7 +187,7 @@ public class Tree {
 		//affiche filsDroit filsDroit.getInternsInfix
 		if (currentNode.getRightChild()!=-1) {
 			System.out.println("appel recc fils droit " + currentNode.getIntern().getName());
-			 getInternsInfix( myList, currentNode.getRightChild()*88 ,raf);
+			 getInternsInfix( myList, currentNode.getRightChild()*Intern.RECORD_LENGTH ,raf);
 		}
 	
 	}
