@@ -27,7 +27,7 @@ public class InternDAO {
             while ((line = reader.readLine()) != null) {
                 if (line.isEmpty()) continue; 
                 if (line.equals("*")) {
-                    maListe.add(new Intern(name, firstname, department, year, promo));
+                    maListe.add(new Intern(name, firstname, department, promo, year));
                     name = firstname = department = year = promo = "";
                     compteur = 0;
                 } else {
@@ -35,8 +35,8 @@ public class InternDAO {
                         case 0: name = line; break;
                         case 1: firstname = line; break;
                         case 2: department = line; break;
-                        case 3: year = line; break;
-                        case 4: promo = line; break;
+                        case 3: promo = line; break;
+                        case 4: year = line; break;
                     }
                     compteur++;
                 }

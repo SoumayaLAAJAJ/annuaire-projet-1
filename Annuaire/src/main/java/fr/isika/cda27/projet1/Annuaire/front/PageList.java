@@ -48,51 +48,42 @@ public class PageList extends BorderPane {
 
 		rightContainer.getChildren().add(searchBar);
 
-////        try {
-////        	Tree tree = new Tree();
-////        	// creation du random access file pour lire et se déplacer dans le fichier binaire
-////            // lecture des données via le fichier binaire : on a crée la méthode un peu plus bas / cf explications
-////            //List<Intern> internList = readAllInternsFromBinFile(raf);
-////            // pour rappel, observableArrayList permet de créer une liste "dynamique' : JavaFX va surveiller les potentiels changements et MAJ automatiquement la liste en fonction
-////           // myObservableArrayList = FXCollections.observableArrayList(internList);
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////            // si erreur, on crée une liste vide comme ça on a quand même le front qui s'affiche
-////            myObservableArrayList = FXCollections.observableArrayList(); 
-////        }
+		try {
+            List<Intern> interns = tree.getInterns(); // Récupère la liste des stagiaires
+            myObservableArrayList = FXCollections.observableArrayList(interns); // Initialise l'ObservableList
+        } catch (IOException e) {
+            e.printStackTrace();
+            myObservableArrayList = FXCollections.observableArrayList(); // En cas d'erreur, initialise une liste vide
+        }
 //
-//        
-//        // Initialiser la liste observable avec les données de l'arbre binaire
-//        myObservableArrayList = FXCollections.observableArrayList(myObservableArrayList);
-//
-//        // TABLEVIEW
-//        TableView<Intern> tableView = new TableView<>(myObservableArrayList);
-//
-//        TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
-//        colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
-//
-//        TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
-//        colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
-//
-//        TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
-//        colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
-//
-//        TableColumn<Intern, String> colYear = new TableColumn<>("Année");
-//        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
-//
-//        TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
-//        colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
-//
-//        tableView.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);
-//        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//
-//        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
-//        
-//        // Permettre au TableView d'occuper tout l'espace disponible
-//        VBox.setVgrow(tableView, Priority.ALWAYS);
-//
-//        // Ajouter la table au conteneur de droite
-//        rightContainer.getChildren().add(tableView);
+        // TABLEVIEW
+        TableView<Intern> tableView = new TableView<>(myObservableArrayList);
+
+        TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
+        colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
+        colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+
+        TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
+        colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
+
+        TableColumn<Intern, String> colYear = new TableColumn<>("Année");
+        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
+        colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
+
+        tableView.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
+        
+        // Permettre au TableView d'occuper tout l'espace disponible
+        VBox.setVgrow(tableView, Priority.ALWAYS);
+
+        // Ajouter la table au conteneur de droite
+        rightContainer.getChildren().add(tableView);
 
 		// Ajouter un espace en bas
 		Region bottomPadding = new Region();
