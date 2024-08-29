@@ -62,34 +62,29 @@ public class Node {
 		raf.writeInt(-1);
 		raf.writeInt(-1);
 		raf.writeInt(-1);
-}
-	
+	}
 
-	
 	public Intern readNodeFromFile(RandomAccessFile raf, long position) throws IOException {
-		            
-                Intern intern = new Intern();
-                intern.setName(readFixedLengthString(raf, Intern.NAME_LENGTH));
-                intern.setFirstname(readFixedLengthString(raf, Intern.FIRSTNAME_LENGTH));
-                intern.setDepartment(readFixedLengthString(raf, Intern.DEPARTMENT_LENGTH));
-                intern.setYear(readFixedLengthString(raf, Intern.YEAR_LENGTH));
-                intern.setPromo(readFixedLengthString(raf, Intern.PROMO_LENGTH));
-                System.out.println("ICI" + intern);
-        
-        return intern;
-    }
-	
+
+		Intern intern = new Intern();
+		intern.setName(readFixedLengthString(raf, Intern.NAME_LENGTH));
+		intern.setFirstname(readFixedLengthString(raf, Intern.FIRSTNAME_LENGTH));
+		intern.setDepartment(readFixedLengthString(raf, Intern.DEPARTMENT_LENGTH));
+		intern.setYear(readFixedLengthString(raf, Intern.YEAR_LENGTH));
+		intern.setPromo(readFixedLengthString(raf, Intern.PROMO_LENGTH));
+		// System.out.println("ICI" + intern);
+
+		return intern;
+	}
+
 	private String readFixedLengthString(RandomAccessFile raf, int length) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            sb.append(raf.readChar());
-        }
-        return sb.toString().trim();
-    }
-
-
-
-
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			// System.out.println(raf.readChar());
+			sb.append(raf.readChar());
+		}
+		return sb.toString().trim();
+	}
 
 	/**
 	 * **************AJOUT D'UN NOEUD DANS L'ARBRE : *************** - 1ère étape :
@@ -97,179 +92,186 @@ public class Node {
 	 * dans la classe Tree
 	 * 
 	 * @param intern
-	 * @return 
-	 * @throws IOException 
+	 * @return
+	 * @throws IOException
 	 */
-	
+
 	public void addNode(Intern newIntern, RandomAccessFile raf) throws IOException {
 		/**
+		 * 
 		 * SI le stagiaire de la racine > celui qui est comparé...
 		 */
 		
-		System.out.println(raf.getFilePointer());
+		System.out.println("addNode de " + newIntern.getName()+ "depuis position " + raf.getFilePointer() + "  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ) ;
 		
-		if (this.intern.getName().compareTo(newIntern.getName()) > 0) {
-			
+		Tree tree = new Tree();
+		long position = raf.getFilePointer();
+		Node node = tree.readNode(raf, position); //On se place à la racine de l'arbe
+
+		// System.out.println();
+
+		if (node.intern.getName().compareTo(newIntern.getName()) > 0) {
+
 			/**
 			 * ...et que dans ce cas, le fils gauche du noeud racine (key) est null...
 			 */
-			if (this.leftChild== -1) {
-				
-					//on recule le curseur de 12 octet
-				//raf.seek(raf.length());
-					raf.seek(raf.getFilePointer() - 12);
-					raf.writeLong((raf.length() / Intern.RECORD_LENGTH)); //index du noeud
-					//je me remets à la fin du fichier
-					raf.seek(raf.length());
-					//j'écris le nouveau noeud
-					intern.writeToRandomAccessFile(raf);
-					raf.writeInt(-1);
-					raf.writeInt(-1);
-					raf.writeInt(-1);
-					
-				
+			if (node.leftChild == -1) {
+
+				// on recule le curseur de 12 octet
+				// raf.seek(raf.length());
+				raf.seek(raf.getFilePointer() - 12);
+				raf.writeInt((int) (raf.length() / Intern.RECORD_LENGTH));
+				System.out.println((int) (raf.length() / Intern.RECORD_LENGTH));// index du noeud
+				// je me remets à la fin du fichier
+				raf.seek(raf.length());
+				// j'écris le nouveau noeud
+				intern.writeToRandomAccessFile(raf);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+
 				/**
 				 * ... ALORS on ajoute le stagiaire au fils gauche (condition d'arrêt)
 				 */
-				
-			//	this.leftChild = new Node(intern);
+
+				// this.leftChild = new Node(intern);
 				/**
 				 * Mais si le stagiaire de la racine est toujours > celui qui est comparé MAIS
 				 * que le fils gauche est déjà rempli
 				 */
-			} else { //fils gauche non vide
+			} else { // fils gauche non vide
 				/**
 				 * alors on continue le traitement sur le noeud intermédiaire jusqu'à trouver un
 				 * noeud null ( => récursivité)
 				 */
 				// on se déplace à la position fils gauche
-				raf.seek(this.leftChild *  Intern.RECORD_LENGTH);
-				//Node leftNode = leftNode.ReadNode();//lire un noeud
-				//leftNode.addNode(intern, raf);
+				raf.seek(node.leftChild * Intern.RECORD_LENGTH);
+				// Node leftNode = leftNode.ReadNode();//lire un noeud
+				addNode(intern, raf);
 			}
 			/**
 			 * SI le stagiaire de la racine < celui qui est comparé...
 			 */
-		}  //meme chose mais on remont de -8 octet
-			/**
-			 * ...et que dans ce cas le fils droit est null...
-			 */
-		else if (this.intern.getName().compareTo(newIntern.getName()) < 0) {
-			if (this.rightChild == -1) {
+		} // meme chose mais on remont de -8 octet
+		/**
+		 * ...et que dans ce cas le fils droit est null...
+		 */
+		else if (node.intern.getName().compareTo(newIntern.getName()) < 0) {
+			if (node.rightChild == -1) {
 				/**
 				 * ...ALORS on ajoute le stagiaire dans ce noeud (condition d'arrêt)
 				 */
 				raf.seek(raf.getFilePointer() - 8);
-				raf.writeLong(raf.length()  / Intern.RECORD_LENGTH); //index du noeud
-				//je me remets à la fin du fichier
+				raf.writeInt((int) (raf.length() / Intern.RECORD_LENGTH)); // index du noeud
+				// je me remets à la fin du fichier
 				raf.seek(raf.length());
-				//j'écris le nouveau noeud
+				System.out.println((int) ((raf.length() / Intern.RECORD_LENGTH)));
+				// j'écris le nouveau noeud
 				intern.writeToRandomAccessFile(raf);
 				raf.writeInt(-1);
 				raf.writeInt(-1);
 				raf.writeInt(-1);
-				
-			//	this.rightChild = new Node(intern);
+
+				// this.rightChild = new Node(intern);
 				/**
 				 * si le fils droit est déjà rempli, alors récursivité
 				 */
 			} else {
-				//this.rightChild.addNode(intern);
-				raf.seek(this.rightChild *  Intern.RECORD_LENGTH);
-			//	Node rightNode= rightNode.ReadNode();//lire un noeud
-		//		 rightChild.addNode(intern, raf);
+				// this.rightChild.addNode(intern);
+				raf.seek(node.rightChild * Intern.RECORD_LENGTH);
+				// Node rightNode= rightNode.ReadNode();//lire un noeud
+				addNode(intern, raf);
 			}
 			/**
 			 * Dans le cas où il y a un doublon, on envoie une erreur pour stopper le
 			 * processus
 			 */
+		} else {
+			if (node.next == -1) {
+
+				/// meme chose maios on remonte de 4
+				raf.seek(raf.length());
+				raf.seek(raf.getFilePointer() - 4);
+				raf.writeInt((int) (raf.length() / Intern.RECORD_LENGTH));
+				System.out.println((int) (raf.length() / Intern.RECORD_LENGTH));// index du noeud
+				// je me remets à la fin du fichier
+				raf.seek(raf.length());
+				// j'écris le nouveau noeud
+				intern.writeToRandomAccessFile(raf);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+
+			}
+			// demander a vincent pourquoi il imprime 10 et retourne a la ligne
 		}
-		else {
-		 if (this.next == -1) { 
-			
-			/// meme chose maios on remonte de 4
-			 raf.seek(raf.length());
-			raf.seek(raf.getFilePointer() - 4);
-			raf.writeLong(raf.length()  / Intern.RECORD_LENGTH); //index du noeud
-			//je me remets à la fin du fichier
-			raf.seek(raf.length());
-			//j'écris le nouveau noeud
-			intern.writeToRandomAccessFile(raf);
-			raf.writeInt(-1);
-			raf.writeInt(-1);
-			raf.writeInt(-1);
-			
-		//	this.rightChild = new Node(intern);
-			/**
-			 * si le fils droit est déjà rempli, alors récursivité
-			 */
-			} else {
-				//this.rightChild.addNode(intern);
-				raf.seek(this.next *  Intern.RECORD_LENGTH);
-				//Node doublonNode= doublonNode.ReadNode();//lire un noeud
-				//rightNode.addNode(intern, raf);
-		} 
-		System.out.println(intern);
-		}
+		//System.out.println(intern);
 		
-	}}
-
+	}
 	
-//	
+	public void seekNode(Intern newIntern, RandomAccessFile raf) throws IOException {
+		/**
+		 * 
+		 * SI le stagiaire de la racine > celui qui est comparé...
+		 */
+		
 
-//READ NODE : lit le noeud à partir du curseur et retourne le noeud
+		Tree tree = new Tree();
+		long position = raf.getFilePointer();
+		Node node = tree.readNode(raf, position); //On lit le noeud courrant
 
+			// Est ce que je m trouve dans le noeud que je cherhche ?
+		
+		//oui -> je retourne le Intern
+		//non -> on fait ce qu'il y a dessous
 
+		if (node.intern.getName().compareTo(newIntern.getName()) > 0) { //si valeur<noeudcourrant
+			
+			//on part a gauche
+		
+			if (node.leftChild == -1) {
 
-//
-//	/**
-//	 * **************AFFICHAGE PAR ORDRE ALPHABETIQUE SELON PARCOURS
-//	 * INFIXE************* - 1ere étape : définir la méthode d'affichage d'un Node
-//	 * selon son emplacement dans l'arbre - 2eme étape : voir dans la classe Tree
-//	 * 
-//	 * infixe : leftChild - Node - rightChild
-//	 * 
-//	 */
-//	public void displayNode() {
-//		/**
-//		 * Si le fils gauche est rempli, alors recursivité : On continue d'afficher les
-//		 * fils gauches jusqu'à ce qu'on tombe sur une feuille
-//		 */
-//		if (this.leftChild != -1) {
-//			this.leftNode.displayNode();
-//		}
-//
-//		/**
-//		 * Affichage de la racine
-//		 */
-//		System.out.println(this.key.toString());
-//
-//		/**
-//		 * Si le fils droit est rempli, alors recursivité
-//		 */
-//		if (this.rightChild != -1) {
-//			this.rightNode.displayNode();
-//		}
-//	}
-//
-//	/**
-//	 * Parcours de l'arbre en ordre infixe et ajout les Interns d'une liste fournie en paramètre
-//	 * @param internList
-//	 */
-//	public void collectInterns(List<Intern> internList) {
-//		if (leftChild != -1) {
-//			leftNode.collectInterns(internList);
-//		}
-//		internList.add(key);
-//		if (rightChild != -1) {
-//			rightNode.collectInterns(internList);
-//		}
-//>>>>>>> 5acb57c39fb1ce1a60497805374c546d64131387
-//	}
-//
-//	//TODO methode lire un noeud qui retourne le noeud lu
-//	//public Node ReadNode() {
-//		//return null;
-//	//}
-//	//TODO ecrire un noeud dans un fichier binaire (write to random access file)
-//}
+			//la vlaur n'existe pas 
+			
+			} else { 
+				//sinon reccursion à gauche
+				raf.seek(node.leftChild * Intern.RECORD_LENGTH);
+				
+				seekNode(intern, raf);
+			}
+			
+		}
+
+		else if (node.intern.getName().compareTo(newIntern.getName()) < 0) {
+			if (node.rightChild == -1) {
+				// la valeurn'existe pas 
+			} else {
+				// réccursion à droite
+				raf.seek(node.leftChild * Intern.RECORD_LENGTH);
+				
+				seekNode(intern, raf);
+			}
+		} else {
+			if (node.next == -1) {
+		}
+			// demander a vincent pourquoi il imprime 10 et retourne a la ligne
+		}
+		//System.out.println(intern);
+		
+	}
+
+	public void deleteIntern(Intern newIntern, RandomAccessFile raf) throws IOException {
+		Tree tree = new Tree();
+		long position = raf.getFilePointer();
+		Node node = tree.readNode(raf, position);
+		if (node.next != -1) {
+
+		} else if (node.leftChild == -1) {
+			if (node.rightChild == -1) {
+
+			}
+		} else if (node.rightChild == -1) {
+
+		}
+	}
+}
