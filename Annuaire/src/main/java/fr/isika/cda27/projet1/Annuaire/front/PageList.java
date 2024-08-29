@@ -2,6 +2,7 @@ package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
 import fr.isika.cda27.projet1.Annuaire.back.InternDAO;
+import fr.isika.cda27.projet1.Annuaire.back.Node;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.collections.FXCollections;
@@ -22,31 +23,31 @@ import java.util.List;
 
 public class PageList extends BorderPane {
 
-    public ObservableList<Intern> myObservableArrayList;
-    public Intern selectedIntern;
+	public ObservableList<Intern> myObservableArrayList;
+	public Intern selectedIntern;
 
-    public PageList(User loggedInUser) {
-    	createBinfile();
-    	
-        this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-        
-        // PANNEAU GAUCHE
-        LeftPane leftPane = new LeftPane(loggedInUser);
-        this.setLeft(leftPane);
+	public PageList(User loggedInUser) {
+		Tree tree = new Tree();
+		tree.createBinfile();
 
-        // Conteneur pour la barre de recherche et la table
-        VBox rightContainer = new VBox();
-        rightContainer.setPadding(new Insets(0, 50, 0, 50)); 
-        rightContainer.setSpacing(10); 
+		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
-        // SEARCH BAR
-        SearchBar searchBar = new SearchBar();
-        searchBar.setPadding(new Insets(30, 0, 25, 0));
-        setTop(searchBar);
-       
-        rightContainer.getChildren().add(searchBar);
+		// PANNEAU GAUCHE
+		LeftPane leftPane = new LeftPane(loggedInUser);
+		this.setLeft(leftPane);
 
-        
+		// Conteneur pour la barre de recherche et la table
+		VBox rightContainer = new VBox();
+		rightContainer.setPadding(new Insets(0, 50, 0, 50));
+		rightContainer.setSpacing(10);
+
+		// SEARCH BAR
+		SearchBar searchBar = new SearchBar();
+		searchBar.setPadding(new Insets(30, 0, 25, 0));
+		setTop(searchBar);
+
+		rightContainer.getChildren().add(searchBar);
+
 ////        try {
 ////        	Tree tree = new Tree();
 ////        	// creation du random access file pour lire et se déplacer dans le fichier binaire
@@ -93,38 +94,17 @@ public class PageList extends BorderPane {
 //        // Ajouter la table au conteneur de droite
 //        rightContainer.getChildren().add(tableView);
 
-        // Ajouter un espace en bas
-        Region bottomPadding = new Region();
-        bottomPadding.setMinHeight(30); // Ajuster la hauteur pour définir l'espace en bas
-        rightContainer.getChildren().add(bottomPadding);
+		// Ajouter un espace en bas
+		Region bottomPadding = new Region();
+		bottomPadding.setMinHeight(30); // Ajuster la hauteur pour définir l'espace en bas
+		rightContainer.getChildren().add(bottomPadding);
 
-        // Ajouter le conteneur de droite au centre du BorderPane
-        this.setCenter(rightContainer);
-    }
-    
-    private void createBinfile() {
-		InternDAO intern;
-		List<Intern> interns;
-
-		try {
-			// Initialise la liste de stagiaire depuis le fichier don
-			intern = new InternDAO();
-			interns = intern.getMaListe();
-
-			// créé l'arbre
-			Tree tree = new Tree();
-
-			// Parcours de chaque stagiare pour créer un Node et l'écrire dans le fichier
-			for (int i = 0; i < interns.size(); i++) {
-				// Crée un noeud avec le stagiaire
-				tree.checkRootToAddNode(interns.get(i));
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Ajouter le conteneur de droite au centre du BorderPane
+		this.setCenter(rightContainer);
 	}
-    
+
+}
+
 //    private List<Intern> readAllInternsFromBinFile(RandomAccessFile raf) throws IOException {
 //        List<Intern> internList = new ArrayList<>();
 //        raf.seek(0); // Commencer au début du fichier
@@ -250,7 +230,6 @@ public class PageList extends BorderPane {
 //		}
 //		
 //	}
-}
 
 
 
