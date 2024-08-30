@@ -108,8 +108,8 @@ public class Intern implements Comparable<Intern> {
 		raf.writeChars(formatString(this.name, NAME_LENGTH));
 		raf.writeChars(formatString(this.firstname, FIRSTNAME_LENGTH));
 		raf.writeChars(formatString(this.department, DEPARTMENT_LENGTH));
-		raf.writeChars(formatString(this.year, YEAR_LENGTH));
 		raf.writeChars(formatString(this.promo, PROMO_LENGTH));
+		raf.writeChars(formatString(this.year, YEAR_LENGTH));
 	}
 
 	/**
