@@ -39,7 +39,10 @@
     -fx-cursor: hand;
 }
 
-
+.selected-button {
+    -fx-background-color: #A9A9A9; /* Changez cette couleur pour correspondre à votre thème */
+    -fx-font-weight: bold;
+}
 
 /* Barre de recherche */ 
 .searchBtn {
