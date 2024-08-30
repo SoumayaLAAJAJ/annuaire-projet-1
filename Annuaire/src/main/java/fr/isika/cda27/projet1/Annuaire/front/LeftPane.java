@@ -83,6 +83,15 @@ public class LeftPane extends BorderPane {
 		menuFooter.setLeft(FAQBtn);
 		menuFooter.setRight(logOutBtn);
 		
+		FAQBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				app.switchToFAQPage(app, loggedInUser);
+				
+			}
+		});
+		
 		logOutBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

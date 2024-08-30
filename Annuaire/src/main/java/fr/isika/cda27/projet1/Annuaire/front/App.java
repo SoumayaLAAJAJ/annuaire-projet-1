@@ -53,6 +53,17 @@ public class App extends Application {
 		Scene addInternScene = addPage.createAddView(app, loggedInUser);
 		stage.setScene(addInternScene);
 	}
+	
+    // Méthode pour appeler la page FAQ
+    public void switchToFAQPage(App app, User loggedInUser) {
+        FAQ faqPage = new FAQ(app, loggedInUser);
+        Scene faqScene = faqPage.createAddView(app, loggedInUser);
+        stage.setScene(faqScene);
+        stage.centerOnScreen();
+        stage.setTitle("FAQ - Annuaire de Gin");
+    }
+	
+
 
 	public static void main(String[] args) {
 		launch(args);

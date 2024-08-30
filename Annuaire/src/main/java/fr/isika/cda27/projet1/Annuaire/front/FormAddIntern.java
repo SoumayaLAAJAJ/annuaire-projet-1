@@ -46,7 +46,7 @@ public class FormAddIntern extends BorderPane {
 	VBox yearBox = new VBox();
 
 	GridPane form = new GridPane();
-	Label feedbackLabel = new Label(); // Label pour afficher les messages de feedback
+	Label feedbackLabel = new Label(); 
 
 	private void initializeUI(App app, User loggedInUser) {
 
@@ -83,7 +83,7 @@ public class FormAddIntern extends BorderPane {
 		form.addRow(1, nameBox, firstnameBox, departmentBox);
 		form.addRow(2, yearBox, promoBox);
 		form.addRow(3, buttonRow);
-		form.addRow(4, feedbackLabel); // Ajout du feedbackLabel sous le bouton
+		form.addRow(4, feedbackLabel); 
 		form.setVgap(30);
 		form.setHgap(100);
 
