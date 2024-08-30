@@ -1,11 +1,9 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.User;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -14,11 +12,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 
 public class LeftPane extends BorderPane {
 
-	public LeftPane(User loggedInUser) {
+	private App app;
+
+	public LeftPane(App app, User loggedInUser) {
+		
+		this.app = app;
 		// Couleur de fond et largueur du panneau
 		setStyle("-fx-background-color:#D9D9D9");
 		setPrefWidth(270);
@@ -55,36 +56,24 @@ public class LeftPane extends BorderPane {
 		internListBtn.setPrefWidth(270);
 		internListBtn.getStyleClass().add("labelBold");
 		internListBtn.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent event) {
-				PageList pageList = new PageList(loggedInUser);
-				Scene scene = new Scene(pageList);
-				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
-				stage.setScene(scene);
-				 //stage.setMaximized(false);
-
-				 stage.setMaximized(true);
-				
+				app.switchToPageList(app, loggedInUser);
 			}
 		});
-		
+
 		Button internAddBtn = new Button("Ajouter un stagiaire");
 		internAddBtn.setPrefWidth(270);
 		menu.getChildren().addAll(internListBtn, internAddBtn);
 		setCenter(menu);
+
 		internAddBtn.setOnAction(new EventHandler<ActionEvent>() {
-			
 			@Override
 			public void handle(ActionEvent event) {
-				FormAddIntern formAddIntern = new FormAddIntern(loggedInUser);
-				Scene scene = new Scene(formAddIntern);
-				Stage stage = (Stage) LeftPane.this.getScene().getWindow();
-				stage.setScene(scene);
-				 stage.setMaximized(false);
-				
-				
+				app.switchToAddInternPage(app, loggedInUser);
 			}
+
 		});
 
 		// Footer
@@ -93,6 +82,14 @@ public class LeftPane extends BorderPane {
 		Button logOutBtn = new Button("Se déconnecter");
 		menuFooter.setLeft(FAQBtn);
 		menuFooter.setRight(logOutBtn);
+		
+		logOutBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				app.showLoginScene();
+			}
+
+		});
 
 		setBottom(menuFooter);
 	}

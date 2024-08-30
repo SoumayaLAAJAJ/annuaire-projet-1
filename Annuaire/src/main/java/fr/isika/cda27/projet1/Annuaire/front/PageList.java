@@ -6,9 +6,11 @@ import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,65 +28,39 @@ public class PageList extends BorderPane {
 	public ObservableList<Intern> myObservableArrayList;
 	public Intern selectedIntern;
 
-	public PageList(User loggedInUser) {
-		Tree tree = new Tree();
-		tree.createBinfile();
+	public Scene createListView(App app, User loggedInUser) {
 
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
-		// PANNEAU GAUCHE
-		LeftPane leftPane = new LeftPane(loggedInUser);
+		// Ajout du menu de gauche
+		LeftPane leftPane = new LeftPane(app, loggedInUser);
 		this.setLeft(leftPane);
 
-		// Conteneur pour la barre de recherche et la table
+		// Conteneur pour la partie droite de la page
 		VBox rightContainer = new VBox();
 		rightContainer.setPadding(new Insets(0, 40, 0, 40));
 		rightContainer.setSpacing(10);
 
-		// SEARCH BAR
-		SearchBar searchBar = new SearchBar();
+		// Ajout de la table view
+		InternTableView tableView = new InternTableView();
+		
+		// Ajout de la barre de recherche
+        SearchBar searchBar = new SearchBar(tableView);
 		searchBar.setPadding(new Insets(30, 0, 25, 0));
 		setTop(searchBar);
 
-		rightContainer.getChildren().add(searchBar);
 
-		try {
-            List<Intern> interns = tree.getInterns(); // Récupère la liste des stagiaires
-            myObservableArrayList = FXCollections.observableArrayList(interns); // Initialise l'ObservableList
-        } catch (IOException e) {
-            e.printStackTrace();
-            myObservableArrayList = FXCollections.observableArrayList(); // En cas d'erreur, initialise une liste vide
-        }
-
-        // TABLEVIEW
-        TableView<Intern> tableView = new TableView<>(myObservableArrayList);
-
-        TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
-        colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
-        colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
-
-        TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
-        colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
-
-        TableColumn<Intern, String> colYear = new TableColumn<>("Année");
-        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
-
-        TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
-        colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
-
-        tableView.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);
-        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> selectedIntern = newValue);
-        
+		// Ajout de l'icône d'impression
+		Image printIcon = new Image(getClass().getResource("/printIcon.png").toExternalForm());
+		ImageView printIconView = new ImageView(printIcon);
+		printIconView.setFitWidth(20);
+		printIconView.setPreserveRatio(true);
 
 		// Ajout de l'icône de suppression
 		Image binIcon = new Image(getClass().getResource("/binIcon.png").toExternalForm());
-		ImageView BinIconView = new ImageView(binIcon);
-		BinIconView.setFitWidth(20);
-		BinIconView.setPreserveRatio(true);
+		ImageView binIconView = new ImageView(binIcon);
+		binIconView.setFitWidth(20);
+		binIconView.setPreserveRatio(true);
 
 		// Ajout de l'icône d'édition
 		Image editIcon = new Image(getClass().getResource("/editIcon.png").toExternalForm());
@@ -93,8 +69,14 @@ public class PageList extends BorderPane {
 		editIconView.setPreserveRatio(true);
 
 		// Création du bouton suppression et ajout de l'icône dans le bouton
+		Button printBtn = new Button();
+		printBtn.setGraphic(printIconView);
+		printBtn.getStyleClass().add("searchIconBtn");
+		printBtn.setVisible(true);
+
+		// Création du bouton suppression et ajout de l'icône dans le bouton
 		Button removeBtn = new Button();
-		removeBtn.setGraphic(BinIconView);
+		removeBtn.setGraphic(binIconView);
 		removeBtn.getStyleClass().add("searchIconBtn");
 		removeBtn.setVisible(true);
 
@@ -104,38 +86,32 @@ public class PageList extends BorderPane {
 		editBtn.getStyleClass().add("searchIconBtn");
 		editBtn.setVisible(true);
 
-		VBox adminBtns = new VBox(removeBtn, editBtn);
-		adminBtns.setSpacing(20);
+		VBox buttons = new VBox();
+		buttons.setSpacing(20);
+		buttons.getChildren().add(printBtn);
 
-		// Si user est admin :
-
-		if (loggedInUser.isRoleAdmin()) {
-			// Création de l'hbox contenant la table view et les boutons admin
-			HBox tableViewBox = new HBox(tableView, adminBtns);
-			tableViewBox.setSpacing(20);
-			VBox.setVgrow(tableViewBox, Priority.ALWAYS);
-			rightContainer.getChildren().add(tableViewBox);
-
-		} else {
-
-			// Si user est pas admin, ajout uniquement de tableview dans l'hbox
-			rightContainer.getChildren().add(tableView);
-
-		}
-
-		// Permet à la tableview d'occuper tout l'espace disponible horizontalement
+		HBox tableViewBox = new HBox(tableView, buttons);
+		tableViewBox.setSpacing(20);
+		
+		VBox.setVgrow(tableViewBox, Priority.ALWAYS);
 		HBox.setHgrow(tableView, Priority.ALWAYS);
 
-		// Permettre au TableView d'occuper tout l'espace disponible verticalement
-		VBox.setVgrow(tableView, Priority.ALWAYS);
+		// Si l'utilisateur est admin, on ajoute les boutons de suppression et d'édition
+		if (loggedInUser.isRoleAdmin()) {
+			buttons.getChildren().addAll(removeBtn, editBtn);
+		}
 
-		// Ajouter un espace en bas
+		// Ajoute un espace en bas
 		Region bottomPadding = new Region();
-		bottomPadding.setMinHeight(20); // Ajuster la hauteur pour définir l'espace en bas
-		rightContainer.getChildren().add(bottomPadding);
+		bottomPadding.setMinHeight(20);
+		
+		rightContainer.getChildren().addAll(searchBar, tableViewBox, bottomPadding);
 
-		// Ajouter le conteneur de droite au centre du BorderPane
+		// Ajoute le conteneur de droite au centre du BorderPane
 		this.setCenter(rightContainer);
+
+		return new Scene(this, 1300, 700);
 	}
+
 
 }

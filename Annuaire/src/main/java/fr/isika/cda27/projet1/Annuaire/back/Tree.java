@@ -44,6 +44,7 @@ public class Tree {
 		this.raf.seek(0);
 		node.addNode(intern, raf);
 	}
+	
 
 	public Node readNode(RandomAccessFile raf, long position) {
 		String name = "";
