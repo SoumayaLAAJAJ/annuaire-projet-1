@@ -3,6 +3,7 @@ package fr.isika.cda27.projet1.Annuaire.back;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Node {
 
@@ -16,6 +17,14 @@ public class Node {
 	public int buffer1;
 	public int bufferTDLC;
 	public int bufferTDRC;
+
+	public int getNext() {
+		return next;
+	}
+
+	public void setNext(int next) {
+		this.next = next;
+	}
 
 	public Node(Intern intern) {
 		this.intern = intern;
@@ -62,12 +71,6 @@ public class Node {
 		this.rightChild = rightChild;
 	}
 
-	public void writeToRandomAccessFile(RandomAccessFile raf) throws IOException {
-		intern.writeToRandomAccessFile(raf);
-		raf.writeInt(-1);
-		raf.writeInt(-1);
-		raf.writeInt(-1);
-	}
 
 	/**
 	 * **************AJOUT D'UN NOEUD DANS L'ARBRE : *************** - 1ère étape :
@@ -195,17 +198,17 @@ public class Node {
 
 	}
 
-	public void seekInterns(String name) throws IOException {
+	public void seekInterns(String name, String firstname) throws IOException {
 		// System.out.println("getInterns
 		// ****************************************************************************");
 		IndexChild=-1;
 		Tree tree = new Tree();
 		tree.getRaf().seek(0);
-		seekNode(name, tree.getRaf());
+		seekNode(name, firstname,tree.getRaf());
 
 	}
 
-	public void seekNode(String name, RandomAccessFile raf) throws IOException {
+	public void seekNode(String name, String firstname,RandomAccessFile raf) throws IOException {
 		/**
 		 * 
 		 * SI le stagiaire de la racine > celui qui est comparé...
@@ -220,10 +223,10 @@ public class Node {
 
 		// oui -> je retourne le Intern
 		// non -> on fait ce qu'il y a dessous
-		if (node.intern.getName().compareTo(name) == 0) {
+		if ((node.intern.getName().compareTo(name) == 0 && node.intern.getFirstname().compareTo(firstname)==0) ) {
 			IndexChild = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
 //			System.out.println("Index Father = " + IndexFather);
-//			System.out.println("Index Child = " + IndexChild);
+//		System.out.println("Index Child = " + IndexChild);
 //			System.out.println("trouvé");
 		}
 
@@ -240,7 +243,7 @@ public class Node {
 				IndexFather = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
 				// System.out.println("Index Father = " + tree.IndexFather);
 				raf.seek(node.leftChild * Intern.RECORD_LENGTH);
-				seekNode(name, raf);
+				seekNode(name,firstname, raf);
 			}
 
 		}
@@ -256,23 +259,48 @@ public class Node {
 				IndexFather = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
 				// System.out.println("Index Father = " + IndexFather);
 				raf.seek(node.rightChild * Intern.RECORD_LENGTH);
-				seekNode(name, raf);
+				seekNode(name,firstname, raf);
 
 			}
+		}
+		else if (node.intern.getName().compareTo(name) == 0 && node.next!=-1) {
+			IndexFather = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
+			// System.out.println("Index Father = " + IndexFather);
+			raf.seek(node.next * Intern.RECORD_LENGTH);
+	//	System.out.println(node.getIntern().getName());
+			seekNode(name,firstname, raf);
 		}
 
 	}
 
-	public void deleteIntern(String name, RandomAccessFile raf) throws IOException {
+	public void deleteIntern(String name,String firstname, RandomAccessFile raf) throws IOException {
 		
 		Tree tree = new Tree();
 		
-		seekInterns(name);// sort index du pere et fils
+		seekInterns(name,firstname);// sort index du pere et fils
+		// Verification si le stagiere a été trouvé
 		if (IndexChild!=-1) {
 		//System.out.println("indexFather " + IndexFather);
 		Node nodeFather = tree.readNode(tree.getRaf(), IndexFather * Intern.RECORD_LENGTH); //IndexFather
 		Node nodeToDelete = tree.readNode(tree.getRaf(), IndexChild * Intern.RECORD_LENGTH);// IndexChild
-		if (nodeToDelete.leftChild == -1 && nodeToDelete.rightChild == -1) {
+		
+		if (nodeToDelete.next != -1){
+			bufferTDLC=IndexChild;
+			raf.seek(nodeToDelete.next*Intern.RECORD_LENGTH);
+			Node node1 = tree.readNode(tree.getRaf(), nodeToDelete.next * Intern.RECORD_LENGTH);
+			IndexRemplacant = (int) ((raf.getFilePointer()- Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
+			while (node1.next != -1) {
+				IndexRemplacant = (int) ((raf.getFilePointer()- Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
+				// System.out.println("node" +node1.rightChild);
+				node1 = tree.readNode(tree.getRaf(), node1.next* Intern.RECORD_LENGTH);
+				//System.out.println(node1.getIntern().getName()	); 				
+		}
+			Intern internRemplacant = node1.getIntern();
+			deleteIntern(node1.getIntern().getName(),node1.getIntern().getFirstname(), tree.getRaf());
+			raf.seek(bufferTDLC*Intern.RECORD_LENGTH);
+			internRemplacant.writeToRandomAccessFile(raf);	
+		}
+		else if (nodeToDelete.leftChild == -1 && nodeToDelete.rightChild == -1 ) {
 			//System.out.println("enfant supprimé");
 			buffer1=-1;
 			if (nodeFather.leftChild == IndexChild) {
@@ -283,6 +311,10 @@ public class Node {
 				//System.out.println("why " +IndexChild);
 				//System.out.println(buffer1);
 				raf.seek((IndexFather + 1) * Intern.RECORD_LENGTH - 8);
+				raf.writeInt(buffer1);
+			}
+			else if (nodeFather.next==IndexChild) {
+				raf.seek((IndexFather + 1) * Intern.RECORD_LENGTH - 4);
 				raf.writeInt(buffer1);
 			}
 		}
@@ -331,15 +363,12 @@ public class Node {
 		}
 			
 		
-	//		System.out.println("Index CHild b4 " +IndexChild);
+
 			Intern internRemplacant = node1.getIntern();
-			deleteIntern(node1.getIntern().getName(), tree.getRaf());
-//			System.out.println("Index CHild adter " +IndexChild);
-//			System.out.println("bufferTDLC after " +bufferTDLC);
+			deleteIntern(node1.getIntern().getName(),node1.getIntern().getFirstname(), tree.getRaf());
 			raf.seek(bufferTDLC*Intern.RECORD_LENGTH);
 			internRemplacant.writeToRandomAccessFile(raf);	
-		//	System.out.println(" print " +node1.getIntern().getName());
-					
+
 			
 			}		
 		}
@@ -350,11 +379,11 @@ public class Node {
 	
 	
 	
-	public void updateIntern(RandomAccessFile raf, String name, Intern newIntern) throws IOException {
+	public void updateIntern(RandomAccessFile raf, String name, String firstname,Intern newIntern) throws IOException {
 		Tree tree = new Tree();
 		raf=tree.getRaf();
 		
-		deleteIntern(name, raf);
+		deleteIntern(name, firstname,raf);
 		raf.seek(0);
 		addNode(newIntern, raf);
 		
@@ -365,10 +394,10 @@ public class Node {
 	
 	
 	
-	public Node getInternfromseek(String name) throws IOException {
+	public Node getInternfromseek(String name, String firstname) throws IOException {
 		
 		Tree tree = new Tree();
-		seekInterns(name);
+		seekInterns(name, firstname);
 		Node nodeIntern=tree.readNode(tree.getRaf(), (int)(IndexChild*Intern.RECORD_LENGTH));
 		return nodeIntern;
 	}

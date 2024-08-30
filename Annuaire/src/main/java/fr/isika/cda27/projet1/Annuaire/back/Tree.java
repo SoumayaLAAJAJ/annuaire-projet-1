@@ -1,5 +1,6 @@
 package fr.isika.cda27.projet1.Annuaire.back;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -10,10 +11,14 @@ public class Tree {
 
 	private Node root;
 	private RandomAccessFile raf;
+	public int IndexChild;
+	public int IndexFather;
+	public String filePath = "src/main/resources/arbre.bin";
+
 
 	public Tree() {
 		try {
-			raf = new RandomAccessFile("src/main/resources/arbre.bin", "rw");
+			raf = new RandomAccessFile(this.filePath, "rwd");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -44,7 +49,6 @@ public class Tree {
 		this.raf.seek(0);
 		node.addNode(intern, raf);
 	}
-	
 
 	public Node readNode(RandomAccessFile raf, long position) {
 		String name = "";
@@ -56,20 +60,20 @@ public class Tree {
 		int rightChild = 0;
 		int next = 0;
 
-		System.out.println("début lecture readnode pointeur: " + position);
+	//	System.out.println("début lecture readnode pointeur: " + position);
 		try {
 			// read Nom
 			raf.seek(position);
-			System.out.println("raf.getFilePointer() *++++++++++++++++++++++++++++++++++++++++++++"+raf.getFilePointer());
+			//System.out.println("raf.getFilePointer() *++++++++++++++++++++++++++++++++++++++++++++"+raf.getFilePointer());
 //			if (!(raf.getFilePointer() < 88)) {
 //				raf.seek(position  - 88);
 //			}
-			System.out.println(raf.getFilePointer());
+		//	System.out.println(raf.getFilePointer());
 			for (int j = 0; j < Intern.NAME_LENGTH; j++) {
 				name += raf.readChar();
 			}
 			name = name.trim();
-			System.out.println(name); // read Prenom
+		//	System.out.println(name); // read Prenom
 			for (int j = 0; j < (Intern.FIRSTNAME_LENGTH); j++) {
 				firstname += raf.readChar();
 			}
@@ -79,32 +83,30 @@ public class Tree {
 				department += raf.readChar();
 			}
 			department = department.trim();
-			
 			//System.out.println(department); // read année
+		
+			//System.out.println(year); // read promo
+			for (int j = 0; j < (Intern.PROMO_LENGTH); j++) {
+				promo += raf.readChar();
+			}
+			promo = promo.trim();	
 			for (int j = 0; j < (Intern.YEAR_LENGTH); j++) {
 				year += raf.readChar();
 			}
 			year = year.trim();
-			
-			for (int j = 0; j < (Intern.PROMO_LENGTH); j++) {
-				promo += raf.readChar();
-			}
-			promo = promo.trim();
-			
-			System.out.println(year); // read promo
 			//System.out.println(promo); // read left child
 			leftChild = raf.readInt();
-			System.out.println(leftChild); // read right child
+			//System.out.println(leftChild); // read right child
 			rightChild = raf.readInt();
-			System.out.println(rightChild); // read next child
+			//System.out.println(rightChild); // read next child
 			next = raf.readInt();
-			System.out.println(next);
-			System.out.println("pointeur fin de readnode: " + raf.getFilePointer() + "\n\n\n");
+			//System.out.println(next);
+			//System.out.println("pointeur fin de readnode: " + raf.getFilePointer() + "\n\n\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		Intern intern = new Intern(name, firstname, department, promo, year);
+		Intern intern = new Intern(name, firstname, department,  promo,year);
 		Node node = new Node(intern, leftChild, rightChild, next);
 
 		return node;
@@ -139,29 +141,37 @@ public class Tree {
 		}
 	}
 
-	public void createBinfile() {
-		InternDAO intern;
-		List<Intern> interns;
+	public void createBinfile()  {
 
 		try {
-			// Initialise la liste de stagiaire depuis le fichier don
-			intern = new InternDAO();
-			interns = intern.getMaListe();
+			if (this.getRaf().length()==0){
+			InternDAO intern;
+			List<Intern> interns;
 
-			// Parcours de chaque stagiare pour créer un Node et l'écrire dans le fichier
-			for (int i = 0; i < interns.size(); i++) {
-				// Crée un noeud avec le stagiaire
-				this.checkRootToAddNode(interns.get(i));
+			try {
+				// Initialise la liste de stagiaire depuis le fichier don
+				intern = new InternDAO();
+				interns = intern.getMaListe();
+
+				// Parcours de chaque stagiare pour créer un Node et l'écrire dans le fichier
+				for (int i = 0; i < interns.size(); i++) {
+					// Crée un noeud avec le stagiaire
+					this.checkRootToAddNode(interns.get(i));
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
+}
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+		}
 	
 	
 	public ArrayList<Intern> getInterns() throws IOException{
-		System.out.println("getInterns ****************************************************************************");
+		//System.out.println("getInterns ****************************************************************************");
 		raf.seek(0);
 		ArrayList<Intern> myList = new ArrayList<Intern>();
 		getInternsInfix(myList, 0, this.getRaf());
@@ -170,29 +180,29 @@ public class Tree {
 	
 	public void getInternsInfix(ArrayList<Intern> myList, long position, RandomAccessFile raf) throws IOException{
 		
-		System.out.println("getInternsInfix ----------------------------------------------------------" + position);
-		
+		//System.out.println("getInternsInfix ----------------------------------------------------------" + position);
 		Node currentNode = readNode(raf,position);
-		
-		
+
 		//affiche filsGauche filsGauche.getInternsInfix(maListe)
 		if (currentNode.getLeftChild()!=-1) {
-			System.out.println("appel recc fils gauche " + currentNode.getIntern().getName());
+		//	System.out.println("appel recc fils gauche " + currentNode.getIntern().getName());
 			 getInternsInfix( myList, currentNode.getLeftChild()*Intern.RECORD_LENGTH ,raf);
 		}
+				
+		if (currentNode.getNext()!=-1) {
+			//	System.out.println("appel recc fils gauche " + currentNode.getIntern().getName());
+				 getInternsInfix( myList, currentNode.getNext()*Intern.RECORD_LENGTH ,raf);
+			}
 		
 		//affiche noeud maList.add(noeud.intern)
-		System.out.println("Ajout List " + currentNode.getIntern().getName());
+		//System.out.println("Ajout List " + currentNode.getIntern().getName());
 		myList.add(currentNode.getIntern());
 		
 		//affiche filsDroit filsDroit.getInternsInfix
 		if (currentNode.getRightChild()!=-1) {
-			System.out.println("appel recc fils droit " + currentNode.getIntern().getName());
+			//System.out.println("appel recc fils droit " + currentNode.getIntern().getName());
 			 getInternsInfix( myList, currentNode.getRightChild()*Intern.RECORD_LENGTH ,raf);
 		}
 	
 	}
 }
-
-
-

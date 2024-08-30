@@ -37,6 +37,7 @@ public class InternDAO {
                         case 2: department = line; break;
                         case 3: promo = line; break;
                         case 4: year = line; break;
+                        
                     }
                     compteur++;
                 }
@@ -135,4 +136,3 @@ public class InternDAO {
 
 
 }
-

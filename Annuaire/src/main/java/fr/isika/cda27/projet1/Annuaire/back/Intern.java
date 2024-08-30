@@ -9,7 +9,7 @@ public class Intern implements Comparable<Intern> {
 	public static final int FIRSTNAME_LENGTH = 10;
 	public static final int DEPARTMENT_LENGTH = 6;
 	public static final int YEAR_LENGTH = 4;
-	public static final int PROMO_LENGTH = 16;
+	public static final int PROMO_LENGTH = 20;
 	public static final int RECORD_LENGTH = NAME_LENGTH*2 + FIRSTNAME_LENGTH*2 + DEPARTMENT_LENGTH*2 + YEAR_LENGTH*2+ PROMO_LENGTH*2 + 12;
 
 	private String name;
@@ -120,7 +120,7 @@ public class Intern implements Comparable<Intern> {
 	 * @param length
 	 * @return String
 	 */
-	public String formatString(String s, int length) {
+	private String formatString(String s, int length) {
 		String sLong = s;
 		if (sLong.length() < length) {
 			for (int i = s.length(); i < length; i++) {
