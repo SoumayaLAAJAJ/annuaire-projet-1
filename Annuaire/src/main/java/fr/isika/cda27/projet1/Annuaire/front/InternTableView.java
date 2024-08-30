@@ -5,9 +5,11 @@ import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,9 +36,36 @@ public class InternTableView extends TableView<Intern> {
         // Configuration des colonnes
         TableColumn<Intern, String> colNom = new TableColumn<>("Nom");
         colNom.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colNom.setCellFactory(new Callback<TableColumn<Intern, String>, TableCell<Intern, String>>() {
+            @Override
+            public TableCell<Intern, String> call(TableColumn<Intern, String> param) {
+                return new TableCell<Intern, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.toUpperCase());
+                        }
+                    }
+                };
+            }
+        });
 
         TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
         colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+        colPrenom.setCellFactory(column -> new TableCell<Intern, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    setText(item.substring(0, 1).toUpperCase() + item.substring(1).toLowerCase());
+                }
+            }
+        });
 
         TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
         colDepartment.setCellValueFactory(new PropertyValueFactory<>("department"));
@@ -46,6 +75,23 @@ public class InternTableView extends TableView<Intern> {
 
         TableColumn<Intern, String> colPromo = new TableColumn<>("Promo");
         colPromo.setCellValueFactory(new PropertyValueFactory<>("promo"));
+        colPromo.setCellFactory(new Callback<TableColumn<Intern, String>, TableCell<Intern, String>>() {
+            @Override
+            public TableCell<Intern, String> call(TableColumn<Intern, String> param) {
+                return new TableCell<Intern, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.toUpperCase());
+                        }
+                    }
+                };
+            }
+        });
+
 
         // Ajouter les colonnes à la TableView
         this.getColumns().addAll(colNom, colPrenom, colDepartment, colYear, colPromo);

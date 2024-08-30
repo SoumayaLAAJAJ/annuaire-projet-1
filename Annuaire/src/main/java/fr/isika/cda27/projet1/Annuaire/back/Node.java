@@ -97,7 +97,7 @@ public class Node {
 //System.out.println(newIntern);
 		// System.out.println();
 
-		if (node.intern.getName().compareTo(newIntern.getName()) > 0) {
+		if (node.intern.getName().compareToIgnoreCase(newIntern.getName()) > 0) {
 
 			/**
 			 * ...et que dans ce cas, le fils gauche du noeud racine (key) est null...
@@ -144,7 +144,7 @@ public class Node {
 		/**
 		 * ...et que dans ce cas le fils droit est null...
 		 */
-		else if (node.intern.getName().compareTo(newIntern.getName()) < 0) {
+		else if (node.intern.getName().compareToIgnoreCase(newIntern.getName()) < 0) {
 			if (node.rightChild == -1) {
 				/**
 				 * ...ALORS on ajoute le stagiaire dans ce noeud (condition d'arrêt)
@@ -223,14 +223,14 @@ public class Node {
 
 		// oui -> je retourne le Intern
 		// non -> on fait ce qu'il y a dessous
-		if ((node.intern.getName().compareTo(name) == 0 && node.intern.getFirstname().compareTo(firstname)==0) ) {
+		if ((node.intern.getName().compareToIgnoreCase(name) == 0 && node.intern.getFirstname().compareToIgnoreCase(firstname)==0) ) {
 			IndexChild = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
 //			System.out.println("Index Father = " + IndexFather);
 //		System.out.println("Index Child = " + IndexChild);
 //			System.out.println("trouvé");
 		}
 
-		if (node.intern.getName().compareTo(name) > 0) { // si valeur<noeudcourrant
+		if (node.intern.getName().compareToIgnoreCase(name) > 0) { // si valeur<noeudcourrant
 		//	System.out.println("depuis position " + raf.getFilePointer() + "  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 			// on part a gauche
 
@@ -248,7 +248,7 @@ public class Node {
 
 		}
 
-		else if (node.intern.getName().compareTo(name) < 0) {
+		else if (node.intern.getName().compareToIgnoreCase(name) < 0) {
 			// System.out.println("depuis position " + raf.getFilePointer() + "
 			// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ) ;
 			if (node.rightChild == -1) {
@@ -263,7 +263,7 @@ public class Node {
 
 			}
 		}
-		else if (node.intern.getName().compareTo(name) == 0 && node.next!=-1) {
+		else if (node.intern.getName().compareToIgnoreCase(name) == 0 && node.next!=-1) {
 			IndexFather = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
 			// System.out.println("Index Father = " + IndexFather);
 			raf.seek(node.next * Intern.RECORD_LENGTH);
