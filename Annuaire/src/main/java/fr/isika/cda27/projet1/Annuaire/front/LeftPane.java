@@ -17,7 +17,7 @@ public class LeftPane extends BorderPane {
 
 	private App app;
 
-	public LeftPane(App app, User loggedInUser) {
+	public LeftPane(App app, User loggedInUser, String scene) {
 		
 		this.app = app;
 		// Couleur de fond et largueur du panneau
@@ -67,7 +67,7 @@ public class LeftPane extends BorderPane {
 		internAddBtn.setPrefWidth(270);
 		menu.getChildren().addAll(internListBtn, internAddBtn);
 		setCenter(menu);
-
+		
 		internAddBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -75,6 +75,7 @@ public class LeftPane extends BorderPane {
 			}
 
 		});
+		
 
 		// Footer
 		BorderPane menuFooter = new BorderPane();
@@ -82,6 +83,24 @@ public class LeftPane extends BorderPane {
 		Button logOutBtn = new Button("Se déconnecter");
 		menuFooter.setLeft(FAQBtn);
 		menuFooter.setRight(logOutBtn);
+		
+		// Ajout du css pour la page sélectionnée
+		if("FormAddIntern".equals(scene)) {
+			internAddBtn.getStyleClass().add("selected-button");
+			internListBtn.getStyleClass().remove("selected-button");
+			FAQBtn.getStyleClass().remove("selected-button");
+		}
+		if("PageList".equals(scene)) {
+			internAddBtn.getStyleClass().remove("selected-button");
+			internListBtn.getStyleClass().add("selected-button");
+			FAQBtn.getStyleClass().remove("selected-button");
+		}
+		if("FAQ".equals(scene)) {
+			internAddBtn.getStyleClass().remove("selected-button");
+			internListBtn.getStyleClass().remove("selected-button");
+			FAQBtn.getStyleClass().add("selected-button");
+		}
+
 		
 		FAQBtn.setOnAction(new EventHandler<ActionEvent>() {
 			

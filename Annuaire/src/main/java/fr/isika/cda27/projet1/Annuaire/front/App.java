@@ -44,7 +44,7 @@ public class App extends Application {
 		Scene pageListScene = pageList.createListView(app, loggedInUser);
 		stage.setScene(pageListScene);
 		stage.centerOnScreen();
-		stage.setTitle("Bienvenue dans l'annuaire de Gin !");
+		stage.setTitle("Bienvenue dans l'annuaire de Gin");
 	}
 
 	// Méthode pour appeler le formulaire d'ajout de stagiaire

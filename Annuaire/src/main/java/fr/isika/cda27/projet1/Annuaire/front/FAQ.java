@@ -22,7 +22,7 @@ public class FAQ extends HBox {
 
     private void initializeUI(App app, User loggedInUser) {
         this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-        LeftPane leftPane = new LeftPane(app, loggedInUser);
+        LeftPane leftPane = new LeftPane(app, loggedInUser, "FAQ");
 
         // Créez les questions
         createQuestion("Comment ajouter un stagiaire ?", "/addIntern.png", 800, "Appuyez sur le bouton 'Ajouter un stagiaire', remplir le formulaire et appuyez sur le bouton 'Ajouter'. Attention : tous les champs doivent être remplis !");

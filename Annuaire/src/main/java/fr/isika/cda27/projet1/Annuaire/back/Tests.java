@@ -12,11 +12,11 @@ public class Tests {
 		tree.createBinfile();
 		Intern internd = new Intern();
 		Node node = new Node(internd);
-		Intern newIntern = new Intern("GEGE", "Petanque", "95", "1998", "CDAVIEUX");
-		//node.updateIntern(tree.getRaf(),"UNG" , newIntern);
+		Intern newIntern = new Intern("GIN", "Hello", "95", "1998", "CDAVIEUX");
+		//node.updateIntern(tree.getRaf(),"LACROIX", "Pascale" , newIntern);
 
-		System.out.println(node.getInternfromseek("CHONE", "Martin").getNext());
-		node.deleteIntern("CHONE","Martin", tree.getRaf());
+	//	System.out.println(node.getInternfromseek("CHONE", "Martin").getNext());
+		node.deleteIntern("BRACHOTTE","Faustine", tree.getRaf());
 	
 
 

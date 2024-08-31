@@ -40,8 +40,7 @@
 }
 
 .selected-button {
-    -fx-background-color: #A9A9A9; /* Changez cette couleur pour correspondre à votre thème */
-    -fx-font-weight: bold;
+    -fx-background-color: #B8B8B8;
 }
 
 /* Barre de recherche */ 
@@ -67,6 +66,13 @@
 .searchIconBtn:hover {
     -fx-background-color: rgba(100, 138, 159, 0.75);
 
+}
+
+.editIconBtn {
+	-fx-padding: 8px 10px;
+    -fx-background-color: #6ABF9B;
+    -fx-transition: background-color 0.3s ease;
+    -fx-background-radius: 30px; 
 }
 
 /* Style pour les TextField */
@@ -109,7 +115,8 @@
 }
 
 .table-view .table-row-cell:selected .table-cell {
-    -fx-background-color: #648A9F;
+    -fx-background-color: #D3D3D3;
+     -fx-text-fill: black;
 }
 
 .table-view .table-cell {
@@ -117,8 +124,6 @@
     -fx-border-color: transparent;
     -fx-alignment: center;
 }
-
-
 /**
  * FAQ
  */

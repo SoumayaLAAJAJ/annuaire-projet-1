@@ -36,7 +36,7 @@ public class PageList extends BorderPane {
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
 		// Ajout du menu de gauche
-		LeftPane leftPane = new LeftPane(app, loggedInUser);
+		LeftPane leftPane = new LeftPane(app, loggedInUser, "PageList");
 		this.setLeft(leftPane);
 
 		// Conteneur pour la partie droite de la page
@@ -83,6 +83,7 @@ public class PageList extends BorderPane {
 		removeBtn.getStyleClass().add("searchIconBtn");
 		removeBtn.setVisible(true);
 		removeBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
 		    @Override
 		    public void handle(ActionEvent event) {
 		        // Récupération du stagiaire sélectionné
@@ -110,7 +111,6 @@ public class PageList extends BorderPane {
 		        }
 		    }
 		});
-
 
 		// Création du bouton d'édition et ajout de l'icône dans le bouton
 		Button editBtn = new Button();

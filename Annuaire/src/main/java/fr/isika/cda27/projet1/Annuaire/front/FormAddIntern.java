@@ -15,81 +15,72 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class FormAddIntern extends BorderPane {
 
 	public FormAddIntern(App app, User loggedInUser) {
-		super();
-		initializeUI(app, loggedInUser);
-	}
 
-	Label title = new Label("Ajouter un stagiaire");
-	VBox container = new VBox();
-	Label name = new Label("Nom");
-	Label firstname = new Label("Prénom");
-	Label department = new Label("Département");
-	Label promo = new Label("Promotion");
-	Label year = new Label("Année");
-	TextField nameTxtfield = new TextField();
-	TextField firstnameTxtfield = new TextField();
-	TextField departmentTxtfield = new TextField();
-	TextField promoTxtField = new TextField();
-	ChoiceBox<String> yearChoiceBox = new ChoiceBox<>();
-	Button add = new Button("Ajouter");
-
-	VBox nameBox = new VBox();
-	VBox firstnameBox = new VBox();
-	VBox departmentBox = new VBox();
-	VBox promoBox = new VBox();
-	VBox yearBox = new VBox();
-
-	GridPane form = new GridPane();
-	Label feedbackLabel = new Label(); 
-
-	private void initializeUI(App app, User loggedInUser) {
+		Label title = new Label("Ajouter un stagiaire");
+		VBox container = new VBox();
+		Label name = new Label("Nom");
+		Label firstname = new Label("Prénom");
+		Label department = new Label("Département");
+		Label promo = new Label("Promotion");
+		Label year = new Label("Année");
+		TextField nameTxtfield = new TextField();
+		TextField firstnameTxtfield = new TextField();
+		TextField departmentTxtfield = new TextField();
+		TextField promoTxtField = new TextField();
+		ChoiceBox<String> yearChoiceBox = new ChoiceBox<String>();
+		Button add = new Button("Ajouter");
+		VBox nameBox = new VBox();
+		VBox firstnameBox = new VBox();
+		VBox departmentBox = new VBox();
+		VBox promoBox = new VBox();
+		VBox yearBox = new VBox();
+		GridPane form = new GridPane();
+		Label feedbackLabel = new Label(); 
 
 		// Ajout du menu de gauche
-		LeftPane leftPane = new LeftPane(app, loggedInUser);
+		LeftPane leftPane = new LeftPane(app, loggedInUser, "FormAddIntern");
 		this.setLeft(leftPane);
 
 		// Conteneur pour le formulaire
 		VBox rightContainer = new VBox();
-		rightContainer.setPadding(new Insets(120, 40, 0, 40));
-		rightContainer.setSpacing(10);
+		rightContainer.setPadding(new Insets(80, 20, 0, 70));
 
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-		add.getStyleClass().add("specific-button");
+		add.getStyleClass().add("searchIconBtn");
+		add.setStyle("-fx-padding: 12px 20px;");
 		title.setStyle("-fx-font-weight: bold; -fx-font-family: 'Inter'; -fx-font-size: 28px;");
 
 		nameBox.getChildren().addAll(name, nameTxtfield);
+		nameBox.setSpacing(10);
 		firstnameBox.getChildren().addAll(firstname, firstnameTxtfield);
+		firstnameBox.setSpacing(10);
 		departmentBox.getChildren().addAll(department, departmentTxtfield);
+		departmentBox.setSpacing(10);
+		departmentBox.setPadding(new Insets(0, 0, 0, 65));
 		promoBox.getChildren().addAll(promo, promoTxtField);
+		promoBox.setSpacing(10);
 
-		for (int year = 2002; year <= 2024; year++) {
-			yearChoiceBox.getItems().add(String.valueOf(year));
+
+		for (int yearChoice = 2002; yearChoice <= 2024; yearChoice++) {
+			yearChoiceBox.getItems().addAll(String.valueOf(yearChoice));
 		}
 
 		yearBox.getChildren().addAll(year, yearChoiceBox);
-
-		HBox buttonRow = new HBox();
-		HBox space = new HBox();
-		buttonRow.getChildren().addAll(space, add);
+		yearBox.setSpacing(10);
 
 		// Formulaire
 		form.addRow(0, title);
-		form.addRow(1, nameBox, firstnameBox, departmentBox);
-		form.addRow(2, yearBox, promoBox);
-		form.addRow(3, buttonRow);
-		form.addRow(4, feedbackLabel); 
+		form.addRow(2, nameBox, firstnameBox, departmentBox);
+		form.addRow(3, yearBox, promoBox);
+		form.addRow(5, add);
 		form.setVgap(30);
-		form.setHgap(100);
 
 		container.getChildren().addAll(form);
-		form.setPadding(new Insets(0, 0, 0, 50));
-
 		rightContainer.getChildren().addAll(container);
 
 		// Ajouter le conteneur de droite au centre du BorderPane
@@ -132,11 +123,10 @@ public class FormAddIntern extends BorderPane {
 				}
 			}
 		});
-
+		
 	}
 
 	public Scene createAddView(App app, User loggedInUser) {
 		return new Scene(this, 1300, 700);
 	}
 }
-
