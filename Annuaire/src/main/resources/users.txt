@@ -6,3 +6,4 @@ a;a;true;
 marieMadeleine;test;false
 gege;gege;false
 a;a;false
+test1;test&;false
