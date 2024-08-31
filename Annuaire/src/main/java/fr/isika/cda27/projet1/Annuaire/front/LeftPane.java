@@ -76,17 +76,6 @@ public class LeftPane extends BorderPane {
 
 		});
 		
-		// Ajout du css pour la page sélectionnée
-		if("FormAddIntern".equals(scene)) {
-			internAddBtn.getStyleClass().add("selected-button");
-			internListBtn.getStyleClass().remove("selected-button");
-
-		}
-		if("PageList".equals(scene)) {
-			internAddBtn.getStyleClass().remove("selected-button");
-			internListBtn.getStyleClass().add("selected-button");
-		}
-
 
 		// Footer
 		BorderPane menuFooter = new BorderPane();
@@ -94,6 +83,33 @@ public class LeftPane extends BorderPane {
 		Button logOutBtn = new Button("Se déconnecter");
 		menuFooter.setLeft(FAQBtn);
 		menuFooter.setRight(logOutBtn);
+		
+		// Ajout du css pour la page sélectionnée
+		if("FormAddIntern".equals(scene)) {
+			internAddBtn.getStyleClass().add("selected-button");
+			internListBtn.getStyleClass().remove("selected-button");
+			FAQBtn.getStyleClass().remove("selected-button");
+		}
+		if("PageList".equals(scene)) {
+			internAddBtn.getStyleClass().remove("selected-button");
+			internListBtn.getStyleClass().add("selected-button");
+			FAQBtn.getStyleClass().remove("selected-button");
+		}
+		if("FAQ".equals(scene)) {
+			internAddBtn.getStyleClass().remove("selected-button");
+			internListBtn.getStyleClass().remove("selected-button");
+			FAQBtn.getStyleClass().add("selected-button");
+		}
+
+		
+		FAQBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				app.switchToFAQPage(app, loggedInUser);
+				
+			}
+		});
 		
 		logOutBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class FormAddIntern extends BorderPane {
@@ -41,6 +40,7 @@ public class FormAddIntern extends BorderPane {
 		VBox promoBox = new VBox();
 		VBox yearBox = new VBox();
 		GridPane form = new GridPane();
+		Label feedbackLabel = new Label(); 
 
 		// Ajout du menu de gauche
 		LeftPane leftPane = new LeftPane(app, loggedInUser, "FormAddIntern");
@@ -65,6 +65,7 @@ public class FormAddIntern extends BorderPane {
 		promoBox.getChildren().addAll(promo, promoTxtField);
 		promoBox.setSpacing(10);
 
+
 		for (int yearChoice = 2002; yearChoice <= 2024; yearChoice++) {
 			yearChoiceBox.getItems().addAll(String.valueOf(yearChoice));
 		}
@@ -87,16 +88,38 @@ public class FormAddIntern extends BorderPane {
 
 		// Ajoute le stagiaire dans l'arbre binaire
 		add.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
-				Intern newIntern = new Intern(nameTxtfield.getText(), firstnameTxtfield.getText(),
-						departmentTxtfield.getText(), promoTxtField.getText(), yearChoiceBox.getValue());
-				Tree tree = new Tree();
-				try {
-					tree.addNode(newIntern);
-				} catch (IOException e) {
-					e.printStackTrace();
+				// Vérifier si tous les champs sont remplis
+				if (nameTxtfield.getText().isEmpty() || firstnameTxtfield.getText().isEmpty()
+						|| departmentTxtfield.getText().isEmpty() || promoTxtField.getText().isEmpty()
+						|| yearChoiceBox.getValue() == null) {
+
+					// Afficher le message d'erreur en rouge
+					feedbackLabel.setText("Merci de remplir tous les champs");
+					feedbackLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
+				} else {
+					Intern newIntern = new Intern(nameTxtfield.getText(), firstnameTxtfield.getText(),
+							departmentTxtfield.getText(), promoTxtField.getText(), yearChoiceBox.getValue());
+					Tree tree = new Tree();
+					try {
+						tree.addNode(newIntern);
+
+						// Afficher le message de succès en vert
+						feedbackLabel.setText("Le stagiaire a bien été ajouté");
+						feedbackLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+
+						// Réinitialiser les champs après ajout
+						nameTxtfield.clear();
+						firstnameTxtfield.clear();
+						departmentTxtfield.clear();
+						promoTxtField.clear();
+						yearChoiceBox.setValue(null);
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -106,5 +129,4 @@ public class FormAddIntern extends BorderPane {
 	public Scene createAddView(App app, User loggedInUser) {
 		return new Scene(this, 1300, 700);
 	}
-
 }
