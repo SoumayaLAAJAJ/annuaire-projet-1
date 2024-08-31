@@ -88,8 +88,6 @@ public class Node {
 		 * SI le stagiaire de la racine > celui qui est comparé...
 		 */
 		
-		//System.out.println("addNode de " + newIntern.getName()+ "depuis position " + raf.getFilePointer() + "  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ) ;
-		
 		Tree tree = new Tree();
 		long position = raf.getFilePointer();
 		Node node = tree.readNode(raf, position); //On se place à la racine de l'arbe

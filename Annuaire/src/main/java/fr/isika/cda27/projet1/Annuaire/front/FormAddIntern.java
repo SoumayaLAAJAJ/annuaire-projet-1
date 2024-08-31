@@ -78,6 +78,7 @@ public class FormAddIntern extends BorderPane {
 		form.addRow(2, nameBox, firstnameBox, departmentBox);
 		form.addRow(3, yearBox, promoBox);
 		form.addRow(5, add);
+		form.addRow(4, feedbackLabel);
 		form.setVgap(30);
 
 		container.getChildren().addAll(form);
