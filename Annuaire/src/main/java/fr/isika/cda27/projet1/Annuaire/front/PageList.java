@@ -1,10 +1,13 @@
 package fr.isika.cda27.projet1.Annuaire.front;
 
 import fr.isika.cda27.projet1.Annuaire.back.Intern;
+import fr.isika.cda27.projet1.Annuaire.back.Node;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -79,6 +82,35 @@ public class PageList extends BorderPane {
 		removeBtn.setGraphic(binIconView);
 		removeBtn.getStyleClass().add("searchIconBtn");
 		removeBtn.setVisible(true);
+		removeBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		        // Récupération du stagiaire sélectionné
+		        Intern selectedIntern = tableView.getSelectionModel().getSelectedItem();
+
+		        if (selectedIntern != null) {
+		            try {
+		                // Création d'une instance de Node pour la suppression
+		                Node node = new Node(selectedIntern);
+		                
+		                // Suppression du stagiaire dans l'arbre
+		                Tree tree = new Tree();
+		                node.deleteIntern(selectedIntern.getName(), selectedIntern.getFirstname(), tree.getRaf());
+
+		                // Mise à jour de la liste observable après suppression
+		                List<Intern> updatedInterns = tree.getInterns(); 
+		                ObservableList<Intern> updatedObservableList = FXCollections.observableArrayList(updatedInterns);
+		                tableView.setItems(updatedObservableList);
+		                
+		            } catch (IOException e) {
+		                e.printStackTrace();
+		            }
+		        } else {
+		            System.out.println("Aucun stagiaire sélectionné pour la suppression.");
+		        }
+		    }
+		});
+
 
 		// Création du bouton d'édition et ajout de l'icône dans le bouton
 		Button editBtn = new Button();
