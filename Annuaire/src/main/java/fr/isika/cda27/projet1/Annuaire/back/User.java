@@ -82,14 +82,5 @@ public class User {
         return null;
     }
 
-    // Méthode pour se déconnecter
-//    public void logOut(Stage primaryStage) {
-//        LogForm form = new LogForm();
-//        try {
-//            form.start(primaryStage);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
 

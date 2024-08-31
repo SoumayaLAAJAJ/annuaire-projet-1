@@ -77,6 +77,15 @@ public class PageList extends BorderPane {
 		printBtn.setGraphic(printIconView);
 		printBtn.getStyleClass().add("searchIconBtn");
 		printBtn.setVisible(true);
+		printBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		        PdfGenerator pdfGenerator = new PdfGenerator(tableView);
+		        String filePath = "liste_stagiaires.pdf";
+		        pdfGenerator.generatePdf(filePath);
+		        System.out.println("PDF généré à : " + filePath);
+		    }
+		});
 
 		// Création du bouton suppression et ajout de l'icône dans le bouton
 		Button removeBtn = new Button();

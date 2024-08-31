@@ -6,10 +6,12 @@ import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,6 +45,22 @@ public class InternTableView extends TableView<Intern> {
             intern.setName(event.getNewValue());
             updatebinFile(oldIntern, intern);
         });
+        colNom.setCellFactory(new Callback<TableColumn<Intern, String>, TableCell<Intern, String>>() {
+            @Override
+            public TableCell<Intern, String> call(TableColumn<Intern, String> param) {
+                return new TableCell<Intern, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.toUpperCase());
+                        }
+                    }
+                };
+            }
+        });
 
         TableColumn<Intern, String> colPrenom = new TableColumn<>("Prénom");
         colPrenom.setCellValueFactory(new PropertyValueFactory<>("firstname"));
@@ -52,6 +70,17 @@ public class InternTableView extends TableView<Intern> {
             Intern oldIntern = new Intern(intern.getName(),intern.getFirstname(),intern.getDepartment(),intern.getYear(),intern.getPromo());
             intern.setFirstname(event.getNewValue());
             updatebinFile(oldIntern, intern);
+        });
+        colPrenom.setCellFactory(column -> new TableCell<Intern, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    setText(item.substring(0, 1).toUpperCase() + item.substring(1).toLowerCase());
+                }
+            }
         });
 
         TableColumn<Intern, String> colDepartment = new TableColumn<>("Département");
@@ -82,6 +111,22 @@ public class InternTableView extends TableView<Intern> {
             Intern oldIntern = new Intern(intern.getName(),intern.getFirstname(),intern.getDepartment(),intern.getYear(),intern.getPromo());
             intern.setPromo(event.getNewValue());
             updatebinFile(oldIntern, intern);
+        });
+        colPromo.setCellFactory(new Callback<TableColumn<Intern, String>, TableCell<Intern, String>>() {
+            @Override
+            public TableCell<Intern, String> call(TableColumn<Intern, String> param) {
+                return new TableCell<Intern, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.toUpperCase());
+                        }
+                    }
+                };
+            }
         });
 
         // Ajouter les colonnes à la TableView
