@@ -5,8 +5,8 @@ import java.io.RandomAccessFile;
 
 public class Intern implements Comparable<Intern> {
 
-	public static final int NAME_LENGTH = 10;
-	public static final int FIRSTNAME_LENGTH = 10;
+	public static final int NAME_LENGTH = 15;
+	public static final int FIRSTNAME_LENGTH = 15;
 	public static final int DEPARTMENT_LENGTH = 6;
 	public static final int YEAR_LENGTH = 4;
 	public static final int PROMO_LENGTH = 20;
