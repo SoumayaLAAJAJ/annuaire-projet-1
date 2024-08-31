@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -117,6 +118,16 @@ public class PageList extends BorderPane {
 		editBtn.setGraphic(editIconView);
 		editBtn.getStyleClass().add("searchIconBtn");
 		editBtn.setVisible(true);
+		
+		// Ajout de tooltips pour les boutons
+        Tooltip editTooltipActivate = new Tooltip("Activer le mode édition");
+        Tooltip editTooltipDeactivate = new Tooltip("Désactiver le mode édition");
+        Tooltip printTooltip = new Tooltip("Imprimer la liste des stagiaires");
+        Tooltip removeTooltip = new Tooltip("Supprimer un stagiaire");
+
+        editBtn.setTooltip(editTooltipActivate);
+        printBtn.setTooltip(printTooltip);
+        removeBtn.setTooltip(removeTooltip);
 
 		VBox buttons = new VBox();
 		buttons.setSpacing(20);
@@ -128,10 +139,29 @@ public class PageList extends BorderPane {
 		VBox.setVgrow(tableViewBox, Priority.ALWAYS);
 		HBox.setHgrow(tableView, Priority.ALWAYS);
 
-		// Si l'utilisateur est admin, on ajoute les boutons de suppression et d'édition
-		if (loggedInUser.isRoleAdmin()) {
-			buttons.getChildren().addAll(removeBtn, editBtn);
-		}
+        // Si l'utilisateur est admin, on ajoute les boutons de suppression et d'édition
+        if (loggedInUser.isRoleAdmin()) {
+            buttons.getChildren().addAll(removeBtn, editBtn);
+
+            // Gestion de l'action du bouton d'édition
+            editBtn.setOnAction(event -> {
+                // Bascule l'état d'édition et récupère le nouvel état
+                boolean isEditMode = tableView.toggleEditMode();
+
+                // Change le style du bouton en fonction de l'état d'édition
+                if (isEditMode) {
+                    editBtn.getStyleClass().remove("searchIconBtn");
+                    editBtn.getStyleClass().add("editIconBtn");
+                    editBtn.setTooltip(editTooltipDeactivate);
+
+                } else {
+                    editBtn.getStyleClass().remove("editIconBtn");
+                    editBtn.getStyleClass().add("searchIconBtn");
+                    editBtn.setTooltip(editTooltipActivate);
+
+                }
+            });
+        }
 
 		// Ajoute un espace en bas
 		Region bottomPadding = new Region();
