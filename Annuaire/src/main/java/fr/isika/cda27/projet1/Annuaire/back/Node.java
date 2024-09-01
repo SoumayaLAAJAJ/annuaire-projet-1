@@ -2,8 +2,13 @@ package fr.isika.cda27.projet1.Annuaire.back;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 
+/**
+ * Cette classe représente un nœud dans l'arbre binaire. Chaque nœud contient un
+ * stagiaire de type {@link Intern} et des références à ses enfants gauche et
+ * droit, ainsi qu'à un nœud suivant.
+ * 
+ */
 public class Node {
 
 	private Intern intern;
@@ -17,14 +22,12 @@ public class Node {
 	public int bufferTDLC;
 	public int bufferTDRC;
 
-	public int getNext() {
-		return next;
-	}
-
-	public void setNext(int next) {
-		this.next = next;
-	}
-
+	/**
+	 * Constructeur permettant d'iinitialiser un nœud avec un objet `Intern` et des
+	 * enfants non définis.
+	 * 
+	 * @param intern le stagiaire contenu dans le nœud
+	 */
 	public Node(Intern intern) {
 		this.intern = intern;
 		this.leftChild = -1;
@@ -32,13 +35,15 @@ public class Node {
 		this.next = -1;
 	}
 
-	public Node(Intern intern, int leftChild, int rightChild) {
-		this.intern = intern;
-		this.leftChild = leftChild;
-		this.rightChild = rightChild;
-		this.next = -1;
-	}
-
+	/**
+	 * Constructeur permettant d'initialiser un nœud avec un objet `Intern`, un
+	 * enfant gauche, un enfant droit, et un nœud suivant.
+	 * 
+	 * @param intern     le stagiaire contenu dans le nœud
+	 * @param leftChild  l'index du nœud enfant gauche
+	 * @param rightChild l'index du nœud enfant droit
+	 * @param next       l'index du nœud suivant
+	 */
 	public Node(Intern intern, int leftChild, int rightChild, int next) {
 		this.intern = intern;
 		this.leftChild = leftChild;
@@ -46,30 +51,50 @@ public class Node {
 		this.next = next;
 	}
 
+	/**
+	 * Retourne le stagiaire contenu dans ce nœud.
+	 * 
+	 * @return le stagiaire
+	 */
 	public Intern getIntern() {
 		return intern;
 	}
 
-	public void setIntern(Intern intern) {
-		this.intern = intern;
-	}
-
+	/**
+	 * Retourne l'index de l'enfant gauche du nœud.
+	 * 
+	 * @return l'index de l'enfant gauche
+	 */
 	public int getLeftChild() {
 		return leftChild;
 	}
 
-	public void setLeftChild(int leftChild) {
-		this.leftChild = leftChild;
-	}
-
+	/**
+	 * Retourne l'index de l'enfant droit du nœud.
+	 * 
+	 * @return l'index de l'enfant droit
+	 */
 	public int getRightChild() {
 		return rightChild;
 	}
 
-	public void setRightChild(int rightChild) {
-		this.rightChild = rightChild;
+	/**
+	 * Retourne l'index du nœud suivant dans l'arbre.
+	 * 
+	 * @return l'index du nœud suivant
+	 */
+	public int getNext() {
+		return next;
 	}
 
+	/**
+	 * Ajoute un stagiaire dans l'arbre en utilisant le fichier binaire. La méthode
+	 * place le nouvel objet à la position appropriée dans l'arbre.
+	 * 
+	 * @param newIntern Le stagiaire à ajouter
+	 * @param raf       Le fichier dans lequel est stocké l'arbre
+	 * @throws IOException si une erreur d'entrée/sortie se produit
+	 */
 	public void addNode(Intern newIntern, RandomAccessFile raf) throws IOException {
 
 		Tree tree = new Tree();
@@ -130,6 +155,13 @@ public class Node {
 		}
 	}
 
+	/**
+	 * Recherche un noeud dans l'arbre en fonction du nom et du prénom du stagiaire.
+	 * 
+	 * @param name      Le nom du stagiaire à rechercher
+	 * @param firstname Le prénom du stagiaire à rechercher
+	 * @throws IOException si une erreur d'entrée/sortie se produit
+	 */
 	public void seekInterns(String name, String firstname) throws IOException {
 
 		IndexChild = -1;
@@ -139,6 +171,14 @@ public class Node {
 
 	}
 
+	/**
+	 * Recherche un nœud dans l'arbre en fonction du nom et du prénom du stagiaire.
+	 * 
+	 * @param name      Le nom du stagiaire à rechercher
+	 * @param firstname Le prénom du stagiaire à rechercher
+	 * @param raf       Le fichier dans lequel est stocké l'arbre
+	 * @throws IOException si une erreur d'entrée/sortie se produit
+	 */
 	public void seekNode(String name, String firstname, RandomAccessFile raf) throws IOException {
 
 		Tree tree = new Tree();
@@ -180,11 +220,19 @@ public class Node {
 
 	}
 
+	/**
+	 * Supprime un stagiaire de l'arbre en fonction de son nom et prénom.
+	 * 
+	 * @param name      Le nom du stagiaire à supprimer
+	 * @param firstname Le prénom du stagiaire à supprimer
+	 * @param raf       Le fichier dans lequel est stocké l'arbre
+	 * @throws IOException si une erreur d'entrée/sortie se produit
+	 */
 	public void deleteIntern(String name, String firstname, RandomAccessFile raf) throws IOException {
 
 		Tree tree = new Tree();
-
 		seekInterns(name, firstname);
+		
 		if (IndexChild != -1) {
 			Node nodeFather = tree.readNode(tree.getRaf(), IndexFather * Intern.RECORD_LENGTH); // IndexFather
 			Node nodeToDelete = tree.readNode(tree.getRaf(), IndexChild * Intern.RECORD_LENGTH);// IndexChild
@@ -194,14 +242,17 @@ public class Node {
 				raf.seek(nodeToDelete.next * Intern.RECORD_LENGTH);
 				Node node1 = tree.readNode(tree.getRaf(), nodeToDelete.next * Intern.RECORD_LENGTH);
 				IndexRemplacant = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
+				
 				while (node1.next != -1) {
 					IndexRemplacant = (int) ((raf.getFilePointer() - Intern.RECORD_LENGTH) / Intern.RECORD_LENGTH);
 					node1 = tree.readNode(tree.getRaf(), node1.next * Intern.RECORD_LENGTH);
 				}
+				
 				Intern internRemplacant = node1.getIntern();
 				deleteIntern(node1.getIntern().getName(), node1.getIntern().getFirstname(), tree.getRaf());
 				raf.seek(bufferTDLC * Intern.RECORD_LENGTH);
 				internRemplacant.writeToRandomAccessFile(raf);
+				
 			} else if (nodeToDelete.leftChild == -1 && nodeToDelete.rightChild == -1) {
 				buffer1 = -1;
 				if (nodeFather.leftChild == IndexChild) {
@@ -253,10 +304,18 @@ public class Node {
 				internRemplacant.writeToRandomAccessFile(raf);
 
 			}
-		} else {
 		}
 	}
 
+	/**
+	 * Remplace un stagiaire dans l'arbre
+	 * 
+	 * @param raf       Le fichier binaire dans lequel est stocké l'arbre
+	 * @param name      Le nom du stagiaire à supprimer
+	 * @param firstname Le prénom du stagiaire à supprimer
+	 * @param newIntern Le stagiaire modifié à ajouter
+	 * @throws IOException Si une erreur d'entrée/sortie se produit
+	 */
 	public void updateIntern(RandomAccessFile raf, String name, String firstname, Intern newIntern) throws IOException {
 		Tree tree = new Tree();
 		raf = tree.getRaf();
@@ -264,23 +323,6 @@ public class Node {
 		deleteIntern(name, firstname, raf);
 		raf.seek(0);
 		addNode(newIntern, raf);
-
 	}
 
-	public Node getInternfromseek(String name, String firstname) throws IOException {
-
-		Tree tree = new Tree();
-		seekInterns(name, firstname);
-		Node nodeIntern = tree.readNode(tree.getRaf(), (int) (IndexChild * Intern.RECORD_LENGTH));
-		return nodeIntern;
-	}
-
-	public ArrayList<Intern> getInterns(long position) throws IOException {
-
-		Tree tree = new Tree();
-		tree.getRaf().seek(position);
-		ArrayList<Intern> myList = new ArrayList<Intern>();
-		tree.getInternsInfix(myList, position, tree.getRaf());
-		return myList;
-	}
 }

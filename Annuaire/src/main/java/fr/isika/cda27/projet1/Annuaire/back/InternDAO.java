@@ -6,17 +6,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cette classe permet l'accès et la lecture des données des stagiaires depuis
+ * un fichier texte. Les données sont lues depuis un fichier DON et stockées
+ * dans une liste d'objets Intern.
+ */
 public class InternDAO {
-	private String name;
-	private String firstname;
-	private String department;
-	private String year;
-	private String promo;
+
 	public List<Intern> maListe;
 
+	/**
+	 * Constructeur permettant d'initialiser la liste des stagiaires en lisant les
+	 * données depuis un fichier texte.
+	 * 
+	 * @throws IOException Si une erreur d'entrée/sortie se produit lors de la
+	 *                     lecture du fichier
+	 */
 	public InternDAO() throws IOException {
+		
 		maListe = new ArrayList<>();
 		String path = "src/main/resources/STAGIAIRES.DON";
+		
 		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
 			String line;
 			String name = "", firstname = "", department = "", year = "", promo = "";
@@ -46,24 +56,19 @@ public class InternDAO {
 					case 4:
 						year = line;
 						break;
-
 					}
+					
 					compteur++;
 				}
 			}
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "InternDAO [name=" + name + ", firstname=" + firstname + ", department=" + department + ", year=" + year
-				+ ", promo=" + promo + ", maListe=" + maListe + "]";
-	}
-
-	public void setMaListe(List<Intern> maListe) {
-		this.maListe = maListe;
-	}
-
+	/**
+	 * Retourne la liste des stagiaires.
+	 * 
+	 * @return La liste des stagiaires
+	 */
 	public List<Intern> getMaListe() {
 		return maListe;
 	}

@@ -6,6 +6,9 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cette classe représente un arbre binaire permettant de gérer des stagiaires de type {@link Intern} stockés dans un fichier binaire.
+ */
 public class Tree {
 
 	private Node root;
@@ -14,6 +17,9 @@ public class Tree {
 	public int IndexFather;
 	public String filePath = "src/main/resources/arbre.bin";
 
+	/**
+	 * Constructeur permettant d'initialiser le fichier binaire pour l'arbre.
+	 */
 	public Tree() {
 		try {
 			raf = new RandomAccessFile(this.filePath, "rwd");
@@ -22,28 +28,96 @@ public class Tree {
 		}
 	}
 
+	/**
+	 * Retourne la racine de l'arbre.
+	 * 
+	 * @return La racine de l'arbre
+	 */
 	public Node getRoot() {
 		return root;
 	}
 
-	public void setRoot(Node root) {
-		this.root = root;
-	}
-
+	/**
+	 * Retourne le fichier binaire associé à l'arbre.
+	 * 
+	 * @return le fichier binaire associé à l'arbre
+	 */
 	public RandomAccessFile getRaf() {
 		return raf;
 	}
 
-	public void setRaf(RandomAccessFile raf) {
-		this.raf = raf;
+	/**
+	 * Crée le fichier binaire de l'arbre à partir d'une liste existante de stagiaires.
+	 */
+	public void createBinfile() {
+
+		try {
+			if (this.getRaf().length() == 0) {
+				InternDAO intern;
+				List<Intern> interns;
+
+				try {
+					intern = new InternDAO();
+					interns = intern.getMaListe();
+
+					for (int i = 0; i < interns.size(); i++) {
+						this.checkRootToAddNode(interns.get(i));
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
+	/**
+	 * Vérifie si la racine de l'arbre est définie pour la création du premier noeud
+	 * Appele la méthode addNode() pour les noeuds suivants
+	 * 
+	 * @param intern Le stagiaire à ajouter dans l'arbre
+	 */
+	public void checkRootToAddNode(Intern intern) {
+		try {
+			if (raf.length() == 0) {
+				this.root = new Node(intern);
+				raf.seek(0);
+				intern.writeToRandomAccessFile(raf);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+				raf.writeInt(-1);
+			} else {
+				Node node = new Node(intern);
+
+				raf.seek(0);
+				node.addNode(intern, raf);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Ajoute un nœud dans l'arbre pour le stagiaire spécifié.
+	 * 
+	 * @param intern Le stagiaire ajouter à l'arbre
+	 * @throws IOException Si une erreur d'entrée/sortie survient lors de l'ajout
+	 */
 	public void addNode(Intern intern) throws IOException {
 		Node node = new Node(intern);
 		this.raf.seek(0);
 		node.addNode(intern, raf);
 	}
 
+	/**
+	 * Lit un nœud à partir du fichier binaire à la position spécifiée.
+	 * 
+	 * @param raf Le fichier binaire à lire
+	 * @param position La position du nœud dans le fichier
+	 * @return Le nœud lu à partir du fichier
+	 */
 	public Node readNode(RandomAccessFile raf, long position) {
 		String name = "";
 		String firstname = "";
@@ -92,50 +166,12 @@ public class Tree {
 		return node;
 	}
 
-	public void checkRootToAddNode(Intern intern) {
-		try {
-			if (raf.length() == 0) {
-				this.root = new Node(intern);
-				raf.seek(0);
-				intern.writeToRandomAccessFile(raf);
-				raf.writeInt(-1);
-				raf.writeInt(-1);
-				raf.writeInt(-1);
-			} else {
-				Node node = new Node(intern);
-
-				raf.seek(0);
-				node.addNode(intern, raf);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void createBinfile() {
-
-		try {
-			if (this.getRaf().length() == 0) {
-				InternDAO intern;
-				List<Intern> interns;
-
-				try {
-					intern = new InternDAO();
-					interns = intern.getMaListe();
-
-					for (int i = 0; i < interns.size(); i++) {
-						this.checkRootToAddNode(interns.get(i));
-					}
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+	/**
+	 * Retourne une liste de tous les stagiaires de l'arbre en utilisant le parcours infixe
+	 * 
+	 * @return Une liste ordonnée de stagiaires
+	 * @throws IOException Si une erreur d'entrée/sortie survient lors de la lecture
+	 */
 	public ArrayList<Intern> getInterns() throws IOException {
 
 		raf.seek(0);
@@ -144,6 +180,15 @@ public class Tree {
 		return myList;
 	}
 
+	/**
+	 * Effectue un parcours infixe de l'arbre pour récupérer les stagiaires dans
+	 * l'ordre.
+	 * 
+	 * @param myList La liste des stagiaires à compléter
+	 * @param position La position actuelle dans le fichier binaire
+	 * @param raf Le fichier binaire à lire
+	 * @throws IOException Si une erreur d'entrée/sortie survient lors de la lecture
+	 */
 	public void getInternsInfix(ArrayList<Intern> myList, long position, RandomAccessFile raf) throws IOException {
 
 		Node currentNode = readNode(raf, position);
@@ -161,6 +206,5 @@ public class Tree {
 		if (currentNode.getRightChild() != -1) {
 			getInternsInfix(myList, currentNode.getRightChild() * Intern.RECORD_LENGTH, raf);
 		}
-
 	}
 }

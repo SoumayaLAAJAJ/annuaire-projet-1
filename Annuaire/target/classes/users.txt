@@ -7,3 +7,5 @@ marieMadeleine;test;false
 gege;gege;false
 a;a;false
 test1;test&;false
+b;b;false
+c;c;false
