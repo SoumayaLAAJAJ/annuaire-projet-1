@@ -17,8 +17,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Cette classe représente un formulaire permettant d'ajouter un stagiaire dans
+ * l'annuaire.
+ */
 public class FormAddIntern extends BorderPane {
 
+	/**
+	 * Constructeur permettant d'initialiser l'interface pour ajouter un stagiaire.
+	 *
+	 * @param app          L'application
+	 * @param loggedInUser L'utilisateur actuellement connecté
+	 */
 	public FormAddIntern(App app, User loggedInUser) {
 
 		Label title = new Label("Ajouter un stagiaire");
@@ -121,6 +131,12 @@ public class FormAddIntern extends BorderPane {
 
 	}
 
+	/**
+	 * Capitalise la première lettre d'une chaîne de caractères.
+	 *
+	 * @param text La chaîne de caractères à capitaliser
+	 * @return La chaîne de caractères avec la première lettre en majuscule
+	 */
 	private String capitalizeFirstLetter(String text) {
 		if (text == null || text.isEmpty()) {
 			return text;
@@ -128,6 +144,14 @@ public class FormAddIntern extends BorderPane {
 		return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
 	}
 
+	/**
+	 * Crée une scène pour le formulaire d'ajout de stagiaire.
+	 *
+	 * @param app          L'application
+	 * @param loggedInUser L'utilisateur actuellement connecté
+	 * @return Une nouvelle scène contenant la vue du formulaire d'ajout de
+	 *         stagiaire
+	 */
 	public Scene createAddView(App app, User loggedInUser) {
 		return new Scene(this, 1300, 700);
 	}

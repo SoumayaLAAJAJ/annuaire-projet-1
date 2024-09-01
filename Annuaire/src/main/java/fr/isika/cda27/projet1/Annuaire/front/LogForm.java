@@ -17,16 +17,30 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+/**
+ * Cette classe permet la création et la gestion de la scène de connexion de l'application.
+ * Elle permet aux utilisateurs de se connecter ou de s'inscrire en utilisant un formulaire simple.
+ */
 public class LogForm {
 
 	private App app;
 
+    /**
+     * Constructeur permettant d'initialiser la vue de connexion utilisateur
+     *
+     * @param app L'application
+     */
 	public LogForm(App app) {
 		this.app = app;
 	}
 
 	private static final String FILE_PATH = "src/main/resources/users.txt";
 
+    /**
+     * Crée et retourne une scène contenant le formulaire de connexion.
+     *
+     * @return La scène contenant le formulaire de connexion
+     */
 	public Scene createLogFormScene() {
 		String imagePath = "/gin-login.png";
 		Image image = null;

@@ -10,8 +10,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * Cette classe crée un panneau de recherche qui permet à l'utilisateur de filtrer les stagiaires.
+ */
 public class SearchBar extends VBox {
 
+    /**
+     * Crée une instance de `SearchBar` pour filtrer les stagiaires dans la table spécifiée.
+     *
+     * @param internTableView La table des stagiaires à filtrer
+     */
 	public SearchBar(InternTableView internTableView) {
 
 		setPadding(new Insets(30, 0, 20, 0));
@@ -19,7 +27,7 @@ public class SearchBar extends VBox {
 		VBox searchPane = new VBox();
 		searchPane.setSpacing(20);
 
-		// Ajout de l'icône de recherche
+		// Création du bouton de recherche
 		Image searchIcon = new Image(getClass().getResource("/searchIcon.png").toExternalForm());
 		ImageView iconView = new ImageView(searchIcon);
 		iconView.setFitWidth(25);
@@ -29,13 +37,11 @@ public class SearchBar extends VBox {
 		iconView2.setFitWidth(25);
 		iconView2.setPreserveRatio(true);
 
-		// Pane contenant le texte et l'icône
 		HBox btnContent = new HBox();
 		btnContent.setAlignment(Pos.CENTER_LEFT);
 		btnContent.setSpacing(115);
 		btnContent.getChildren().addAll(new Label("Rechercher par :"), iconView);
 
-		// Création du bouton et ajout du contenu
 		Button searchBtn = new Button();
 		searchBtn.setGraphic(btnContent);
 		searchBtn.setPrefWidth(300);
@@ -43,56 +49,48 @@ public class SearchBar extends VBox {
 		HBox searchBtns = new HBox();
 		searchBtns.setSpacing(20);
 
-		// Création de l'input pour la recherche du nom
+        // Création des champs de texte pour la recherche
 		TextField nameTextField = new TextField();
 		nameTextField.setPromptText("Nom");
 		nameTextField.setStyle("-fx-prompt-text-fill: black");
 		nameTextField.setPrefWidth(340);
 		nameTextField.setVisible(false);
 
-		// Création de l'input pour la recherche du prénom
 		TextField firstnameTextField = new TextField();
 		firstnameTextField.setPromptText("Prénom");
 		firstnameTextField.setStyle("-fx-prompt-text-fill: black");
 		firstnameTextField.setPrefWidth(340);
 		firstnameTextField.setVisible(false);
 
-		// Création de l'input pour la recherche du département
 		TextField departmentTextField = new TextField();
 		departmentTextField.setPromptText("Département");
 		departmentTextField.setStyle("-fx-prompt-text-fill: black");
 		departmentTextField.setPrefWidth(340);
 		departmentTextField.setVisible(false);
 
-		// Création de l'input pour la recherche de l'année
 		TextField yearTextField = new TextField();
 		yearTextField.setPromptText("Année");
 		yearTextField.setStyle("-fx-prompt-text-fill: black");
 		yearTextField.setPrefWidth(340);
 		yearTextField.setVisible(false);
 
-		// Création de l'input pour la recherche de la promo
 		TextField promoTextField = new TextField();
 		promoTextField.setPromptText("Promo");
 		promoTextField.setStyle("-fx-prompt-text-fill: black");
 		promoTextField.setPrefWidth(340);
 		promoTextField.setVisible(false);
 
-		// Création du bouton et ajout de l'icône dans le bouton
+        // Création du bouton de validation pour appliquer les filtres
 		Button validateBtn = new Button();
 		validateBtn.setGraphic(iconView2);
-		validateBtn.getStyleClass().add("searchIconBtn");
+		validateBtn.getStyleClass().add("iconBtn");
 		validateBtn.setVisible(false);
 
 		searchBtns.getChildren().addAll(nameTextField, firstnameTextField, departmentTextField, yearTextField,
 				promoTextField, validateBtn);
 
-		// Ajout de tous les boutons à la searchPane
 		searchPane.getChildren().addAll(searchBtn, searchBtns);
-
-		// Ajout de la classe CSS et ajout à la scène
 		searchBtn.getStyleClass().add("searchBtn");
-
 		getChildren().addAll(searchPane);
 
 		searchBtn.setOnAction(e -> {

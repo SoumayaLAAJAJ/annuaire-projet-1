@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -23,11 +24,22 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Cette classe est responsable de l'affichage de la liste des stagiaires dans l'application.
+ * Elle fournit une interface utilisateur pour afficher, rechercher, imprimer, supprimer et modifier les informations des stagiaires.
+ */
 public class PageList extends BorderPane {
 
 	public ObservableList<Intern> myObservableArrayList;
 	public Intern selectedIntern;
 
+    /**
+     * Constructeur permettant d'initialiser la vue de la liste des stagiaires.
+     *
+     * @param app L'application
+     * @param loggedInUser L'utilisateur actuellement connecté
+     * @return La scène contenant la liste des stagiaires
+     */
 	public Scene createListView(App app, User loggedInUser) {
 
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
@@ -45,28 +57,26 @@ public class PageList extends BorderPane {
 		searchBar.setPadding(new Insets(30, 0, 25, 0));
 		setTop(searchBar);
 
-		// Ajout de l'icône d'impression
+		// Création des icônes
 		Image printIcon = new Image(getClass().getResource("/printIcon.png").toExternalForm());
 		ImageView printIconView = new ImageView(printIcon);
 		printIconView.setFitWidth(20);
 		printIconView.setPreserveRatio(true);
 
-		// Ajout de l'icône de suppression
 		Image binIcon = new Image(getClass().getResource("/binIcon.png").toExternalForm());
 		ImageView binIconView = new ImageView(binIcon);
 		binIconView.setFitWidth(20);
 		binIconView.setPreserveRatio(true);
 
-		// Ajout de l'icône d'édition
 		Image editIcon = new Image(getClass().getResource("/editIcon.png").toExternalForm());
 		ImageView editIconView = new ImageView(editIcon);
 		editIconView.setFitWidth(20);
 		editIconView.setPreserveRatio(true);
 
-		// Création du bouton suppression et ajout de l'icône dans le bouton
+		// Création des boutons
 		Button printBtn = new Button();
 		printBtn.setGraphic(printIconView);
-		printBtn.getStyleClass().add("searchIconBtn");
+		printBtn.getStyleClass().add("iconBtn");
 		printBtn.setVisible(true);
 		printBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -74,14 +84,12 @@ public class PageList extends BorderPane {
 				PdfGenerator pdfGenerator = new PdfGenerator(tableView);
 				String filePath = "liste_stagiaires.pdf";
 				pdfGenerator.generatePdf(filePath);
-				System.out.println("PDF généré à : " + filePath);
 			}
 		});
 
-		// Création du bouton suppression et ajout de l'icône dans le bouton
 		Button removeBtn = new Button();
 		removeBtn.setGraphic(binIconView);
-		removeBtn.getStyleClass().add("searchIconBtn");
+		removeBtn.getStyleClass().add("iconBtn");
 		removeBtn.setVisible(true);
 		removeBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -105,18 +113,20 @@ public class PageList extends BorderPane {
 						e.printStackTrace();
 					}
 				} else {
-					System.out.println("Aucun stagiaire sélectionné pour la suppression.");
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null);
+					alert.setContentText("Veuillez sélectionner un stagiaire à supprimer");
+					alert.showAndWait();
 				}
 			}
 		});
 
-		// Création du bouton d'édition et ajout de l'icône dans le bouton
 		Button editBtn = new Button();
 		editBtn.setGraphic(editIconView);
-		editBtn.getStyleClass().add("searchIconBtn");
+		editBtn.getStyleClass().add("iconBtn");
 		editBtn.setVisible(true);
 
-		// Ajout de tooltips pour les boutons
+        // Création des tooltips
 		Tooltip editTooltipActivate = new Tooltip("Activer le mode édition");
 		Tooltip editTooltipDeactivate = new Tooltip("Désactiver le mode édition");
 		Tooltip printTooltip = new Tooltip("Imprimer la liste des stagiaires");
@@ -136,40 +146,34 @@ public class PageList extends BorderPane {
 		VBox.setVgrow(tableViewBox, Priority.ALWAYS);
 		HBox.setHgrow(tableView, Priority.ALWAYS);
 
-		// Si l'utilisateur est admin, on ajoute les boutons de suppression et d'édition
+        // Ajout des boutons de suppression et d'édition si l'utilisateur est administrateur
 		if (loggedInUser.isRoleAdmin()) {
 			buttons.getChildren().addAll(removeBtn, editBtn);
 
-			// Gestion de l'action du bouton d'édition
 			editBtn.setOnAction(event -> {
-				// Bascule l'état d'édition et récupère le nouvel état
+                // Bascule l'état d'édition et récupère le nouvel état
 				boolean isEditMode = tableView.toggleEditMode();
 
 				// Change le style du bouton en fonction de l'état d'édition
 				if (isEditMode) {
-					editBtn.getStyleClass().remove("searchIconBtn");
+					editBtn.getStyleClass().remove("iconBtn");
 					editBtn.getStyleClass().add("editIconBtn");
 					editBtn.setTooltip(editTooltipDeactivate);
 
 				} else {
 					editBtn.getStyleClass().remove("editIconBtn");
-					editBtn.getStyleClass().add("searchIconBtn");
+					editBtn.getStyleClass().add("iconBtn");
 					editBtn.setTooltip(editTooltipActivate);
-
 				}
 			});
 		}
 
-		// Ajoute un espace en bas
 		Region bottomPadding = new Region();
 		bottomPadding.setMinHeight(20);
 
 		rightContainer.getChildren().addAll(searchBar, tableViewBox, bottomPadding);
-
-		// Ajoute le conteneur de droite au centre du BorderPane
 		this.setCenter(rightContainer);
 
 		return new Scene(this, 1300, 700);
 	}
-
 }

@@ -3,7 +3,7 @@
 }
 
 .label {
-	-fx-padding: 2px 0;
+	-fx-padding: 2.0px 0.0;
 	-fx-font-family: 'Arial';
 	-fx-font-weight: bold;
 }
@@ -24,12 +24,12 @@
 
 /* Bouton spécifique */
 .specific-button {
-    -fx-padding: 10px 25px;
+    -fx-padding: 10.0px 25.0px;
     -fx-background-color: transparent;
     -fx-border-color: black;
-    -fx-border-width: 1px;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
+    -fx-border-width: 1.0px;
+    -fx-border-radius: 20.0px;
+    -fx-background-radius: 20.0px;
     -fx-transition: background-color 0.3s ease;
 }
 
@@ -45,56 +45,79 @@
 
 /* Barre de recherche */ 
 .searchBtn {
-    -fx-padding: 7px 0px 8px 25px;
-    -fx-background-color: rgba(100, 138, 159, 0.5);
+    -fx-padding: 7.0px 0.0px 8.0px 25.0px;
+    -fx-background-color: rgba(100.0, 138.0, 159.0, 0.5);
     -fx-transition: background-color 0.3s ease;
-    -fx-background-radius: 30px; 
+    -fx-background-radius: 30.0px; 
 }
-
 .searchBtn:hover {
-    -fx-background-color: rgba(100, 138, 159, 0.75);
+    -fx-background-color: rgba(100.0, 138.0, 159.0, 0.75);
 }
 
 
 .searchIconBtn {
-	-fx-padding: 8px 10px;
-    -fx-background-color: rgba(100, 138, 159, 0.5);
+	-fx-padding: 8.0px 10.0px;
+    -fx-background-color: rgba(100.0, 138.0, 159.0, 0.5);
     -fx-transition: background-color 0.3s ease;
-    -fx-background-radius: 30px; 
+    -fx-background-radius: 30.0px; 
 }
 
 .searchIconBtn:hover {
-    -fx-background-color: rgba(100, 138, 159, 0.75);
-
+    -fx-background-color: rgba(100.0, 138.0, 159.0, 0.75);
 }
 
 .editIconBtn {
-	-fx-padding: 8px 10px;
+	-fx-padding: 8.0px 10.0px;
     -fx-background-color: #6ABF9B;
     -fx-transition: background-color 0.3s ease;
-    -fx-background-radius: 30px; 
+    -fx-background-radius: 30.0px; 
+    -fx-border-color: black;
+    -fx-border-radius: 30.0px;    
+    -fx-border-width: 0.5px;
 }
 
-/* Style pour les TextField */
+.editIconBtn:hover {
+	-fx-padding: 8.0px 10.0px;
+    -fx-background-color: #6ABF9B;
+    -fx-transition: background-color 0.3s ease;
+    -fx-background-radius: 30.0px; 
+    -fx-border-color: black;
+    -fx-border-radius: 30.0px;    
+    -fx-border-width: 0.5px;
+}
+
+.iconBtn {
+    -fx-padding: 8.0px 10.0px;
+    -fx-border-color: black;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 30.0px;
+    -fx-background-radius: 30.0px;
+}
+
+.iconBtn:hover {
+   -fx-background-color: rgba(100.0, 138.0, 159.0, 0.5);
+}
+
+/* TextFields */
 .text-field {
-    -fx-background-color: rgba(100, 138, 159, 0.10); 
-    -fx-border-color: rgba(100, 138, 159, 0.75); 
-    -fx-border-width: 1px;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-max-width: 200px;
-    -fx-padding: 8px 20px; 
+    -fx-background-color: rgba(100.0, 138.0, 159.0, 0.1); 
+    -fx-border-color: rgba(100.0, 138.0, 159.0, 0.75); 
+    -fx-border-width: 1.0px;
+    -fx-border-radius: 20.0px;
+    -fx-background-radius: 20.0px;
+    -fx-max-width: 200.0px;
+    -fx-padding: 8.0px 20.0px; 
 }
 
-/* Style pour les ChoiceBox */
+/* ChoiceBox */
 .choice-box {
-    -fx-background-color: rgba(100, 138, 159, 0.15);
-    -fx-padding: 10px;
-    -fx-pref-width: 200px;
-    -fx-border-color: rgba(100, 138, 159, 0.75); 
-    -fx-border-width: 1px;
-    -fx-border-radius: 200px;
-    -fx-background-radius: 20px;
+    -fx-background-color: rgba(100.0, 138.0, 159.0, 0.15);
+    -fx-padding: 10.0px;
+    -fx-pref-width: 200.0px;
+    -fx-border-color: rgba(100.0, 138.0, 159.0, 0.75); 
+    -fx-border-width: 1.0px;
+    -fx-border-radius: 200.0px;
+    -fx-background-radius: 20.0px;
 }
 
 
@@ -106,12 +129,12 @@
 
 .table-view .column-header .label {
     -fx-font-weight: bold;
-    -fx-padding: 10px;
+    -fx-padding: 10.0px;
 }
 
 .table-view .scroll-bar:horizontal {
-    -fx-opacity: 0;
-    -fx-pref-height: 0px;
+    -fx-opacity: 0.0;
+    -fx-pref-height: 0.0px;
 }
 
 .table-view .table-row-cell:selected .table-cell {
@@ -120,38 +143,37 @@
 }
 
 .table-view .table-cell {
-    -fx-padding: 10px 10px 5px 10px;
+    -fx-padding: 10.0px 10.0px 5.0px 10.0px;
     -fx-border-color: transparent;
     -fx-alignment: center;
 }
-/**
- * FAQ
- */
+
+/* FAQ */ 
  .accordion {
     -fx-background-color: #f9f9f9; 
     -fx-border-color: #d3d3d3; 
-    -fx-border-width: 2; 
-    -fx-border-radius: 8; 
-    -fx-padding: 10; 
+    -fx-border-width: 2.0; 
+    -fx-border-radius: 8.0; 
+    -fx-padding: 10.0; 
 }
 
 .titled-pane {
     -fx-background-color: #ffffff; 
     -fx-text-fill: #333; 
     -fx-font-weight: bold; 
-    -fx-font-size: 14pt; 
+    -fx-font-size: 14.0pt; 
     -fx-border-color: #d3d3d3; 
-    -fx-border-width: 1; 
-    -fx-border-radius: 6; 
-    -fx-padding: 10; 
+    -fx-border-width: 1.0; 
+    -fx-border-radius: 6.0; 
+    -fx-padding: 10.0; 
 }
 
 .titled-pane > .title {
     -fx-background-color: #f1f1f1; 
     -fx-border-color: #d3d3d3; 
-    -fx-border-width: 0 0 1 0; 
-    -fx-padding: 10; 
-    -fx-font-size: 17px; 
+    -fx-border-width: 0.0 0.0 1.0 0.0; 
+    -fx-padding: 10.0; 
+    -fx-font-size: 17.0px; 
     -fx-text-fill: #4a4a4a; 
 }
 
@@ -161,16 +183,16 @@
 
 .titled-pane > .content {
     -fx-background-color: #ffffff; 
-    -fx-padding: 10; 
+    -fx-padding: 10.0; 
 }
 
 .label-faq {
-    -fx-font-size: 12px; 
+    -fx-font-size: 12.0px; 
     -fx-text-fill: #555; 
 }
 
 .image-view {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2); 
-    -fx-padding: 10 0 10 0;
-    -fx-border-radius: 8; 
+    -fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.3), 10.0, 0.0, 0.0, 2.0); 
+    -fx-padding: 10.0 0.0 10.0 0.0;
+    -fx-border-radius: 8.0; 
 }

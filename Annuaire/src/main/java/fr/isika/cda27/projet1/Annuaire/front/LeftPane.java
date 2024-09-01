@@ -13,13 +13,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
+/**
+ * Cette classe représente le panneau latéral gauche de l'application qui permet
+ * de naviguer entre les différentes pages de l'application.
+ */
 public class LeftPane extends BorderPane {
 
-	private App app;
-
+    /**
+     * Constructeur permettant d'initialiser la vue du panneau
+     *
+     * @param app          L'application
+     * @param loggedInUser L'utilisateur actuellement connecté
+     * @param scene        La scène actuelle
+     */
 	public LeftPane(App app, User loggedInUser, String scene) {
 
-		this.app = app;
 		setStyle("-fx-background-color:#D9D9D9");
 		setPrefWidth(270);
 
@@ -97,7 +105,6 @@ public class LeftPane extends BorderPane {
 			@Override
 			public void handle(ActionEvent event) {
 				app.switchToFAQPage(app, loggedInUser);
-
 			}
 		});
 
@@ -106,7 +113,6 @@ public class LeftPane extends BorderPane {
 			public void handle(ActionEvent event) {
 				app.showLoginScene();
 			}
-
 		});
 
 		setBottom(menuFooter);

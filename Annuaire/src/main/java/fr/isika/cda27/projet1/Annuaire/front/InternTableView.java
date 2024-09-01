@@ -14,12 +14,21 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Cette classe représente une table d'affichage des stagiaires. Elle permet de
+ * visualiser, modifier et filtrer les données des stagiaires.
+ */
 public class InternTableView extends TableView<Intern> {
 
 	private FilteredList<Intern> filteredList;
 	private boolean isEditable = false;
 
+	/**
+	 * Constructeur permettant d'initialiser la table avec les stagiaires présents
+	 * dans le fichier binaire.
+	 */
 	public InternTableView() {
+
 		try {
 			Tree tree = new Tree();
 			List<Intern> interns = tree.getInterns();
@@ -99,7 +108,12 @@ public class InternTableView extends TableView<Intern> {
 		colPromo.setEditable(isEditable);
 	}
 
-	// Met à jour le stagiaire dans le fichier binaire
+	/**
+	 * Met à jour les informations du stagiaire dans le fichier binaire.
+	 *
+	 * @param oldIntern Le stagiaire avant modification
+	 * @param newIntern Le stagiaire après modification
+	 */
 	private void updatebinFile(Intern oldIntern, Intern newIntern) {
 
 		Intern intern = new Intern();
@@ -113,7 +127,11 @@ public class InternTableView extends TableView<Intern> {
 		}
 	}
 
-	// Méthode pour basculer le mode d'édition
+	/**
+	 * Bascule le mode d'édition de la table.
+	 *
+	 * @return true si la table est éditable, false sinon.
+	 */
 	public boolean toggleEditMode() {
 		isEditable = !isEditable;
 		setEditable(isEditable);
@@ -123,7 +141,15 @@ public class InternTableView extends TableView<Intern> {
 		return isEditable;
 	}
 
-	// Méthode pour filtrer la table en multi-critères
+	/**
+	 * Filtre les données de la table selon plusieurs critères.
+	 *
+	 * @param nameFilter       Le filtre appliqué au nom
+	 * @param firstnameFilter  Le filtre appliqué au prénom
+	 * @param departmentFilter Le filtre appliqué au département
+	 * @param yearFilter       Le filtre appliqué à l'année d'entrée
+	 * @param promoFilter      Le filtre appliqué à la promotion
+	 */
 	public void filterTable(String nameFilter, String firstnameFilter, String departmentFilter, String yearFilter,
 			String promoFilter) {
 		filteredList.setPredicate(intern -> {
@@ -154,27 +180,31 @@ public class InternTableView extends TableView<Intern> {
 		});
 	}
 
-	// Méthode pour filtrer la table avec un seul critère
+	/**
+	 * Filtre les données de la table selon un seul critère.
+	 *
+	 * @param field      Le nom du champ sur lequel appliquer le filtre
+	 * @param filterText Le texte à filtrer
+	 */
 	public void filterOne(String field, String filterText) {
 		filteredList.setPredicate(intern -> {
-			// Si le texte est vide, afficher tous les éléments
+
 			if (filterText == null || filterText.isEmpty()) {
 				return true;
 			}
 
 			String lowerCaseFilter = filterText.toLowerCase();
 
-			// Comparaison avec le texte du filtre en fonction du champ envoyé
 			if (field.equals("name") && intern.getName().toLowerCase().contains(lowerCaseFilter)) {
-				return true; // Filtrer par nom
+				return true;
 			} else if (field.equals("firstname") && intern.getFirstname().toLowerCase().contains(lowerCaseFilter)) {
-				return true; // Filtrer par prénom
+				return true;
 			} else if (field.equals("department") && intern.getDepartment().toLowerCase().contains(lowerCaseFilter)) {
-				return true; // Filtrer par département
+				return true;
 			} else if (field.equals("year") && intern.getYear().toLowerCase().contains(lowerCaseFilter)) {
-				return true; // Filtrer par année
+				return true;
 			} else if (field.equals("promo") && intern.getPromo().toLowerCase().contains(lowerCaseFilter)) {
-				return true; // Filtrer par promo
+				return true;
 			}
 			return false;
 		});

@@ -15,16 +15,31 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Cette classe permet la génération d'un fichier PDF contenant la liste des
+ * stagiaires.
+ */
 public class PdfGenerator {
 
 	private TableView<Intern> tableView;
 
+    /**
+     * Crée une instance de `PdfGenerator` avec la table des stagiaires.
+     *
+     * @param tableView La table des stagiaires à inclure dans le PDF
+     */
 	public PdfGenerator(TableView<Intern> tableView) {
 		this.tableView = tableView;
 	}
 
+    /**
+     * Génère un fichier PDF contenant la liste des stagiaires à partir de la table fournie.
+     *
+     * @param filePath Le chemin du fichier PDF à créer
+     */
 	public void generatePdf(String filePath) {
 		Document document = new Document();
+		
 		try {
 			PdfWriter.getInstance(document, new FileOutputStream(filePath));
 			document.open();
@@ -38,7 +53,6 @@ public class PdfGenerator {
 			}
 
 			document.close();
-
 			openPdf(filePath);
 
 		} catch (FileNotFoundException | DocumentException e) {
@@ -46,6 +60,11 @@ public class PdfGenerator {
 		}
 	}
 
+    /**
+     * Ouvre le fichier PDF spécifié à l'aide de l'application par défaut associée.
+     *
+     * @param filePath Le chemin du fichier PDF à ouvrir
+     */
 	private void openPdf(String filePath) {
 		if (Desktop.isDesktopSupported()) {
 			try {
