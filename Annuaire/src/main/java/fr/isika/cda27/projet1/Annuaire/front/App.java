@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
 	private Stage stage;
-	
+
 	@Override
 	public void init() {
 		Tree tree = new Tree();
@@ -33,7 +33,6 @@ public class App extends Application {
 			stage.centerOnScreen();
 			stage.show();
 		} else {
-			// Gérer le cas où la scène n'a pas pu être créée (par exemple, si l'image n'est pas trouvée)
 			System.err.println("La scène de connexion n'a pas pu être initialisée.");
 		}
 	}
@@ -53,20 +52,18 @@ public class App extends Application {
 		Scene addInternScene = addPage.createAddView(app, loggedInUser);
 		stage.setScene(addInternScene);
 	}
-	
-    // Méthode pour appeler la page FAQ
-    public void switchToFAQPage(App app, User loggedInUser) {
-        FAQ faqPage = new FAQ(app, loggedInUser);
-        Scene faqScene = faqPage.createAddView(app, loggedInUser);
-        stage.setScene(faqScene);
-        stage.centerOnScreen();
-        stage.setTitle("FAQ - Annuaire de Gin");
-    }
-	
 
+	// Méthode pour appeler la page FAQ
+	public void switchToFAQPage(App app, User loggedInUser) {
+		FAQ faqPage = new FAQ(app, loggedInUser);
+		Scene faqScene = faqPage.createAddView(app, loggedInUser);
+		stage.setScene(faqScene);
+		stage.centerOnScreen();
+		stage.setTitle("FAQ - Annuaire de Gin");
+	}
 
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 }

@@ -28,7 +28,6 @@ public class LogForm {
 	private static final String FILE_PATH = "src/main/resources/users.txt";
 
 	public Scene createLogFormScene() {
-		// Chemin de l'image relatif au répertoire des ressources
 		String imagePath = "/gin-login.png";
 		Image image = null;
 
@@ -91,16 +90,14 @@ public class LogForm {
 		signUpButton.setOnAction(e -> {
 			String username = usernameField.getText();
 			String password = passwordField.getText();
-			
-			// Vérifier si les champs sont bien remplis avant de créer le stagiaire
+
 			if (username == "" | password == "") {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Erreur de connexion");
 				alert.setHeaderText(null);
 				alert.setContentText("Veuillez compléter tous les champs");
-				alert.showAndWait(); 
+				alert.showAndWait();
 			} else {
-				// Création du stagiaire dans le fichier
 				User newUser = new User(username, password, false);
 				if (newUser.signUp(FILE_PATH)) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -116,7 +113,7 @@ public class LogForm {
 					alert.showAndWait();
 				}
 			}
-			
+
 		});
 
 		loginButton.setOnAction(new EventHandler<ActionEvent>() {

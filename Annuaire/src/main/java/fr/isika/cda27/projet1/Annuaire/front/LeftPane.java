@@ -18,27 +18,22 @@ public class LeftPane extends BorderPane {
 	private App app;
 
 	public LeftPane(App app, User loggedInUser, String scene) {
-		
+
 		this.app = app;
-		// Couleur de fond et largueur du panneau
 		setStyle("-fx-background-color:#D9D9D9");
 		setPrefWidth(270);
 
-		// En-tête avec image de Gin et nom du user
 		HBox userTitle = new HBox();
 		userTitle.setPadding(new Insets(20));
 
-		// Ajout de la photo de super Gin
 		Image userImg = new Image(getClass().getResource("/gin.jpg").toExternalForm());
 		ImageView imageView = new ImageView(userImg);
 		imageView.setFitWidth(130);
 		imageView.setPreserveRatio(true);
 
-		// Création du cercle pour la photo de super Gin
 		Circle clip = new Circle(60, 60, 60);
 		imageView.setClip(clip);
 
-		// Ajout du texte de bienvenue
 		VBox userGreetings = new VBox();
 		userGreetings.setPadding(new Insets(35, 0, 0, 10));
 		Label greetings = new Label("Bonjour");
@@ -48,7 +43,6 @@ public class LeftPane extends BorderPane {
 		userTitle.getChildren().addAll(imageView, userGreetings);
 		setTop(userTitle);
 
-		// Navigation principale
 		VBox menu = new VBox();
 		menu.setSpacing(15);
 		menu.setPadding(new Insets(30, 0, 0, 0));
@@ -67,7 +61,7 @@ public class LeftPane extends BorderPane {
 		internAddBtn.setPrefWidth(270);
 		menu.getChildren().addAll(internListBtn, internAddBtn);
 		setCenter(menu);
-		
+
 		internAddBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -75,42 +69,38 @@ public class LeftPane extends BorderPane {
 			}
 
 		});
-		
 
-		// Footer
 		BorderPane menuFooter = new BorderPane();
 		Button FAQBtn = new Button("FAQ");
 		Button logOutBtn = new Button("Se déconnecter");
 		menuFooter.setLeft(FAQBtn);
 		menuFooter.setRight(logOutBtn);
-		
-		// Ajout du css pour la page sélectionnée
-		if("FormAddIntern".equals(scene)) {
+
+		if ("FormAddIntern".equals(scene)) {
 			internAddBtn.getStyleClass().add("selected-button");
 			internListBtn.getStyleClass().remove("selected-button");
 			FAQBtn.getStyleClass().remove("selected-button");
 		}
-		if("PageList".equals(scene)) {
+		if ("PageList".equals(scene)) {
 			internAddBtn.getStyleClass().remove("selected-button");
 			internListBtn.getStyleClass().add("selected-button");
 			FAQBtn.getStyleClass().remove("selected-button");
 		}
-		if("FAQ".equals(scene)) {
+		if ("FAQ".equals(scene)) {
 			internAddBtn.getStyleClass().remove("selected-button");
 			internListBtn.getStyleClass().remove("selected-button");
 			FAQBtn.getStyleClass().add("selected-button");
 		}
 
-		
 		FAQBtn.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent event) {
 				app.switchToFAQPage(app, loggedInUser);
-				
+
 			}
 		});
-		
+
 		logOutBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

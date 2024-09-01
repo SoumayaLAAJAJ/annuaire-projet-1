@@ -70,14 +70,6 @@ public class Intern implements Comparable<Intern> {
 		this.promo = promo;
 	}
 
-	/**
-	 * Modification de la méthode compareTo appartenant à l'interface Comparable On
-	 * compare d'abord le nom. - Si c'est le même nom, alors on compare le prénom -
-	 * Si c'est le même prénom, alors on compare le département - Si c'est le même
-	 * département, on compare l'année - Si c'est la même année, on compare la promo
-	 * NB: la gestion de doublon se fait directement dans la méthode addNode();
-	 *
-	 */
 	@Override
 	public int compareTo(Intern o) {
 		int result = this.name.compareTo(o.name);

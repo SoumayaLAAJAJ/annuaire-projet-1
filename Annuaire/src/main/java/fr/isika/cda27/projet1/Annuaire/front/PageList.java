@@ -11,11 +11,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -36,23 +32,18 @@ public class PageList extends BorderPane {
 
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
-		// Ajout du menu de gauche
 		LeftPane leftPane = new LeftPane(app, loggedInUser, "PageList");
 		this.setLeft(leftPane);
 
-		// Conteneur pour la partie droite de la page
 		VBox rightContainer = new VBox();
 		rightContainer.setPadding(new Insets(0, 40, 0, 40));
 		rightContainer.setSpacing(10);
 
-		// Ajout de la table view
 		InternTableView tableView = new InternTableView();
-		
-		// Ajout de la barre de recherche
-        SearchBar searchBar = new SearchBar(tableView);
+
+		SearchBar searchBar = new SearchBar(tableView);
 		searchBar.setPadding(new Insets(30, 0, 25, 0));
 		setTop(searchBar);
-
 
 		// Ajout de l'icône d'impression
 		Image printIcon = new Image(getClass().getResource("/printIcon.png").toExternalForm());
@@ -78,13 +69,13 @@ public class PageList extends BorderPane {
 		printBtn.getStyleClass().add("searchIconBtn");
 		printBtn.setVisible(true);
 		printBtn.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		        PdfGenerator pdfGenerator = new PdfGenerator(tableView);
-		        String filePath = "liste_stagiaires.pdf";
-		        pdfGenerator.generatePdf(filePath);
-		        System.out.println("PDF généré à : " + filePath);
-		    }
+			@Override
+			public void handle(ActionEvent event) {
+				PdfGenerator pdfGenerator = new PdfGenerator(tableView);
+				String filePath = "liste_stagiaires.pdf";
+				pdfGenerator.generatePdf(filePath);
+				System.out.println("PDF généré à : " + filePath);
+			}
 		});
 
 		// Création du bouton suppression et ajout de l'icône dans le bouton
@@ -93,33 +84,30 @@ public class PageList extends BorderPane {
 		removeBtn.getStyleClass().add("searchIconBtn");
 		removeBtn.setVisible(true);
 		removeBtn.setOnAction(new EventHandler<ActionEvent>() {
-			
-		    @Override
-		    public void handle(ActionEvent event) {
-		        // Récupération du stagiaire sélectionné
-		        Intern selectedIntern = tableView.getSelectionModel().getSelectedItem();
 
-		        if (selectedIntern != null) {
-		            try {
-		                // Création d'une instance de Node pour la suppression
-		                Node node = new Node(selectedIntern);
-		                
-		                // Suppression du stagiaire dans l'arbre
-		                Tree tree = new Tree();
-		                node.deleteIntern(selectedIntern.getName(), selectedIntern.getFirstname(), tree.getRaf());
+			@Override
+			public void handle(ActionEvent event) {
+				Intern selectedIntern = tableView.getSelectionModel().getSelectedItem();
 
-		                // Mise à jour de la liste observable après suppression
-		                List<Intern> updatedInterns = tree.getInterns(); 
-		                ObservableList<Intern> updatedObservableList = FXCollections.observableArrayList(updatedInterns);
-		                tableView.setItems(updatedObservableList);
-		                
-		            } catch (IOException e) {
-		                e.printStackTrace();
-		            }
-		        } else {
-		            System.out.println("Aucun stagiaire sélectionné pour la suppression.");
-		        }
-		    }
+				if (selectedIntern != null) {
+					try {
+						Node node = new Node(selectedIntern);
+
+						Tree tree = new Tree();
+						node.deleteIntern(selectedIntern.getName(), selectedIntern.getFirstname(), tree.getRaf());
+
+						List<Intern> updatedInterns = tree.getInterns();
+						ObservableList<Intern> updatedObservableList = FXCollections
+								.observableArrayList(updatedInterns);
+						tableView.setItems(updatedObservableList);
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					System.out.println("Aucun stagiaire sélectionné pour la suppression.");
+				}
+			}
 		});
 
 		// Création du bouton d'édition et ajout de l'icône dans le bouton
@@ -127,16 +115,16 @@ public class PageList extends BorderPane {
 		editBtn.setGraphic(editIconView);
 		editBtn.getStyleClass().add("searchIconBtn");
 		editBtn.setVisible(true);
-		
-		// Ajout de tooltips pour les boutons
-        Tooltip editTooltipActivate = new Tooltip("Activer le mode édition");
-        Tooltip editTooltipDeactivate = new Tooltip("Désactiver le mode édition");
-        Tooltip printTooltip = new Tooltip("Imprimer la liste des stagiaires");
-        Tooltip removeTooltip = new Tooltip("Supprimer un stagiaire");
 
-        editBtn.setTooltip(editTooltipActivate);
-        printBtn.setTooltip(printTooltip);
-        removeBtn.setTooltip(removeTooltip);
+		// Ajout de tooltips pour les boutons
+		Tooltip editTooltipActivate = new Tooltip("Activer le mode édition");
+		Tooltip editTooltipDeactivate = new Tooltip("Désactiver le mode édition");
+		Tooltip printTooltip = new Tooltip("Imprimer la liste des stagiaires");
+		Tooltip removeTooltip = new Tooltip("Supprimer un stagiaire");
+
+		editBtn.setTooltip(editTooltipActivate);
+		printBtn.setTooltip(printTooltip);
+		removeBtn.setTooltip(removeTooltip);
 
 		VBox buttons = new VBox();
 		buttons.setSpacing(20);
@@ -144,38 +132,38 @@ public class PageList extends BorderPane {
 
 		HBox tableViewBox = new HBox(tableView, buttons);
 		tableViewBox.setSpacing(20);
-		
+
 		VBox.setVgrow(tableViewBox, Priority.ALWAYS);
 		HBox.setHgrow(tableView, Priority.ALWAYS);
 
-        // Si l'utilisateur est admin, on ajoute les boutons de suppression et d'édition
-        if (loggedInUser.isRoleAdmin()) {
-            buttons.getChildren().addAll(removeBtn, editBtn);
+		// Si l'utilisateur est admin, on ajoute les boutons de suppression et d'édition
+		if (loggedInUser.isRoleAdmin()) {
+			buttons.getChildren().addAll(removeBtn, editBtn);
 
-            // Gestion de l'action du bouton d'édition
-            editBtn.setOnAction(event -> {
-                // Bascule l'état d'édition et récupère le nouvel état
-                boolean isEditMode = tableView.toggleEditMode();
+			// Gestion de l'action du bouton d'édition
+			editBtn.setOnAction(event -> {
+				// Bascule l'état d'édition et récupère le nouvel état
+				boolean isEditMode = tableView.toggleEditMode();
 
-                // Change le style du bouton en fonction de l'état d'édition
-                if (isEditMode) {
-                    editBtn.getStyleClass().remove("searchIconBtn");
-                    editBtn.getStyleClass().add("editIconBtn");
-                    editBtn.setTooltip(editTooltipDeactivate);
+				// Change le style du bouton en fonction de l'état d'édition
+				if (isEditMode) {
+					editBtn.getStyleClass().remove("searchIconBtn");
+					editBtn.getStyleClass().add("editIconBtn");
+					editBtn.setTooltip(editTooltipDeactivate);
 
-                } else {
-                    editBtn.getStyleClass().remove("editIconBtn");
-                    editBtn.getStyleClass().add("searchIconBtn");
-                    editBtn.setTooltip(editTooltipActivate);
+				} else {
+					editBtn.getStyleClass().remove("editIconBtn");
+					editBtn.getStyleClass().add("searchIconBtn");
+					editBtn.setTooltip(editTooltipActivate);
 
-                }
-            });
-        }
+				}
+			});
+		}
 
 		// Ajoute un espace en bas
 		Region bottomPadding = new Region();
 		bottomPadding.setMinHeight(20);
-		
+
 		rightContainer.getChildren().addAll(searchBar, tableViewBox, bottomPadding);
 
 		// Ajoute le conteneur de droite au centre du BorderPane
@@ -183,6 +171,5 @@ public class PageList extends BorderPane {
 
 		return new Scene(this, 1300, 700);
 	}
-
 
 }
