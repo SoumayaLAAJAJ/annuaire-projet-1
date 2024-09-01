@@ -59,6 +59,7 @@ public class FormAddIntern extends BorderPane {
 		rightContainer.setPadding(new Insets(80, 20, 0, 70));
 
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+		this.setStyle("-fx-background-color: #ffffff");
 		add.getStyleClass().add("specific-button");
 		add.setStyle("-fx-padding: 12px 20px;");
 		title.setStyle("-fx-font-weight: bold; -fx-font-family: 'Inter'; -fx-font-size: 28px;");
