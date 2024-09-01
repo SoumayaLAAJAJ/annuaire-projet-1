@@ -93,8 +93,12 @@ public class FormAddIntern extends BorderPane {
 					feedbackLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
 				} else {
-					Intern newIntern = new Intern(nameTxtfield.getText(), firstnameTxtfield.getText(),
-							departmentTxtfield.getText(), promoTxtField.getText(), yearChoiceBox.getValue());
+					String name = nameTxtfield.getText().toUpperCase();
+					String firstname = capitalizeFirstLetter(firstnameTxtfield.getText());
+					String department = departmentTxtfield.getText().toUpperCase();
+					String promo = promoTxtField.getText().toUpperCase();
+
+					Intern newIntern = new Intern(name, firstname, department, promo, yearChoiceBox.getValue());
 					Tree tree = new Tree();
 					try {
 						tree.addNode(newIntern);
@@ -115,6 +119,13 @@ public class FormAddIntern extends BorderPane {
 			}
 		});
 
+	}
+
+	private String capitalizeFirstLetter(String text) {
+		if (text == null || text.isEmpty()) {
+			return text;
+		}
+		return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
 	}
 
 	public Scene createAddView(App app, User loggedInUser) {
