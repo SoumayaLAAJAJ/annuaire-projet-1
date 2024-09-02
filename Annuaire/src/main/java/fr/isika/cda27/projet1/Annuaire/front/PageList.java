@@ -4,7 +4,6 @@ import fr.isika.cda27.projet1.Annuaire.back.Intern;
 import fr.isika.cda27.projet1.Annuaire.back.Node;
 import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import fr.isika.cda27.projet1.Annuaire.back.User;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,24 +22,24 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
- * Cette classe est responsable de l'affichage de la liste des stagiaires dans l'application.
- * Elle fournit une interface utilisateur pour afficher, rechercher, imprimer, supprimer et modifier les informations des stagiaires.
+ * Cette classe est responsable de l'affichage de la liste des stagiaires dans
+ * l'application. Elle fournit une interface utilisateur pour afficher,
+ * rechercher, imprimer, supprimer et modifier les informations des stagiaires.
  */
 public class PageList extends BorderPane {
 
 	public ObservableList<Intern> myObservableArrayList;
 	public Intern selectedIntern;
 
-    /**
-     * Constructeur permettant d'initialiser la vue de la liste des stagiaires.
-     *
-     * @param app L'application
-     * @param loggedInUser L'utilisateur actuellement connecté
-     * @return La scène contenant la liste des stagiaires
-     */
+	/**
+	 * Constructeur permettant d'initialiser la vue de la liste des stagiaires.
+	 *
+	 * @param app          L'application
+	 * @param loggedInUser L'utilisateur actuellement connecté
+	 * @return La scène contenant la liste des stagiaires
+	 */
 	public Scene createListView(App app, User loggedInUser) {
 
 		this.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
@@ -52,6 +52,8 @@ public class PageList extends BorderPane {
 		rightContainer.setSpacing(10);
 
 		InternTableView tableView = new InternTableView();
+		Label placeholder = new Label("Aucun stagiaire ne correspond à la recherche");
+		tableView.setPlaceholder(placeholder);
 
 		SearchBar searchBar = new SearchBar(tableView);
 		searchBar.setPadding(new Insets(30, 0, 25, 0));
@@ -104,10 +106,9 @@ public class PageList extends BorderPane {
 						Tree tree = new Tree();
 						node.deleteIntern(selectedIntern.getName(), selectedIntern.getFirstname(), tree.getRaf());
 
-						List<Intern> updatedInterns = tree.getInterns();
-						ObservableList<Intern> updatedObservableList = FXCollections
-								.observableArrayList(updatedInterns);
-						tableView.setItems(updatedObservableList);
+						ObservableList<Intern> sourceList = (ObservableList<Intern>) tableView.getFilteredList().getSource();
+						sourceList.clear();
+						sourceList.addAll(tree.getInterns());
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -126,7 +127,7 @@ public class PageList extends BorderPane {
 		editBtn.getStyleClass().add("iconBtn");
 		editBtn.setVisible(true);
 
-        // Création des tooltips
+		// Création des tooltips
 		Tooltip editTooltipActivate = new Tooltip("Activer le mode édition");
 		Tooltip editTooltipDeactivate = new Tooltip("Désactiver le mode édition");
 		Tooltip printTooltip = new Tooltip("Imprimer la liste des stagiaires");
@@ -146,12 +147,13 @@ public class PageList extends BorderPane {
 		VBox.setVgrow(tableViewBox, Priority.ALWAYS);
 		HBox.setHgrow(tableView, Priority.ALWAYS);
 
-        // Ajout des boutons de suppression et d'édition si l'utilisateur est administrateur
+		// Ajout des boutons de suppression et d'édition si l'utilisateur est
+		// administrateur
 		if (loggedInUser.isRoleAdmin()) {
 			buttons.getChildren().addAll(removeBtn, editBtn);
 
 			editBtn.setOnAction(event -> {
-                // Bascule l'état d'édition et récupère le nouvel état
+				// Bascule l'état d'édition et récupère le nouvel état
 				boolean isEditMode = tableView.toggleEditMode();
 
 				// Change le style du bouton en fonction de l'état d'édition

@@ -1,12 +1,5 @@
-test1;test1;false
-test2;test2;false
-test3;test3;false
-test4;test4;false
-a;a;true;
-marieMadeleine;test;false
-gege;gege;false
-a;a;false
-test1;test&;false
-b;b;false
-c;c;false
-soumsoum;motdepasse;false
+faustine;mdp1;false
+soumaya;mdp2;false
+valentin;mdp3;false
+florent;mdp4;false
+admin;admin;true

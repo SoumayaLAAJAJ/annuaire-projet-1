@@ -209,5 +209,9 @@ public class InternTableView extends TableView<Intern> {
 			return false;
 		});
 	}
+	
+	public FilteredList<Intern> getFilteredList() {
+	    return filteredList;
+	}
 
 }

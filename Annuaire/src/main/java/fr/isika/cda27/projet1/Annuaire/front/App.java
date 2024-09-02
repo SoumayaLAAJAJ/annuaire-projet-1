@@ -4,7 +4,6 @@ import fr.isika.cda27.projet1.Annuaire.back.Tree;
 import fr.isika.cda27.projet1.Annuaire.back.User;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 /**
